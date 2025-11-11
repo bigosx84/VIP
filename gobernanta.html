@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Preguntas</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex; flex-wrap: wrap;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px; font-weight: normal;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            width: calc(100% - 20px); max-width: 100%;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm"></form>
+    </div>
+    
+    <script>
+const questions = [
+  {
+    "question": "1. ¿Cuál es la denominación de la Sección 2ª del Capítulo 2º del Título 1º de la Constitución Española de 1978?",
+    "options": [
+      "a) De los derechos fundamentales y deberes de los ciudadanos.",
+      "b) De la suspensión de los derechos y libertades.",
+      "c) De los derechos fundamentales y de las libertades públicas.",
+      "d) De los derechos y deberes de los ciudadanos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "2. Atendiendo a la estructura de la Constitución Española de 1978, el derecho a la protección de la salud consagrado en su Artículo 43 se encuadra dentro:",
+    "options": [
+      "a) De los principios rectores de la política social y económica del Capítulo 3º del Título 1º.",
+      "b) De los derechos y deberes de los ciudadanos.",
+      "c) De la Disposición Adicional 2ª.",
+      "d) Las garantías de las libertades y derechos fundamentales del Capítulo 4º del Título 1º."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "3. Según el Artículo 31 de la Constitución Española de 1978, el gasto público realizará una asignación equitativa de los recursos públicos, y su programación y ejecución responderán a los criterios de:",
+    "options": [
+      "a) Eficacia y eficiencia.",
+      "b) Eficiencia y economía.",
+      "c) Eficacia y economía.",
+      "d) Eficacia, eficiencia y equidad."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "4. El Estatuto de Autonomía de la Comunidad Autónoma de Extremadura se estructura en:",
+    "options": [
+      "a) Un Preámbulo, un Título Preliminar, siete títulos numerados, siete disposiciones adicionales, una disposición derogatoria y una disposición final.",
+      "b) Un Preámbulo, un Título Preliminar y 91 artículos.",
+      "c) Un Preámbulo, un Título Preliminar, siete títulos numerados, siete disposiciones transitorias, una disposición derogatoria y una disposición final.",
+      "d) Un Preámbulo, un Título Preliminar, 169 artículos, siete disposiciones transitorias, una disposición derogatoria y una disposición final."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "5. A tenor del artículo 3 del Estatuto de Autonomía de Extremadura, ostentan la condición política de extremeños:",
+    "options": [
+      "a) Los ciudadanos que, de acuerdo con las leyes generales del Estado, tengan vecindad administrativa en cualquiera de los municipios de Extremadura.",
+      "b) Los españoles residentes en el extranjero que hayan tenido la última vecindad administrativa en Extremadura y acrediten esta condición en la correspondiente representación diplomática de España.",
+      "c) Los descendientes de los anteriores inscritos como españoles.",
+      "d) Los españoles residentes en el extranjero que así lo soliciten en el Consulado español del país de residencia."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "6. Según el Artículo 10 del Estatuto de Autonomía de Extremadura, la regulación del abastecimiento, saneamiento y depuración de las aguas es:",
+    "options": [
+      "a) Competencia exclusiva de la Comunidad Autónoma de Extremadura.",
+      "b) Competencia de desarrollo normativo y ejecución de la Comunidad Autónoma de Extremadura.",
+      "c) Competencia de desarrollo normativo y ejecución de la Comunidad Autónoma de Extremadura y por tanto, sólo le corresponde la potestad reglamentaria sobre la misma.",
+      "d) Competencia de ejecución de la Comunidad Autónoma de Extremadura."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "7. El régimen de derechos individuales del personal estatutario de los servicios de salud establecido en el Artículo 17.1 de la Ley 55/2003 será aplicable:",
+    "options": [
+      "a) En todo caso al personal estatutario temporal.",
+      "b) Al personal estatutario temporal con las limitaciones derivadas de la planificación funcional del centro sanitario.",
+      "c) No será aplicable en ningún caso al personal estatutario temporal.",
+      "d) Al personal temporal, en la medida que la naturaleza del derecho lo permita."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "8. En cuanto a la recuperación de la condición de personal estatutario fijo, cuando proceda, regulada por el artículo 28 de la Ley 55/2003:",
+    "options": [
+      "a) Supone la declaración simultánea del interesado en la situación de excedencia forzosa, pudiendo reincorporarse al servicio activo a través de los procedimientos de movilidad voluntaria.",
+      "b) Supone la reincorporación inmediata del interesado al servicio activo, en los términos previstos en esta Ley.",
+      "c) En el caso de pérdida de la condición de personal estatutario como consecuencia de pérdida de la nacionalidad, el interesado podrá recuperar dicha condición si acredita la desaparición de la causa que la motivó.",
+      "d) Si la pérdida se produjo como consecuencia de pena de inhabilitación especial, el interesado recuperará tal condición transcurridos 6 años."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "9. En relación con el Sistema Sanitario Público de Extremadura, ¿a quién corresponde la aprobación del Plan de Salud y del mapa sanitario?",
+    "options": [
+      "a) La Junta de Extremadura.",
+      "b) La Consejería competente en materia de sanidad.",
+      "c) El Servicio Extremeño de Salud.",
+      "d) El Consejo Interterritorial del Sistema Nacional de Salud."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "10. ¿Cuál de las siguientes funciones corresponde a la Dirección General de Asistencia Sanitaria del SES?",
+    "options": [
+      "a) La ordenación e instrucción del procedimiento de concesión de subvenciones en salud mental.",
+      "b) La planificación operativa de los recursos adscritos al SES.",
+      "c) La programación, dirección, evaluación interna y control de los centros, establecimientos y servicios adscritos al SES.",
+      "d) Proponer la formación del personal en colaboración con la Escuela de Ciencias de la Salud."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "18. A tenor del Artículo 14 de la Ley 31/1995, NO forma parte del derecho de los trabajadores a una protección eficaz:",
+    "options": [
+      "a) La formación en materia preventiva.",
+      "b) La vigilancia de su estado de salud.",
+      "c) La paralización de la actividad, en cualquier caso.",
+      "d) La información, consulta y participación."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "21. Cuando se produce una emergencia que requiere evacuar el edificio, ¿cómo deberá procederse?",
+    "options": [
+      "a) Volver al puesto para recoger efectos personales.",
+      "b) Salir corriendo ordenadamente.",
+      "c) Dirigirse al lugar más alejado del edificio.",
+      "d) Salir ordenadamente, sin correr ni volver, al punto de reunión fijado."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "42. El método de gestión de almacén en el que la materia prima que primero caduca es la primera en salir se denomina:",
+    "options": [
+      "a) FIFO.",
+      "b) FEFO.",
+      "c) LIFO.",
+      "d) PEPS."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "49. ¿Qué es un desinfectante?",
+    "options": [
+      "a) Conjunto de medidas preventivas.",
+      "b) Germicida que inactiva prácticamente todos los microorganismos patógenos reconocidos.",
+      "c) Germicida que inactiva prácticamente todas las formas de vida microbiana.",
+      "d) Cualquier materia sólida o semisólida."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "50. El amonio cuaternario se caracteriza por ser un desinfectante de:",
+    "options": [
+      "a) Amplio espectro frente a bacterias y virus lipídicos.",
+      "b) Uso exclusivo en quirófano.",
+      "c) Acción limitada frente a hongos.",
+      "d) Uso incompatible con superficies de acero inoxidable."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "73. ¿Cuál es la definición de infección nosocomial?",
+    "options": [
+      "a) Toda infección adquirida en la comunidad.",
+      "b) Toda infección que aparece en un paciente que no estaba presente ni en incubación al ingreso.",
+      "c) Toda infección producida por bacterias multirresistentes.",
+      "d) Toda infección que aparece tras una cirugía, sin importar el tiempo."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "76. ¿Qué tipo de residuo se engloba en el Grupo III según el Decreto 109/2015?",
+    "options": [
+      "a) Residuos microbiológicos.",
+      "b) Residuos asimilables a domésticos.",
+      "c) Vacunas vivas y atenuadas.",
+      "d) Sangre y hemoderivados en forma líquida."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "77. ¿Cuál de estos decretos regula la producción y gestión de los residuos sanitarios en Extremadura?",
+    "options": [
+      "a) Decreto 109/2015, de 19 de mayo.",
+      "b) Decreto 170/2017, de 15 de marzo.",
+      "c) Decreto 270/2020, de 6 de octubre.",
+      "d) Decreto 175/2022, de 7 de septiembre."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "78. ¿Cuál es el objetivo principal de las normas de gestión de residuos sanitarios?",
+    "options": [
+      "a) Reducir costes de limpieza.",
+      "b) Evitar la contaminación ambiental y riesgos para la salud pública.",
+      "c) Facilitar la reutilización de residuos hospitalarios.",
+      "d) Ahorrar espacio en los contenedores."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "79. ¿Quién es responsable de garantizar la correcta segregación de residuos sanitarios?",
+    "options": [
+      "a) Exclusivamente el servicio de limpieza.",
+      "b) El personal que genera el residuo en el punto de origen.",
+      "c) El gestor final autorizado.",
+      "d) El inspector sanitario."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "90. ¿Qué es la ofimática básica?",
+    "options": [
+      "a) Conjunto de herramientas y aplicaciones informáticas para tareas de oficina.",
+      "b) Aplicación informática para crear y editar documentos de texto.",
+      "c) Programa que organiza y visualiza datos en tablas.",
+      "d) Aplicación para calcular y presentar datos en cuadrícula."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "91. En Microsoft Word, el comando “Buscar y reemplazar” se activa con:",
+    "options": [
+      "a) Ctrl + C",
+      "b) Ctrl + F",
+      "c) Ctrl + L",
+      "d) Ctrl + H"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "92. En Excel, si una celda muestra ######, significa que:",
+    "options": [
+      "a) El contenido es incorrecto.",
+      "b) Hay un error de fórmula.",
+      "c) El ancho de la celda es insuficiente.",
+      "d) El número está protegido."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "93. ¿Qué significa “CC” en un correo electrónico?",
+    "options": [
+      "a) Copia Controlada.",
+      "b) Copia de Contacto.",
+      "c) Copia Carbón.",
+      "d) Comunicación Corporativa."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "94. ¿Qué es IMAP en el correo electrónico?",
+    "options": [
+      "a) Enviar correos.",
+      "b) Protocolo de acceso a mensajes de internet.",
+      "c) Encriptar mensajes.",
+      "d) Técnica para aumentar la velocidad del correo."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "95. La Ley 8/2011 de Igualdad en Extremadura será de aplicación a:",
+    "options": [
+      "a) Entidades con representación directa o indirecta de la Junta de Extremadura.",
+      "b) Consorcios y entidades con representación de Administraciones Locales.",
+      "c) Entidades privadas beneficiarias de ayudas o subvenciones públicas.",
+      "d) Universidades públicas y entidades educativas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "96. ¿Qué órgano emitirá el informe de impacto de género sobre el anteproyecto de ley de Presupuestos?",
+    "options": [
+      "a) Cada Consejería.",
+      "b) Centro de Estudios de Género.",
+      "c) Comisión interdepartamental para la igualdad.",
+      "d) Comisión de Impacto de Género de los Presupuestos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "97. Según el Artículo 28 de la Ley 8/2011, los poderes públicos de Extremadura deberán:",
+    "options": [
+      "a) Incluir ocasionalmente la variable sexo en estadísticas.",
+      "b) Agregar los datos sin discriminar por sexo.",
+      "c) Analizar los resultados desde la dimensión de género.",
+      "d) Realizar investigaciones internas sin difundir resultados."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "98. ¿Qué se entiende por actuación administrativa automatizada según la Ley 40/2015?",
+    "options": [
+      "a) Cualquier acto realizado a través de sede electrónica.",
+      "b) Acto realizado sin intervención de empleado público.",
+      "c) Acto realizado íntegramente por medios electrónicos con sello electrónico.",
+      "d) Acto realizado electrónicamente sin intervención directa de un empleado público."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "99. Respecto de los documentos electrónicos con actos administrativos, indique la afirmación correcta:",
+    "options": [
+      "a) Deberán conservarse en el mismo formato original.",
+      "b) Se asegurará la posibilidad de trasladar los datos a otros formatos y soportes.",
+      "c) Se archivarán en cualquier formato que asegure su conservación.",
+      "d) Deberán conservarse en cualquier formato que asegure su integridad."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "100. Según la Ley 40/2015, aquella dirección electrónica disponible para los ciudadanos cuya titularidad corresponde a una Administración Pública se denomina:",
+    "options": [
+      "a) Sede electrónica.",
+      "b) Web corporativa.",
+      "c) Portal de internet.",
+      "d) Carpeta ciudadana."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "R1. ¿Qué procedimiento siguió Extremadura para acceder a la autonomía según la Constitución de 1978?",
+    "options": [
+      "a) Artículo 143.",
+      "b) Disposición Transitoria 4ª.",
+      "c) Artículo 151.",
+      "d) Disposición Transitoria 5ª."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "R2. Según la Ley 31/95, las disposiciones laborales tendrán:",
+    "options": [
+      "a) Carácter de derecho necesario mínimo indisponible; no pueden modificarse.",
+      "b) Carácter imperativo, no pudiendo desarrollarse por normas inferiores.",
+      "c) No tienen carácter administrativo y sólo pueden desarrollarse por negociación colectiva.",
+      "d) Carácter de Derecho necesario mínimo indisponible, pudiendo mejorarse por convenios colectivos."
+    ],
+    "correct": 3
+  }
+];
+
+
+     const form = document.getElementById('quizForm');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                radio.addEventListener('change', () => {
+                    if (i === q.correct) {
+                        optionItem.classList.add('correct');
+                        optionItem.classList.remove('incorrect');
+                    } else {
+                        optionItem.classList.add('incorrect');
+                        optionItem.classList.remove('correct');
+                    }
+                });
+
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.appendChild(questionDiv);
+        });
+    </script>
+</body>
+</html>
+
