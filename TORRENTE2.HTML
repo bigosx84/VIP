@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Preguntas</title>
+    <title>Simulacro ¡Al toro!</title>
     <style>
         body {
             font-family: "Arial", sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f4f7fc;
-            display: flex; flex-wrap: wrap;
+            display: flex;
             justify-content: center;
         }
         .container {
@@ -42,14 +42,14 @@
         .option {
             display: flex;
             align-items: center;
-            font-size: 17px; font-weight: normal;
+            font-size: 17px;
             padding: 10px;
             border-radius: 5px;
             background-color: #ffffff;
             border: 1px solid #d1d8e0;
             margin-bottom: 8px;
             transition: background-color 0.3s;
-            width: calc(100% - 20px); max-width: 100%;
+            cursor: pointer;
         }
         .option:hover {
             background-color: #d9e8ff;
@@ -57,25 +57,33 @@
         .option input[type="radio"] {
             margin-right: 10px;
         }
-        .correct {
+        .correct-answer {
             background-color: #c8e6c9 !important;
             border-color: #4caf50;
             font-weight: bold;
         }
-        .incorrect {
+        .incorrect-answer {
             background-color: #ffcdd2 !important;
             border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <form id="quizForm"></form>
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">TORRENTE 1</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
     </div>
-    
+
     <script>
-        const questions = [
+     const questions = [
    {
     "question": "1. ¿Qué ley regula la información sanitaria y autonomía del paciente en Extremadura?",
     "options": [
@@ -837,6 +845,8 @@
         ];
 
         const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
 
         questions.forEach((q, index) => {
             const questionDiv = document.createElement('div');
@@ -852,29 +862,47 @@
             q.options.forEach((option, i) => {
                 const optionItem = document.createElement('li');
                 optionItem.classList.add('option');
-
                 const radio = document.createElement('input');
                 optionItem.addEventListener('click', () => radio.click());
                 radio.type = 'radio';
                 radio.name = `question${index}`;
                 radio.value = i;
-                radio.addEventListener('change', () => {
-                    if (i === q.correct) {
-                        optionItem.classList.add('correct');
-                        optionItem.classList.remove('incorrect');
-                    } else {
-                        optionItem.classList.add('incorrect');
-                        optionItem.classList.remove('correct');
-                    }
-                });
-
                 optionItem.appendChild(radio);
                 optionItem.appendChild(document.createTextNode(option));
                 optionsList.appendChild(optionItem);
             });
 
             questionDiv.appendChild(optionsList);
-            form.appendChild(questionDiv);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
         });
     </script>
 </body>
