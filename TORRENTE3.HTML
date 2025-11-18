@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">TORRENTE 3</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+
+  {
+    "question": "1. ¿Qué es el livor mortis?",
+    "options": [
+      "a) El endurecimiento del cuerpo que se produce de dos a cuatro horas después del fallecimiento",
+      "b) La suma de conocimientos relativos a la muerte",
+      "c) El inicio del proceso de descomposición de la materia orgánica",
+      "d) La decoloración de los tejidos como consecuencia del cese de la circulación sanguínea"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "2. ¿En qué método se basa la esterilización en autoclave?",
+    "options": [
+      "a) En un método físico que usa calor seco",
+      "b) En un método físico que utiliza radiaciones",
+      "c) En un método químico que usa óxido de etileno",
+      "d) En un método físico que usa calor húmedo"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "3. El celador de atención primaria deberá transportar y almacenar el material, la documentación, la correspondencia, y cualquier otro objeto necesario para el trabajo en equipo:",
+    "options": [
+      "a) dentro del centro",
+      "b) fuera del centro",
+      "c) tanto fuera como dentro del centro",
+      "d) tanto fuera como dentro del centro en el ámbito de su zona y área de salud"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "4. ¿En qué diluimos el óxido de etileno para evitar el riesgo de inflamación?",
+    "options": [
+      "a) En cloroformo",
+      "b) En dióxido de carbono",
+      "c) En cloruro potásico",
+      "d) En nitrato de plata"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "5. El celador que presta su servicio en una institución sanitaria de la seguridad social pertenece al grupo:",
+    "options": [
+      "a) De Servicio",
+      "b) Subalterno",
+      "c) General",
+      "d) De Servicios Generales"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "6. La técnica para realizar una autopsia que consiste en extraer los órganos en tres bloques, cuello y tórax; abdomen y retroperitoneo, realizándose la disección separada de cada bloque, se llama:",
+    "options": [
+      "a) Técnica de Ghon.",
+      "b) Técnica de Letulle.",
+      "c) Técnica de Rokitansky.",
+      "d) Técnica de Virchow."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "7. ¿Cuál es el desinfectante más común utilizado en las autopsias?",
+    "options": [
+      "a) Detergente",
+      "b) Fenoles",
+      "c) Hipoclorito Sódico",
+      "d) Biguanidas"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "8. El JPS deberá dar cuenta al Administrador:",
+    "options": [
+      "a) Del orden y la limpieza de la institución",
+      "b) De las anomalías o alteraciones que encuentre en el orden del edificio",
+      "c) De la compostura y aseo del personal a sus ordenes",
+      "d) Ninguna respuesta es correcta"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "9. En un aislamiento de contacto tomaremos las siguientes precauciones (SEÑALA LA INCORRECTA):",
+    "options": [
+      "a) Precauciones standard",
+      "b) Bata durante todo el tiempo",
+      "c) Lavado de manos antes y después de quitarse los guantes",
+      "d) Mascarilla quirúrgica"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "10. La autopsia consiste en la apertura de:",
+    "options": [
+      "a) Cráneo, tórax y abdomen",
+      "b) Cráneo, tórax y raquis",
+      "c) Tórax, abdomen y raquis",
+      "d) Cráneo, abdomen, tórax y raquis"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "11. Al paso de gérmenes patógenos de unos huéspedes a otros, por distintos mecanismos, se le conoce como:",
+    "options": [
+      "a) Cadena epidemiológica",
+      "b) Fuente de infección",
+      "c) Mecanismo de transmisión",
+      "d) Huesped susceptible"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "12. Los pacientes quemados en más de un 25% de su superficie corporal. ¿qué aislamiento requieren?",
+    "options": [
+      "a) Aislamiento estricto",
+      "b) Aislamiento de contacto",
+      "c) Aislamiento protector",
+      "d) Aislamiento respiratorio"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "13. Un enterótomo es un instrumento que NO sirve para la disección de",
+    "options": [
+      "a) Estómago.",
+      "b) Tráquea.",
+      "c) Huesos.",
+      "d) Intestinos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "14. Admisión es la unidad o servicio del hospital directamente adscrito a",
+    "options": [
+      "a) Dirección de gestión y servicios generales",
+      "b) Gerencia de Área",
+      "c) Dirección Gerencia",
+      "d) Atención al paciente"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "15. ¿ A qué denominamos fómites?",
+    "options": [
+      "a) A los individuos que padecen una determinada infección",
+      "b) A los microorganismos con capacidad de transmitir enfermedades infecciosas",
+      "c) A los insectos con capacidad de transmitir enfermedades infecciosas",
+      "d) A los objetos contaminados por microorganismos que transmiten enfermedades"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "16. Respecto al emplazamiento de los extintores, señale la respuesta incorrecta:",
+    "options": [
+      "a) Fácilmente visibles y accesibles",
+      "b) Estarán situados próximos a los puntos donde se estime mayor probabilidad de iniciarse el incendio",
+      "c) La parte superior del extintor quede situada entre 0,70 y 1,10 m sobre el suelo",
+      "d) Próximos a las salidas de evacuación y a ser posibles colocados sobre soportes fijos"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "17. La autopsia clínica se regula mediante la Ley:",
+    "options": [
+      "a) Ley 29/1980.",
+      "b) Ley 161/2002.",
+      "c) Ley 12/1980.",
+      "d) Ley 9/2002."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "18. El control sanitario de los cementerios y la sanidad mortuoria corresponde a:",
+    "options": [
+      "a) El personal sanitario.",
+      "b) El personal estatutario no sanitario.",
+      "c) Las corporaciones locales.",
+      "d) El área de salud correspondiente."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "19. Se denomina zona de permanencia limitada para radiaciones ionizantes:",
+    "options": [
+      "a) Aquellas en las que existe el riesgo de recibir una dosis superior a los límites de dosis legalmente fijados",
+      "b) Aquellas en las que existe el riesgo de recibir, en cortos periodos de tiempo, una dosis superior a los límites de dosis legalmente fijados y que requieren prescripciones especiales desde el punto de vista de la optimización",
+      "c) Aquellas en las que existe el riesgo de recibir, en una exposición única, dosis superiores a los límites legalmente fijados",
+      "d) Ninguna de las respuestas anteriores es correcta"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "20. La disección de los órganos por separado es la técnica de:",
+    "options": [
+      "a) Letulle.",
+      "b) Ghon.",
+      "c) Virchow.",
+      "d) Rodrigo."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "21. Las medidas de protección del personal durante las exploraciones radiológicas frente a las radiaciones ionizantes incluyen:",
+    "options": [
+      "a) se utilizará delantal plomado",
+      "b) evitarse el haz primario",
+      "c) uso de dosímetro",
+      "d) todas son correctas"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "22. No es un signo tardío de la muerte:",
+    "options": [
+      "a) La rigidez cadavérica.",
+      "b) Enfriamiento del cadáver.",
+      "c) Ausencia de pulso.",
+      "d) Putrefacción cadavérica"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "23. Los equipos contra incendios diseñados para ser transportados y accionados a mano, montados sobre ruedas y con una masa total de más de 20 kg son:",
+    "options": [
+      "a) Extintores portátiles",
+      "b) Extintores móviles",
+      "c) Equipos BIE",
+      "d) Hidrantes móviles"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "24. En la preparación para la transferencia del paciente de la cama a una camilla debemos:",
+    "options": [
+      "a) Colocar la camilla en posición perpendicular a la cama y frenar ambas",
+      "b) Colocar al paciente en posición de decúbito prono",
+      "c) Colocar la camilla en paralelo junto a la cama y frenar ambas",
+      "d) Deslizar nuestras manos en sentido oblicuo bajo las articulaciones del paciente"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "25. En el aislamiento de protección o inverso, qué precauciones deben adoptarse:",
+    "options": [
+      "a) Guantes, mascarilla",
+      "b) Bata, Mascarilla",
+      "c) Bata, guantes, gorro, mascarilla y calzas",
+      "d) No es necesario tomar precauciones en un aislamiento de protección o inverso"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "26. Indique en qué cadáver, según la causa de fallecimiento, podría prohibirse las técnicas de tanatopraxia. Personas cuya defunción se deba a:",
+    "options": [
+      "a) Rabia.",
+      "b) Neumonía.",
+      "c) Cáncer.",
+      "d) Infarto."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "27. El caudal ininterrumpido mínimo a suministrar por cada boca de hidrante contra incendios",
+    "options": [
+      "a) 50 l/min",
+      "b) 500 l/min",
+      "c) 5000 l/min",
+      "d) 50000 l/min"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "28. Señala la respuesta incorrecta. ¿Qué prendas llevará el celador al entrar al quirófano?",
+    "options": [
+      "a) Gorro.",
+      "b) Bata estéril.",
+      "c) Mascarilla.",
+      "d) Calzas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "29. La posición que se utiliza en cirugía de hemorroides y procedimientos del área rectal y coccígea:",
+    "options": [
+      "a) Posición decúbito",
+      "b) Posición de Kraske o Jackknife.",
+      "c) Posición de Laminectomía.",
+      "d) Posición de Fowler."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "30. La desinfección que solo es activa frente a virus lipídicos de tamaño medio, bacterias en forma vegetativa y hongos, es de:",
+    "options": [
+      "a) Alto nivel.",
+      "b) Nivel intermedio.",
+      "c) Bajo nivel.",
+      "d) Depende de la concentración del desinfectante."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "31. Se conocen con el nombre de indicadores colorimétricos:",
+    "options": [
+      "a) Al control químico de la esterilización.",
+      "b) Al control físico de la esterilización.",
+      "c) Al ciclo de esterilización y desinfección.",
+      "d) Al control biológico de la esterilización."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "32. Un material esterilizado que se encuentra envasado en TYVEK@ (hoja opaca fabricada con fibra de polietileno), tiene un tiempo de caducidad de:",
+    "options": [
+      "a) Un mes.",
+      "b) Tres meses.",
+      "c) Seis meses.",
+      "d) Doce meses."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "33. ¿Cuándo se inicia el período intraoperatorio en el proceso quirúrgico?",
+    "options": [
+      "a) Cuando el paciente llega a la zona de intercambio del bloque quirúrgico",
+      "b) Cuando el paciente está en el antequirófano.",
+      "c) Cuando el paciente es colocado en la mesa de operación.",
+      "d) Cuando el paciente ingresa en la denominada sala de despertar."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "34. ¿Cuál es la zona del bloque quirúrgico semipública en la que no es necesario el pijama de quirófano para circular por ella, donde se recepciona a los pacientes?",
+    "options": [
+      "a) Área de intercambio.",
+      "b) Área limpia.",
+      "c) Área estéril.",
+      "d) Área sucia."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "35. La cama roto-rest se emplea en:",
+    "options": [
+      "a) Prevención de infecciones en general.",
+      "b) Prevención de infecciones en quemados.",
+      "c) Inmovilización de pacientes.",
+      "d) Prevención de úlceras por presión (UPP)."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "36. Es falso afirmar, en cuanto al método para el levantamiento manual y traslado de cargas, que:",
+    "options": [
+      "a) Como regla general es preferible manipular las cargas cerca del cuerpo.",
+      "b) La manipulación debe realizarse a una altura comprendida entre la altura de los codos y los nudillos, ya que de este modo disminuye la tensión en la zona lumbar.",
+      "c) Si las cargas que deben ser manipuladas están situadas en el suelo o cerca del mismo, se utilizarán las técnicas de manejo de cargas que permitan utilizar los músculos de la espalda más que los de las piernas.",
+      "d) Deben separarse los pies para adquirir una postura estable y equilibrada para el levantamiento colocando un pie más adelantado que el otro en la dirección del movimiento."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "37. ¿Cuántas veces se renueva el aire por hora en el bloque quirúrgico, mediante sistema independiente de climatización?",
+    "options": [
+      "a) De 5 a 10 veces por hora.",
+      "b) De 10 a 15 veces por hora.",
+      "c) De 15 a 20 veces por hora.",
+      "d) De 25 a 30 veces por hora."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "38. Según el Decreto 47/2023 de 10 de mayo que aprueba el Reglamento General de Organización y Funcionamiento de la Atención Primaria de Salud de la Comunidad Autónoma de Extremadura, el personal celador está incluido dentro del Área de:",
+    "options": [
+      "a) Área asistencial",
+      "b) Área de suministros y mantenimiento",
+      "c) Área de salud comunitaria",
+      "d) Área de información, administración y atención a la población"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "39. La humedad del ambiente de un quirófano debe mantenerse entre:",
+    "options": [
+      "a) 10-20 %",
+      "b) 30-40 %.",
+      "c) 50-60 %.",
+      "d) 80-90 %"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "40. Entre los criterios de viabilidad de la autopsia fetal podemos afirmar que:",
+    "options": [
+      "a) Fetos de menos de 22 semanas según la OMS, no son viables. Son abortos, y deben ser considerados como biopsia.",
+      "b) Fetos de peso inferior a 500 gramos según la OMS, no son viables. Son abortos, y deben ser considerados como biopsia",
+      "c) A y B son falsas",
+      "d) A y B son ciertas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "41. ¿Cómo se denomina la sala o dependencia, anexa al quirófano, que sirve para proporcionar atención y asistencia al paciente, así como llevar a cabo los cuidados que requiera este, antes de ser operado?",
+    "options": [
+      "a) Zona de lavados quirúrgicos.",
+      "b) Intermedia.",
+      "c) Antequirófano.",
+      "d) Sala de reanimación."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "42. ¿Cuál de las siguientes afirmaciones es incorrecta respecto al aislamiento inverso?:",
+    "options": [
+      "a) se utiliza para proteger al paciente inmunodeprimido",
+      "b) el lavado de manos es obligatorio",
+      "c) las personas que entren deberán retirarse toda la ropa antes de salir de la habitación y depositarla en los contenedores",
+      "d) la puerta de la habitación deberá permanecer cerrada"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "43. El material estéril:",
+    "options": [
+      "a) No posee ningún tipo de microorganismo patógeno.",
+      "b) No posee gérmenes tipo virus, bacterias y hongos.",
+      "c) No posee ningún tipo de microorganismo patógeno, ni microorganismo no patógeno, e incluso ni siquiera sus formas de resistencia.",
+      "d) No posee ningún tipo de microorganismo patógeno y no patógeno."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "44. Si un celador es requerido por un compañero para sentar a un paciente que no colabora en una silla de ruedas, se colocarán:",
+    "options": [
+      "a) Uno enfrente del paciente y el otro sujetando la silla",
+      "b) Uno a cada lado del paciente",
+      "c) Los dos al mismo lado del paciente",
+      "d) Está prohibido sentar en una silla de ruedas a un paciente que no colabora"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "45. El aislamiento entérico no requiere:",
+    "options": [
+      "a) Lavado de manos.",
+      "b) Uso de guantes.",
+      "c) Control de objetos contaminados.",
+      "d) Uso de mascarilla."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "46. ¿Qué persigue el aislamiento protector o inverso?",
+    "options": [
+      "a) Una habitación aireada.",
+      "b) Proteger a pacientes con rubeola.",
+      "c) Proteger a pacientes con sarampión.",
+      "d) Proteger a pacientes con defensas disminuidas como por ejemplo pacientes inmunodeprimidos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "47. Es una función exclusiva del celador con los pacientes fallecidos:",
+    "options": [
+      "a) El traslado de los cadáveres al mortuorio.",
+      "b) El amortajamiento.",
+      "c) El aseo del paciente.",
+      "d) Todas son funciones exclusivas del celador."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "48. Las medidas a adoptar por el personal sanitario ante cualquier paciente hospitalizado, independientemente de la patología que padezca, siempre que vaya a entrar en contacto con sangre o fluidos corporales, excepto el sudor, piel no intacta y membranas mucosas, se denomina:",
+    "options": [
+      "a) Precauciones estándar o de primer nivel.",
+      "b) Barreras secundarias.",
+      "c) Precauciones generales.",
+      "d) Barreras estándar."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "49. ¿Cuál es la principal medida preventiva para evitar las infecciones cruzadas en el hospital?",
+    "options": [
+      "a) Lavado de manos quirúrgico.",
+      "b) Lavado de manos higiénico.",
+      "c) Lavado de manos especial.",
+      "d) Lavado de manos antiséptico."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "50. El permiso para la realización de una autopsia clínica lo da:",
+    "options": [
+      "a) El juez de guardia.",
+      "b) La familia.",
+      "c) El médico responsable",
+      "d) El jefe de guardia."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "51. En el Real Decreto 487/1997, el concepto de manipulación manual de cargas no comprende:",
+    "options": [
+      "a) La operación de transporte o sujeción de una carga por parte de uno o varios trabajadores que entrañe riesgos, en particular dorsolumbares, para los trabajadores.",
+      "b) El levantamiento, la colocación, el empuje, la tracción o el desplazamiento que, por sus características o condiciones ergonómicas sean inadecuadas.",
+      "c) Transportar o mantener la carga alzada; la sujeción de ésta con las manos y con otras partes del cuerpo, como la espalda, y lanzar la carga de una persona a otra.",
+      "d) El transporte de una carga cuando no entraña riesgo alguno para la seguridad y salud de los trabajadores."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "52. ¿Cuánto tiempo al día habrá que abrir ventanas para ventilar, si el hospital no dispone de aire acondicionado o está averiado?",
+    "options": [
+      "a) De 10 a 15 Minutos, en diferentes intervalos.",
+      "b) De 30 a 45 minutos, en diferentes intervalos.",
+      "c) De 1 a 2 horas, en diferentes intervalos.",
+      "d) Más de 4 horas en diferentes intervalos."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "53. La temperatura de las habitaciones del hospital debe oscilar entre:",
+    "options": [
+      "a) 16-18ºC",
+      "b) 20-22ºC",
+      "c) 26-28ºC",
+      "d) 30-32ºC"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "54. ¿De qué otra cama es variante la cama de Gatch?",
+    "options": [
+      "a) De la cama Clinitron",
+      "b) Del armazón de Foster",
+      "c) De la cama articulada.",
+      "d) De la cama Stryker."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "55. ¿Para qué tipo de pacientes se emplea la cama Clinitron?",
+    "options": [
+      "a) En fractura de miembros superiores.",
+      "b) En grandes quemados.",
+      "c) En fractura de miembros superiores.",
+      "d) En enfermos con úlceras por presión."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "56. ¿Quién es el/la responsable del funcionamiento de la planta de hospitalización?",
+    "options": [
+      "a) La gobernanta.",
+      "b) La supervisora de enfermería.",
+      "c) El médico de la unidad.",
+      "d) La enfermera de planta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "57. Cuál de las siguientes no es función exclusiva del celador según el artículo 28 del Decreto 47/2023 de 10 de mayo que aprueba el Reglamento General de Organización y Funcionamiento de la Atención Primaria de Salud de la Comunidad Autónoma de Extremadura:",
+    "options": [
+      "a) Registrar adecuadamente la actividad realizada en los sistemas de registro e información sanitarios y no sanitarios determinados por el SES y conforme a los procedimientos establecidos por el mismo",
+      "b) Participar activamente en la información y asesoramiento de los usuarios y usuarias, de forma presencial, telefónica, o por los medios que se determinen, sobre actividades y normas del centro, canalización y circulación de personas, adaptándose a las normas de los sistemas de registro que se establezcan en cada momento, con las herramientas facilitadas a tal efecto.",
+      "c) Recoger los datos identificativos del/la paciente, registrarlos en el sistema de información establecido por el SES, y colaborar con la unidad administrativa en el tratamiento definitivo de datos en la base de datos de población protegida para la asistencia sanitaria.",
+      "d) Vigilar y controlar el buen funcionamiento y uso del centro, así como del mobiliario, equipos y utillaje."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "58. ¿Qué le sugiere el término OBDUCCIÓN?:",
+    "options": [
+      "a) Un tipo de prueba diagnostica",
+      "b) Una fase de la autopsia judicial",
+      "c) Un movimiento anatómico del cuerpo",
+      "d) Un tipo de terapia inmunosupresora"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "59. ¿Cuáles son los 5 momentos para la higiene de manos?",
+    "options": [
+      "a) 1. Antes de entrar en la habitación; 2. Antes de realizar una tarea aséptica; 3. Después del riesgo de exposición a fluidos corporales; 4. Después del contacto con el paciente; 5. Tras salir de la habitación",
+      "b) 1. Antes del contacto con el entorno del paciente; 2. Antes de realizar una tarea aséptica; 3. Después del riesgo de exposición a sangre; 4. Después del contacto con el paciente; 5. Después del contacto con el entorno del paciente",
+      "c) 1. Antes del contacto con el paciente; 2. Antes de realizar una tarea aséptica; 3. Después del riesgo de exposición a fluidos corporales; 4. Después del contacto con el paciente; 5. Después del contacto con el entorno del paciente",
+      "d) 1. Antes de entrar en la habitación; 2. Antes del contacto con el paciente; 3. Antes de realizar una tarea aséptica; 4. Después del riesgo de exposición a fluidos corporales; 5. Antes de salir de la habitación"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "60. Señala la respuesta incorrecta acerca de los sistemas de columna seca:",
+    "options": [
+      "a) son sistemas de protección pasiva contra incendios",
+      "b) los sistemas de columna seca ascendentes constarán de salidas en las plantas pares hasta la octava y en todas a partir de ésta",
+      "c) los sistemas de columna seca descendentes se instalará válvula de seccionamiento y salida en cada planta",
+      "d) las respuestas b) y c) son correctas"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "61. Es una función del celador en atención primaria en Extremadura según el artículo 28 del decreto 47/2023 de 10 de mayo:",
+    "options": [
+      "a) Realizar las tareas de apoyo, traslado y desplazamientos de las personas que lo necesiten.",
+      "b) Colaborar en las tareas de apoyo en el traslado y desplazamiento de las personas que lo necesiten.",
+      "c) Recoger los datos identificativos del/la paciente, registrarlos en el sistema de información establecido por el Sistema Nacional de Salud",
+      "d) Ninguna respuesta es correcta"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "62. Los restos anatómicos y órganos sin identidad suficiente, bolsas y bancos de sangre, que no estén incluidos en los grupos III y VII, procedentes de maternidades, del diagnóstico, tratamiento o prevención de enfermedades humanas según el decreto 109/2015 de 19 de mayo, deben ser incluidos en:",
+    "options": [
+      "a) Grupo II",
+      "b) Grupo IV",
+      "c) Grupo V",
+      "d) No se consideran residuos sanitarios"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "63. ¿En qué posición se debe colocar el cadáver si, el facultativo se propone realizar una autopsia raquídea limitada al estudio del sistema nervioso central?:",
+    "options": [
+      "a) en posición decúbito lateral",
+      "b) en posición decúbito supino",
+      "c) en posición decúbito supino para realizar la primera incisión y posteriormente decúbito lateral",
+      "d) en posición decúbito prono"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "64. Cualquier residuo que se genere en el ejercicio de la actividad sanitaria y que, atendiendo a su naturaleza, pueda tener características de más de un grupo, o que como consecuencia necesaria de la práctica profesional sanitaria esté constituido por una mezcla de residuos pertenecientes a varios de los grupos anteriormente definidos:",
+    "options": [
+      "a) tendrá la consideración igual a la de cualquier residuo sanitario químico",
+      "b) tendrá la consideración que resulte más exigente para garantizar la protección de la salud y el medio ambiente",
+      "c) tendrá la consideración igual a la de cualquier residuo sanitario citotóxico o citostático",
+      "d) Todas las respuestas son incorrectas"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "65. Indique la respuesta correcta: En el transporte de un paciente en camilla:",
+    "options": [
+      "a) el celador va siempre detrás de la cabecera del paciente, colocando al paciente de cara al sentido de la marcha, los pies del paciente van por delante",
+      "b) como excepción, en el caso de traslado en camilla de pacientes asistidos, el celador empujará por el piecero",
+      "c) al entrar en el ascensor, primero pasa la cabecera de la camilla y al salir del mismo, primero salen los pies del paciente",
+      "d) todas las contestaciones anteriores son correctas"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "66. A una persona con hemorragias exteriorizadas por el aparato genital femenino, ¿Cuál es la posición corporal más indicada en la que la deberíamos mantenerla en espera de su traslado en ambulancia al Hospital?:",
+    "options": [
+      "a) Fritz",
+      "b) Samuel",
+      "c) Fowler",
+      "d) Sims"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "67. Al Jefe de Personal subalterno le corresponde:",
+    "options": [
+      "a) mantener el régimen establecido por la Dirección para el acceso de visitantes y personal a las distintas dependencias de la institución.",
+      "b) mantener el régimen establecido por la Dirección para el acceso de enfermos y visitantes a las distintas dependencias de la institución.",
+      "c) mantener el régimen establecido por la Dirección para el acceso de enfermos, visitantes y personal a las distintas dependencias de la institución.",
+      "d) Ninguna respuesta es correcta"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "68. Es un método de esterilización por calor seco:",
+    "options": [
+      "a) autoclave",
+      "b) estufa Poupinel",
+      "c) tindalización",
+      "d) las contestaciones b) y c) son correctas"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "69. ¿Qué tipo de muleta es la de Lofstrand?",
+    "options": [
+      "a) muleta de aluminio",
+      "b) muleta de plataforma",
+      "c) muleta de antebrazo",
+      "d) muleta axilar"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "70. De las siguientes afirmaciones señala la incorrecta:",
+    "options": [
+      "a) El plano oblicuo presenta una angulación de 45º respecto al plano sagital y al plano frontal.",
+      "b) El plano transversal es perpendicular al plano sagital.",
+      "c) El plano sagital es un plano vertical que atraviesa longitudinalmente el cuerpo.",
+      "d) Todas las respuestas anteriores son falsas"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "71. ¿Qué plano, perpendicular al sagital, divide el cuerpo en dos mitades, una superior y otra inferior?",
+    "options": [
+      "a) Axial",
+      "b) Frontal",
+      "c) Medio",
+      "d) Longitudinal."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "72. Según el estatuto del personal no sanitario, los celadores tendrán a su cargo la vigilancia nocturna:",
+    "options": [
+      "a) De la parte externa del edificio.",
+      "b) De las afueras del edificio.",
+      "c) Tanto del exterior como del interior del edificio.",
+      "d) Solamente del interior del edificio."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "73. El cuerpo del paciente, después de la muerte, se colocará normalmente:",
+    "options": [
+      "a) En posición de decúbito prono, con los brazos a los lados, las palmas hacia abajo o cruzando las manos sobre el abdomen.",
+      "b) En decúbito dorsal, con los brazos a los lados, las palmas hacia abajo o cruzando las manos sobre el abdomen.",
+      "c) En posición de decúbito supino, con los brazos extendidos y las palmas hacia arriba.",
+      "d) En posición de decúbito prono, con los brazos extendidos y las palmas hacia arriba."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "74. En relación con los pacientes fallecidos, el celador:",
+    "options": [
+      "a) Solamente se encargarán de trasladar los cadáveres al mortuorio.",
+      "b) Informarán a los familiares de la causa de la defunción.",
+      "c) No debe estar presente cuando se vaya a amortajarlos.",
+      "d) Ayudará a las enfermeras o auxiliares a amortajarlos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "75. En caso de fallecimiento de un enfermo en el quirófano, ¿cuál será la función del celador?:",
+    "options": [
+      "a) Indicará a los familiares los trámites a seguir para el enterramiento.",
+      "b) Se encargará de trasladar el cadáver a la sala del mortuorio.",
+      "c) Se hará cargo del cadáver hasta que llegue el personal de la funeraria.",
+      "d) Se encargará de trasladar el cadáver hasta la funeraria."
+    ],
+    "correct": 1
+  }
+
+        ];
+
+          const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
