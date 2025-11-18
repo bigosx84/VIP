@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">Torrente Temas 7 y 9</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+  {
+    "question": "1. Según su origen la historia clínica es un documento de tipo:",
+    "options": [
+      "a) gráfico",
+      "b) primario",
+      "c) informático",
+      "d) sanitario"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "2. El celador no está autorizado para facilitar el acceso a una historia clínica ni al paciente ni a ningún familiar ni allegado. En el caso de tener que enfrentar una solicitud en este sentido, el celador debe orientar a solicitar copia de la historia clínica, en este caso:",
+    "options": [
+      "a) A través del servicio de admisión",
+      "b) Solicitándolo a la dirección gerencia",
+      "c) Solicitándolo a la supervisora de la planta",
+      "d) A través del servicio de atención al usuario"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "3. ¿Está el celador autorizado para facilitar el acceso a una Historia Clínica?",
+    "options": [
+      "a) No.",
+      "b) Sí.",
+      "c) Solo si alguien se lo solicita por escrito.",
+      "d) Solo si el solicitante es el propio paciente."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "4. Uno de los siguientes no es un documento de traslado ordinario por los celadores; señala cuál:",
+    "options": [
+      "a) Hojas de interconsulta.",
+      "b) Pedidos a almacén.",
+      "c) Historias clínicas.",
+      "d) Órdenes de tratamientos prescritos por personal no sanitario."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "5. A los efectos de la ley 3/2005 de información sanitaria y autonomía del paciente, la conformidad expresa del paciente, manifestada de forma voluntaria y libre, previa obtención de la información adecuada con tiempo suficiente, para la realización de cualquier actuación que afecte a su salud, se denomina:",
+    "options": [
+      "a) Consentimiento adecuado",
+      "b) Consentimiento manifiesto",
+      "c) Consentimiento informado",
+      "d) Consentimiento expreso"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "6. En relación con la Ley 3/2005, de 8 de julio, de información sanitaria y autonomía del paciente, se establece que:",
+    "options": [
+      "a) El titular del derecho a la información es el paciente y las personas vinculadas al mismo.",
+      "b) Los menores de edad serán titulares del derecho a la información cuando estén emancipados o tengan 16 años cumplidos",
+      "c) En caso de incapacidad del paciente, o en aquellos casos en que, a criterio del médico que le asiste, el paciente carece de capacidad para entender la información o para hacerse cargo de su situación, a causa de su estado físico o psíquico, se deberá informar a la persona que ostente su representación o, en su defecto, a las personas vinculadas a él por razones familiares o de hecho que asuman la responsabilidad de las decisiones que hayan de adoptarse.",
+      "d) Son correctas b) y c)"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "7. La Ley 3/2005, de 8 de julio, de información sanitaria y autonomía del paciente, establece que aquella información que se considere relevante a efectos preventivos, epidemiológicos o de investigación se conservará:",
+    "options": [
+      "a) Al menos 15 años desde el alta del proceso asistencial.",
+      "b) Indefinidamente y siempre que sea posible se despersonalizarán los datos al objeto de impedir la identificación de los sujetos implicados.",
+      "c) Indefinidamente sólo en aquellos casos que tengan repercusiones judiciales.",
+      "d) Un mínimo de quince años y un máximo de veinte años."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "8. La Ley 3/2005, de 8 de julio, de información sanitaria y autonomía del paciente, establece, en relación al consentimiento informado que:",
+    "options": [
+      "a) A los efectos de la presente Ley, se entiende por consentimiento informado la conformidad expresa del paciente manifestada de forma voluntaria y libre, previa obtención de la información adecuada con tiempo suficiente para la realización de cualquier actuación relativa a su salud.",
+      "b) La prestación del consentimiento informado es un derecho del paciente y su obtención un deber del médico responsable. El consentimiento informado deberá recabarse por el personal sanitario responsable de la asistencia al paciente.",
+      "c) El consentimiento informado siempre deberá recabarse por escrito. El facultativo deberá ponderar en cada caso que cuanto menos dudoso sea el resultado de un procedimiento menos necesario resulte el previo consentimiento por escrito del paciente",
+      "d) Las respuestas a) y b) son correctas"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "9. La Ley 3/2005, de 8 de julio, de información sanitaria y autonomía del paciente, contempla la posibilidad de que se limite la grabación y difusión de imágenes mediante cualquier medio que permita la identificación como destinatarios de atenciones sanitarias, debiendo obtenerse para tales actuaciones:",
+    "options": [
+      "a) Autorización expresa o tácita del afectado.",
+      "b) Autorización previa y expresa del afectado o su representante.",
+      "c) Autorización expresa únicamente del afectado.",
+      "d) Autorización expresa o tácita del afectado y expresa del representante."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "10. Con relación al derecho a la información asistencial que reconoce la Ley 3/2005, de 8 de julio, de información sanitaria y autonomía del paciente, para el supuesto que exista alto riesgo de posibilidad de transmisión de una enfermedad grave, señale la respuesta CORRECTA:",
+    "options": [
+      "a) Toda persona tiene derecho a que no se transmita información de su estado de salud o enfermedad a las personas a él vinculadas.",
+      "b) Toda persona tiene derecho a que no se transmita información de su estado de salud o enfermedad a las personas a él vinculadas por razones familiares o de hecho.",
+      "c) Toda persona tiene derecho a que no se transmita información de su estado de salud o enfermedad a terceras personas.",
+      "d) Este derecho no se reconocerá, debiendo motivarse tal circunstancia en la historia clínica."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "11. Señale la respuestas correcta:",
+    "options": [
+      "a) El paciente tendrá derecho de acceso a la documentación obrante en su historia clínica, incluso a aquella parte de la historia que contenga anotaciones subjetivas realizadas por los profesionales.",
+      "b) El derecho de acceso a la historia clínica no puede ejercitarse en perjuicio del derecho de terceros a la confidencialidad de sus datos si figuran en dicha documentación, y así consta.",
+      "c) El derecho de acceso del paciente a la historia clínica puede ejercitarse también por representación legal, siempre que ésta esté debidamente acreditada.",
+      "d) b y c son ciertas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "12. Respecto al derecho a la autonomía del paciente del Decreto 3/2005, de 8 de julio, de información sanitaria y autonomía del paciente, es cierto que:",
+    "options": [
+      "a) El principio de autonomía alcanza su máxima expresión a través de la Expresión Anticipada de Voluntades y del consentimiento informado.",
+      "b) La expresión anticipada de voluntades puede ser emitida por personas de cualquier edad.",
+      "c) El documento de expresión anticipada de voluntades, una vez emitido, no puede ser modificado.",
+      "d) Las instrucciones contenidas en el documento de expresión anticipada de voluntades se tendrán siempre en cuenta, aunque incorporen previsiones contrarias al ordenamiento jurídico."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "13. Los tipos de contención del enfermo psiquiátrico son:",
+    "options": [
+      "a) Reducción física.",
+      "b) Reducción verbal.",
+      "c) Reducción farmacológica.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "14. De los diferentes tipos de sujeción aplicables al enfermo mental, indica cuál de ellos debe usarse en último lugar:",
+    "options": [
+      "a) Reducción farmacológica.",
+      "b) Reducción física.",
+      "c) Reducción verbal.",
+      "d) Reducción ambiental."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "15. El internamiento involuntario por razón de trastorno psíquico viene regulado en la:",
+    "options": [
+      "a) Ley 1/2000, de Enjuiciamiento Civil",
+      "b) Ley 1/2010, de Salud Mental de Extremadura",
+      "c) Ley 41/2002, de Enjuiciamiento Criminal",
+      "d) Ley 41/2000, Reguladora de las Instituciones Sanitarias"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "16. ¿A qué aspecto del sujeto nos estamos refiriendo cuando decimos que el fono emocional de una persona da color a su vida psíquica?",
+    "options": [
+      "a) Personalidad.",
+      "b) Afecto.",
+      "c) Carácter.",
+      "d) Temperamento"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "17. La forma de hablar con un lenguaje con \"tacos\" se denomina:",
+    "options": [
+      "a) Disartria.",
+      "b) Musitación.",
+      "c) Coprolalia.",
+      "d) Estereotipia verbal."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "18. Entendemos por psiquiatría:",
+    "options": [
+      "a) Una rama de la medicina.",
+      "b) La parte de la medicina que tiene por objeto el estudio y prevención de las enfermedades mentales.",
+      "c) Una parte de la medicina que tiene por objeto el diagnóstico y tratamiento de las enfermedades mentales,",
+      "d) Todas son ciertas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "19. En las unidades de hospitalización psiquiátrica no se dedican a;",
+    "options": [
+      "a) Desintoxicación.",
+      "b) Evaluación y progreso diagnóstico.",
+      "c) Reinserción social.",
+      "d) Fracaso de tratamientos ambulatorios."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "20. La finalidad de los centros día en salud mental es:",
+    "options": [
+      "a) La recuperación de habilidades para integrarse en la sociedad.",
+      "b) La desintoxicación de drogas de abuso.",
+      "c) La integración y terapia familiar.",
+      "d) Todas son ciertas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "21. El trastorno depresivo mayor en salud mental se caracteriza por:",
+    "options": [
+      "a) Preocupación, autocrítica y pensamientos de autodevaluación.",
+      "b) La falta de energía, sobre todo en hombres.",
+      "c) Está caracterizado por uno o más episodios depresivos mayores.",
+      "d) Episodios de delirios, alucinaciones y TCA."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "22. La inmovilización total o parcial de un enfermo en la unidad de psiquiatría se iniciará por:",
+    "options": [
+      "a) La sujeción de los miembros inferiores",
+      "b) Indistintamente",
+      "c) La sujeción de los miembros superiores",
+      "d) La sujeción abdominal"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "23. Al realizar una sujeción mecánica o inmovilización mecánica parcial:",
+    "options": [
+      "a) El celador colabora con el resto del equipo, que debe ser lo más numeroso posible, nunca menos de 6 personas.",
+      "b) Se sujetarán las muñecas y los tobillos a las barandillas de la cama.",
+      "c) Lo primero que se coloca es el cinturón ancho abdominal y a continuación la mano derecha y el pie izquierdo, o la mano izquierda y el pie derecho",
+      "d) Se inmovilizará el tronco y las cuatro extremidades."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "24. El encargado de acompañar al paciente psiquiátrico en su traslado es:",
+    "options": [
+      "a) Enfermero.",
+      "b) Celador.",
+      "c) Médico.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "25. Los componentes del equipo de sujeción Segufix®, no incluyen:",
+    "options": [
+      "a) Muñequeras.",
+      "b) Tiras para cambios posturales.",
+      "c) Pañales para incontinencia.",
+      "d) Llaves magnéticas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "26. El Decreto por el que se establece la organización y funcionamiento de la atención a la salud mental en la Comunidad Autónoma de Extremadura es:",
+    "options": [
+      "a) 29/2002 de 26 de Junio",
+      "b) 92/2006,de 16 de Mayo",
+      "c) 26/2004, de 30 de Mayo",
+      "d) Ninguna respuesta es correcta"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "27. En Extremadura, los dispositivos hospitalarios diseñados para dar atención a pacientes cuya situación psicopatológica persiste después del tratamiento habitual implantado en los Equipos de Salud Mental y las Unidades de Hospitalización Breve, y para proporcionar terapéuticas rehabilitadoras de las funciones que se hayan podido ver afectadas",
+    "options": [
+      "a) Unidades de Media estancia (UME)",
+      "b) Unidades de rehabilitación hospitalaria (URH)",
+      "c) Centros de rehabilitación psicosocial (CRPS)",
+      "d) Hospitales de día"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "28. ¿Qué dispositivo de salud mental es la vía de acceso al resto de dispositivos sociosanitarios en este campo de la salud?",
+    "options": [
+      "a) el hospital de día",
+      "b) las unidades de hospitalización psiquiátrica",
+      "c) los equipos de salud mental",
+      "d) talleres ocupacionales"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "29. Las alucinaciones se consideran uno de los síntomas más característicos de la esquizofrenia afectando a todos los sentidos ¿cuáles se consideran más frecuentes?",
+    "options": [
+      "a) las alucinaciones auditivas y visuales",
+      "b) las alucinaciones táctiles",
+      "c) las alucinaciones olfativas",
+      "d) las alucinaciones gustativas"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "30. ¿A partir de qué año se integra la salud mental en el Sistema Nacional de salud?",
+    "options": [
+      "a) 1978",
+      "b) 1962",
+      "c) 1986",
+      "d) 1973"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "31. A las unidades de hospitalización breve se accede:",
+    "options": [
+      "a) A través de los CRPS",
+      "b) A través de urgencias",
+      "c) A través de los CRR",
+      "d) Ninguna es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "32. El primer eslabón de la cadena de supervivencia es;",
+    "options": [
+      "a) RCP básica.",
+      "b) Desfibrilación precoz.",
+      "c) Activación de los servicios de emergencia.",
+      "d) Soporte vital avanzado"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "33. Según el Real Decreto 836/2012 de 25 de Mayo, los vehículos de transporte sanitario, independientemente de su clase, deberán cumplir, entre otras, las siguientes exigencias con respecto a la célula sanitaria:",
+    "options": [
+      "a) Disponer de revestimientos interiores lisos y sin elementos cortantes y llevar cuñas y botellas irrompibles",
+      "b) Disponer de una puerta lateral izquierda y puerta trasera con apertura suficiente para permitir el acceso del paciente",
+      "c) Poseer camillas y material mínimo de inmovilización",
+      "d) Disponer de botiquines adaptados a cada nivel dependiendo del tipo de ambulancia"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "34. Según el RD 836/2012 de 25 de Mayo, las ambulancias no asistenciales deberán contar con una dotación personal que cumpla los siguientes requisitos:",
+    "options": [
+      "a) Al menos con conductor en posesión del título del certificado de profesionalidad de Transporte Sanitario y otro en posesión del título de FP de Técnico en Emergencias Sanitarias en funciones de ayudante.",
+      "b) Al menos, con un conductor que ostente, como mínimo, el certificado de profesionalidad de transporte sanitario y, otro en funciones de ayudante con la misma cualificación.",
+      "c) Al menos, con un conductor que ostente, como mínimo, el certificado de profesionalidad de transporte sanitario y, cuando el tipo de servicio lo requiera, otro en funciones de ayudante con la misma cualificación.",
+      "d) Al menos con un conductor y un sanitario que estén en posesión del título del certificado de profesionalidad de Transporte Sanitario."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "35. El estilo Utstein en el soporte vital básico es:",
+    "options": [
+      "a) Un acuerdo a nivel mundial para consensuar definiciones relacionadas con la RCP.",
+      "b) La principal asociación de indicaciones en RCP a nivel europeo.",
+      "c) La secuencia de actuación correcta ante una emergencia clínica,",
+      "d) Todas son ciertas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "36. ¿Cómo se denomina el sistema de triage que se viene utilizando en las urgencias extrahospitalarias?",
+    "options": [
+      "a) SET",
+      "b) Manchester",
+      "c) START",
+      "d) Ninguna respuesta es correcta"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "37. Señala el orden correcto de las fases del decálogo de la atención prehospitalaria en accidentes de múltiples víctimas y catástrofes:",
+    "options": [
+      "a) Alarma, alerta, aproximación, triaje, aislamiento, estabilidad, SVB-SVA, transporte, transferencia, reactivación",
+      "b) Alerta, alarma, aproximación, aislamiento, triaje, estabilización, SVB-SVA, transporte, transferencia, reactivación",
+      "c) Alerta, alarma, aproximación, aislamiento, triaje, estabilización, SVB-SVA, transferencia, transporte, reactivación",
+      "d) Alerta, alarma, aproximación, aislamiento, triaje, SVB-SVA, estabilización, transporte, transferencia, reactivación"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "38. Antes de iniciar el transporte de una víctima a un centro sanitario tras un accidente, se deberá responder por orden a las siguientes preguntas:",
+    "options": [
+      "a) ¿Por dónde?, ¿dónde?, ¿cuándo? y ¿cómo?",
+      "b) ¿Dónde?, ¿por dónde?, ¿cómo? y ¿cuándo?",
+      "c) ¿Dónde?, ¿cómo?, ¿por dónde? y ¿cuándo?",
+      "d) ¿Por dónde?, ¿dónde?, ¿cuándo? y ¿cómo?"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "39. Con carácter general, en la mayoría de los hospitales se establecen cinco niveles de gravedad en la selección y clasificación de los pacientes. Qué color se corresponde con el nivel 4:",
+    "options": [
+      "a) Azul",
+      "b) Verde",
+      "c) Naranja",
+      "d) Amarillo"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "40. Al conjunto de actuaciones protocolizadas de soporte vital que se consideran necesarias antes de iniciar el traslado de un enfermo críticamente lesionado, se denomina:",
+    "options": [
+      "a) Fase de traslado",
+      "b) Fase de activación",
+      "c) Fase de transferencia",
+      "d) Fase de estabilización"
+    ],
+    "correct": 3
+  }
+  {
+    "question": "41. ¿Qué color corresponde al nivel 3 en la clasificación de pacientes según el sistema Manchester?",
+    "options": [
+      "a) Rojo",
+      "b) Amarillo",
+      "c) Verde",
+      "d) Naranja"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "42. Señala la opción incorrecta en el traslado de un paciente en camilla:",
+    "options": [
+      "a) Se debe colocar al paciente siempre con los pies por delante.",
+      "b) En el ascensor debe entrar primero la cabecera de la camilla.",
+      "c) En el ascensor debe salir primero la cabecera de la camilla.",
+      "d) El celador debe caminar siempre detrás del cabecero."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "43. Según el RD 836/2012, ¿qué dotación mínima debe llevar una ambulancia asistencial tipo B?",
+    "options": [
+      "a) Un técnico y un conductor",
+      "b) Dos técnicos",
+      "c) Un médico, un enfermero y un técnico",
+      "d) Un técnico y un ayudante"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "44. ¿Cuál es la posición más adecuada para un paciente con dificultad respiratoria durante el traslado?",
+    "options": [
+      "a) Trendelemburg",
+      "b) Simms",
+      "c) Fowler",
+      "d) Decúbito prono"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "45. ¿Qué es el triage START?",
+    "options": [
+      "a) Un sistema de triaje utilizado en pediatría",
+      "b) Un sistema de clasificación rápida en incidentes con múltiples víctimas",
+      "c) Un sistema de clasificación intrahospitalario",
+      "d) Un sistema de clasificación exclusivo para emergencias químicas"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "46. En el soporte vital básico, ¿a qué ritmo deben realizarse las compresiones torácicas?",
+    "options": [
+      "a) 60-80 por minuto",
+      "b) 80-100 por minuto",
+      "c) 100-120 por minuto",
+      "d) 140 por minuto"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "47. ¿Cuál es la relación compresión-ventilación en un adulto durante la RCP básica?",
+    "options": [
+      "a) 10:2",
+      "b) 15:2",
+      "c) 20:2",
+      "d) 30:2"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "48. ¿Cuál es el primer paso del Soporte Vital Básico?",
+    "options": [
+      "a) Abrir la vía aérea",
+      "b) Comprobar respuesta",
+      "c) Activar el sistema de emergencias",
+      "d) Iniciar compresiones torácicas"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "49. ¿Cuándo debe utilizarse el desfibrilador externo automático (DEA)?",
+    "options": [
+      "a) Siempre antes de comenzar la RCP",
+      "b) Únicamente cuando el paciente respira con dificultad",
+      "c) Tan pronto como esté disponible",
+      "d) Únicamente si el paciente presenta pulso débil"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "50. El triaje intrahospitalario más utilizado en los servicios de urgencias es:",
+    "options": [
+      "a) START",
+      "b) META",
+      "c) Manchester",
+      "d) ESI"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "51. ¿Qué organismo define y regula el estilo Utstein?",
+    "options": [
+      "a) OMS",
+      "b) SEMES",
+      "c) ERC (European Resuscitation Council)",
+      "d) Ministerio de Sanidad"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "52. ¿Qué nivel del sistema Manchester corresponde a una emergencia vital?",
+    "options": [
+      "a) Nivel 1",
+      "b) Nivel 2",
+      "c) Nivel 3",
+      "d) Nivel 4"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "53. La duración máxima recomendada de la comprobación de respiración es:",
+    "options": [
+      "a) 5 segundos",
+      "b) 10 segundos",
+      "c) 15 segundos",
+      "d) 20 segundos"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "54. Para abrir la vía aérea en un paciente inconsciente sin sospecha de trauma se usa:",
+    "options": [
+      "a) Tracción mandibular",
+      "b) Maniobra frente-mentón",
+      "c) Maniobra de Heimlich",
+      "d) Triple maniobra"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "55. ¿Cuál es la causa más frecuente de obstrucción de la vía aérea en un inconsciente?",
+    "options": [
+      "a) Cuerpo extraño",
+      "b) Lengua caída hacia la faringe",
+      "c) Vómito",
+      "d) Saliva espesa"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "56. El color verde en el sistema Manchester significa:",
+    "options": [
+      "a) Atención inmediata",
+      "b) Atención muy urgente",
+      "c) Atención urgente",
+      "d) Atención diferida"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "57. En una atención a múltiples víctimas, ¿qué etiqueta corresponde a los fallecidos?",
+    "options": [
+      "a) Verde",
+      "b) Amarillo",
+      "c) Negro",
+      "d) Azul"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "58. ¿Qué es el “golden hour” en emergencias?",
+    "options": [
+      "a) La primera hora tras el traumatismo en la que la intervención es crítica",
+      "b) El tiempo máximo de traslado al hospital",
+      "c) El tiempo que tarda el servicio de emergencias en llegar",
+      "d) El periodo de estabilización del paciente en urgencias"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "59. ¿Qué profesionales componen la dotación mínima de una UVI móvil (Tipo C)?",
+    "options": [
+      "a) Un técnico y un conductor",
+      "b) Un enfermero y un técnico",
+      "c) Un médico, un enfermero y un técnico",
+      "d) Dos técnicos"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "60. Según RD 836/2012, ¿qué tipo de ambulancia está destinada al transporte individual o colectivo programado de pacientes?",
+    "options": [
+      "a) Tipo A1",
+      "b) Tipo A2",
+      "c) Tipo B",
+      "d) Tipo C"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "61. ¿Qué es la fase de transferencia en una emergencia?",
+    "options": [
+      "a) El paso del mando al personal sanitario",
+      "b) El traslado desde el lugar del suceso al hospital",
+      "c) La evaluación inicial del paciente",
+      "d) La entrega del paciente al hospital receptor"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "62. En el sistema START, un paciente que puede caminar se clasifica como:",
+    "options": [
+      "a) Rojo",
+      "b) Amarillo",
+      "c) Verde",
+      "d) Negro"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "63. Los incendios de clase C afectan a:",
+    "options": [
+      "a) Maderas y papeles",
+      "b) Líquidos inflamables",
+      "c) Gases inflamables",
+      "d) Metales combustibles"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "64. La técnica de Heimlich está indicada en:",
+    "options": [
+      "a) Parada cardiaca",
+      "b) Obstrucción leve de vía aérea",
+      "c) Obstrucción grave de vía aérea",
+      "d) Semi-inconsciencia"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "65. ¿Qué se valora primero en el método PAS?",
+    "options": [
+      "a) Avisar",
+      "b) Socorrer",
+      "c) Proteger",
+      "d) Valorar"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "66. El nivel 1 del sistema Manchester corresponde a:",
+    "options": [
+      "a) Emergencia vital",
+      "b) Atención muy urgente",
+      "c) Atención urgente",
+      "d) Atención diferida"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "67. ¿Qué valor indica una frecuencia respiratoria anormal en un adulto?",
+    "options": [
+      "a) 10 rpm",
+      "b) 16 rpm",
+      "c) 20 rpm",
+      "d) 40 rpm"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "68. En caso de traumatismo craneoencefálico, la posición más recomendada es:",
+    "options": [
+      "a) Trendelemburg",
+      "b) Decúbito supino",
+      "c) Fowler",
+      "d) Lateral de seguridad"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "69. Una ambulancia tipo A1 está destinada a:",
+    "options": [
+      "a) Transporte sanitario colectivo",
+      "b) Transporte sanitario individual",
+      "c) Transporte urgente",
+      "d) Emergencias vitales"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "70. ¿Dónde se realiza la clasificación inicial de víctimas en un accidente con múltiples afectados?",
+    "options": [
+      "a) En el hospital receptor",
+      "b) En el punto de reunión de víctimas",
+      "c) En la zona fría",
+      "d) En la entrada del hospital"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "71. En RCP, la profundidad adecuada de las compresiones en un adulto es:",
+    "options": [
+      "a) 3 cm",
+      "b) 4 cm",
+      "c) 5-6 cm",
+      "d) 7 cm"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "72. ¿Qué tipo de guantes deben usarse en una emergencia sanitaria?",
+    "options": [
+      "a) De algodón",
+      "b) Estériles",
+      "c) No estériles, de un solo uso",
+      "d) Industriales"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "73. La respiración agónica se caracteriza por:",
+    "options": [
+      "a) Respiraciones profundas y regulares",
+      "b) Jadeos aislados y poco efectivos",
+      "c) Taquipnea intensa",
+      "d) Apnea prolongada"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "74. La etiqueta roja en una clasificación START indica:",
+    "options": [
+      "a) Leve",
+      "b) Moderado",
+      "c) Grave",
+      "d) Fallecido"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "75. ¿Qué es el Soporte Vital Avanzado?",
+    "options": [
+      "a) Técnicas básicas realizadas por cualquier ciudadano",
+      "b) Maniobras de reanimación sin equipamiento",
+      "c) Intervención con personal sanitario cualificado y equipamiento avanzado",
+      "d) Uso exclusivo de desfibrilador"
+    ],
+    "correct": 0
+  }
+
+
+        ];
+
+          const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
