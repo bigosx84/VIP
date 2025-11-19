@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Preguntas</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex; flex-wrap: wrap;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px; font-weight: normal;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            width: calc(100% - 20px); max-width: 100%;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm"></form>
+    </div>
+    
+    <script>
+const questions = [
+  {
+      "question": "1. Señale la opción correcta. En su artículo 47, la Ley 6/2006, de 9 de Noviembre, de Farmacia de Extremadura, establece que dispondrán de un Servicio de Farmacia:",
+      "options": [
+        "a) Los centros hospitalarios que dispongan de cien o más camas.",
+        "b) Los centros hospitalarios que dispongan de cincuenta o más camas, siempre que figuren como Centros de Atención Sociosanitaria.",
+        "c) Los centros hospitalarios con menos de cien camas cuya distancia a un Hospital de referencia supere los 50 km en perímetro.",
+        "d) Todas las anteriores son correctas."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "4. En relación al actual Mapa Sanitario de la Comunidad Autónoma de Extremadura, señale cuál de las siguientes NO es un área de Salud de las actualmente establecidas:",
+      "options": [
+        "a) Área de Salud de Badajoz - Olivenza.",
+        "b) Área de Salud de Navalmoral de la Mata.",
+        "c) Área de Salud de Don Benito - Villanueva.",
+        "d) Área de Salud de Mérida."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "5. En su artículo 2, la Ley de Garantías y Uso Racional de Medicamento define «MATERIA PRIMA» como:",
+      "options": [
+        "a) Toda sustancia, activa o inactiva, empleada en la fabricación de un medicamento, ya permanezca inalterada, se modifique o desaparezca en el transcurso del proceso.",
+        "b) Toda sustancia poseedora de propiedades curativas o preventivas que pueda administrarse en humanos con el fin de corregir o modificar sus funciones fisiológicas.",
+        "c) Cualquier otro componente distinto al principio activo que se utilice para componer con aquel una forma farmacéutica.",
+        "d) Cualquier materia destinada a una posterior transformación industrial por un fabricante autorizado."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "6. La titularidad y responsabilidad de los Servicios de Farmacia Hospitalaria recae sobre:",
+      "options": [
+        "a) El Director General de Asistencia Sanitaria del sistema sanitario al que pertenece.",
+        "b) Un farmacéutico especialista en Farmacia Hospitalaria.",
+        "c) La Dirección Médica del centro al que pertenece.",
+        "d) El Ministerio que ejerce, en un momento dado, las competencias en materia de Sanidad."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "30. La farmacoDINAMIA estudia:",
+      "options": [
+        "a) Todas las sustancias que se utilizan para prevenir, diagnosticar o tratar la enfermedad.",
+        "b) Las acciones y los efectos de los fármacos en el organismo humano, con el objetivo de conocer la interacción en las células y sistemas.",
+        "c) Todos los procesos y factores que determinan la cantidad de fármaco presente en el sitio de acción, como resultado de los procesos que atraviesa en su paso por el organismo (liberación, absorción, distribución, metabolismo y excreción).",
+        "d) La influencia de la forma farmacéutica de un medicamento sobre el paso del fármaco por el organismo."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "40. Según el método ABC o de Pareto de clasificación de stock, señale la respuesta incorrecta:",
+      "options": [
+        "a) Grupo A: Un 20% de las referencias representan aproximadamente el 80% del valor del inventario.",
+        "b) Grupo B: Un 20% de las referencias representan aproximadamente el 80% del valor del inventario.",
+        "c) Grupo B: Un 30% de las referencias representan aproximadamente el 15% del valor del inventario.",
+        "d) Grupo C: Un 50% de las referencias representan solo el 5% del valor del inventario."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "41. El nivel de stock de existencias en un Servicio de Farmacia, que garantiza una adecuada atención a la demanda y minimiza los costes de mantenimiento, se denomina:",
+      "options": [
+        "a) Stock sobrante.",
+        "b) Stock óptimo.",
+        "c) Stock de seguridad.",
+        "d) Stock activo."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "42. ¿Cuál de los siguientes no es un sistema de valoración de existencias?",
+      "options": [
+        "a) Método FIFO.",
+        "b) Método LIFO.",
+        "c) Método PMP.",
+        "d) Método BMB."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "90. ¿Cuál de estos no se considera organismo de igualdad de la Administración de la Comunidad Autónoma de Extremadura, según la Ley de Igualdad entre Mujeres y Hombres y contra la violencia de género en Extremadura?",
+      "options": [
+        "a) El Instituto de la Mujer de Extremadura.",
+        "b) El Instituto de la Juventud de Extremadura.",
+        "c) El Centro de Estudios de Género.",
+        "d) La Red de Oficinas de Igualdad y Violencia de Género."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "91. Señale cuál de esta respuesta no es la correcta:",
+      "options": [
+        "a) La Constitución garantiza el principio de legalidad, la jerarquía normativa, la publicidad de las normas, la irretroactividad de las disposiciones sancionadoras no favorables o restrictivas de derechos individuales, la seguridad jurídica, la responsabilidad y la interdicción de la arbitrariedad de los poderes públicos.",
+        "b) Los ciudadanos y los poderes públicos están sujetos a la Constitución y al resto del ordenamiento jurídico.",
+        "c) Corresponde a los poderes públicos promover las condiciones para que la libertad y la igualdad del individuo y de los grupos en que se integra sean reales y efectivas.",
+        "d) La Constitución garantiza la retroactividad de las disposiciones sancionadoras no favorables o restrictivas de derechos individuales."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "92. ¿Cuál es la forma política del Estado español?",
+      "options": [
+        "a) La Monarquía Parlamentaria.",
+        "b) La Monarquía Absoluta.",
+        "c) La República Parlamentaria.",
+        "d) La república federal constitucional."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "93. En materia de sanidad y salud pública. Señale la respuesta correcta:",
+      "options": [
+        "a) La Comunidad Autónoma de Extremadura tiene la competencia exclusiva, en lo relativo a la organización, funcionamiento interno, coordinación y control de los centros, servicios y establecimientos sanitarios en la Comunidad Autónoma.",
+        "b) La Comunidad Autónoma de Extremadura tiene la competencia de ejecución.",
+        "c) La Comunidad Autónoma de Extremadura tiene competencia compartida con las Comunidades limítrofes.",
+        "d) La Comunidad Autónoma de Extremadura carece de competencias en materia de sanidad y salud pública."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "94. ¿A quién le corresponde el ejercicio de la potestad legislativa de la Comunidad Autónoma de Extremadura?",
+      "options": [
+        "a) A la Junta de Extremadura.",
+        "b) Al Presidente de la Junta de Extremadura.",
+        "c) A la Asamblea de Extremadura.",
+        "d) Al Consejo Económico y Socia"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "95. ¿Quién convoca las elecciones a la Asamblea de Extremadura?",
+      "options": [
+        "a) El Presidente de la Comunidad Autónoma de Extremadura.",
+        "b) El Presidente de la Asamblea de Extremadura.",
+        "c) El Consejero competente en materia en materia de Función Pública.",
+        "d) El Presidente del Congreso de los Diputados."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "96. El personal estatuario sanitario, en función del título exigido para el ingreso, se clasifica en:",
+      "options": [
+        "a) Personal de formación universitaria y personal de formación profesional.",
+        "b) Personal de formación universitaria, de formación profesional y otro personal.",
+        "c) Personal de formación básica y personal de formación superior.",
+        "d) Ninguna de las respuestas es la correcta."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "97. ¿Cuál de las siguientes no se considera causa de extinción de la condición de personal estatutario fijo?",
+      "options": [
+        "a) La renuncia.",
+        "b) La pérdida de la nacionalidad tomada en consideración para su nombramiento.",
+        "c) La jubilación.",
+        "d) La incapacidad temporal."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "98. Señale la respuesta correcta, de conformidad con lo previsto en la Ley de Salud de Extremadura:",
+      "options": [
+        "a) Las prestaciones ofertadas por el Sistema Sanitario Público de Extremadura serán, como mínimo, las establecidas en cada momento para el Sistema Nacional de Salud.",
+        "b) Las prestaciones ofertadas por el Sistema Sanitario Público de Extremadura serán las mismas que las establecidas en cada momento para el Sistema Nacional de Salud.",
+        "c) En ningún caso cabe incluir nuevos servicios y prestaciones en el Sistema Sanitario Público de Extremadura diferentes a los servicios y prestaciones previstas para el Sistema Nacional de Salud.",
+        "d) Las prestaciones ofertadas por el Sistema Sanitario Público de Extremadura no podrán superar las establecidas en cada momento para el Sistema Nacional de Salud."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "99. ¿Quién nombra al Director Gerente del Servicio Extremeño de Salud?",
+      "options": [
+        "a) El Consejo de Gobierno de la Junta de Extremadura, a propuesta del titular de la Consejería competente en materia de función pública.",
+        "b) El Consejo de Gobierno de la Junta de Extremadura, a propuesta del titular de la Consejería competente en materia de sanidad.",
+        "c) El titular de la Consejería en materia de sanidad, a propuesta del titular de la Consejería competente en materia de función pública.",
+        "d) El Presidente de la Junta de Extremadura, a propuesta del Consejo de Gobierno."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "100. ¿Quién aprueba la memoria anual de la gestión del Servicio Extremeño de Salud?",
+      "options": [
+        "a) El Consejo General del Servicio Extremeño de Salud.",
+        "b) El Consejo de Dirección.",
+        "c) El Director Gerente del Servicio Extremeño de Salud.",
+        "d) El Presidente de la Junta de Extremadura."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "R1. ¿Cuál de los siguientes organismos no podría ser titular de una sede electrónica, de conformidad con la Ley de Régimen Jurídico del Sector Publico?",
+      "options": [
+        "a) La Administración General del Estado.",
+        "b) La Administración General de una Comunidad Autónoma.",
+        "c) Una entidad local.",
+        "d) Una entidad bancaria."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "R8. Señale la respuesta incorrecta:",
+      "options": [
+        "a) El derecho a la protección de la salud aparece recogido en el artículo 43 de la Constitución Española.",
+        "b) Compete a los poderes públicos organizar y tutelar la salud pública a través de medidas preventivas y de las prestaciones y servicios necesarios.",
+        "c) Los poderes públicos fomentarán la educación sanitaria, la educación física y el deporte.",
+        "d) La constitución no recoge el derecho a la protección de la salud."
+      ],
+      "correct": 3
+    }
+];
+
+
+     const form = document.getElementById('quizForm');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                radio.addEventListener('change', () => {
+                    if (i === q.correct) {
+                        optionItem.classList.add('correct');
+                        optionItem.classList.remove('incorrect');
+                    } else {
+                        optionItem.classList.add('incorrect');
+                        optionItem.classList.remove('correct');
+                    }
+                });
+
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.appendChild(questionDiv);
+        });
+    </script>
+</body>
+</html>
+
