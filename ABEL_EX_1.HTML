@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">TORRENTE 2</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+       {
+      "question": "1. La Ley de Salud de Extremadura se aprobó en el año:",
+      "options": [
+        "a) 2001.",
+        "b) 2002.",
+        "c) 2003.",
+        "d) 2004."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "2. ¿Dónde se encuentran recogidas las funciones del jefe de personal subalterno y del celador?",
+      "options": [
+        "a) En el Estatuto no Sanitario del personal al Servicio de las Instituciones Sanitarias de la Seguridad Social.",
+        "b) En el Estatuto de Personal Sanitario al Servicio de las Instituciones Sanitarias de la Seguridad Social.",
+        "c) En el Estatuto Marco del Personal no Sanitario al Servicio de las Instituciones Sanitarias de la Seguridad Social.",
+        "d) En el Estatuto de Personal no Sanitario al Servicio de las Instituciones Sanitarias de la Seguridad Social."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "3. En una habitación de hospital habrá tantas unidades de pacientes como:",
+      "options": [
+        "a) Camas.",
+        "b) Plantas.",
+        "c) Controles de enfermería.",
+        "d) Enfermeras de referencia."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "4. Cómo se utiliza el sistema de bocas de incendio equipadas (BIE), si la manguera es de 45 mm:",
+      "options": [
+        "a) Se desenrolla como mínimo un 50 %.",
+        "b) Se desenrolla como máximo un 70 %.",
+        "c) Se desenrolla como máximo un 80 %.",
+        "d) Hay que desenrollarla por completo."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "5. En la posición de trendelenburg el paciente:",
+      "options": [
+        "a) Permanece tumbado sobre el dorso de su cuerpo, con la cabeza colgando y sus hombros coinciden con el extremo superior de la superficie de apoyo.",
+        "b) Descansa en un plano inclinado de 45º respecto al suelo con la cabeza más elevada que los pies.",
+        "c) Permanece tumbado en decúbito supino sobre la cama o camilla en un plano oblicuo de 45º respecto al suelo con la cabeza más baja que los pies.",
+        "d) Se apoya sobre sus rodillas con el tronco inclinado hacia delante, los brazos cruzados sobre la superficie de apoyo y la cabeza sobre ellos."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "6. ¿Qué tipo de cirugía requiere una atención quirúrgica en menos de 24-48 horas?",
+      "options": [
+        "a) Cirugía de emergencia.",
+        "b) Cirugía diagnóstica.",
+        "c) Cirugía programada.",
+        "d) Cirugía urgente."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "7. El traslado de los pacientes fallecidos al mortuorio, es una función:",
+      "options": [
+        "a) De ayuda.",
+        "b) Exclusiva del celador.",
+        "c) Auxiliar del celador.",
+        "d) De cooperación."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "8. ¿Cuántos capítulos componen el Título I de la Constitución?",
+      "options": [
+        "a) Diez.",
+        "b) Diez, más cuatro disposiciones adicionales, nueve disposiciones transitorias, una disposición derogatoria y una disposición final.",
+        "c) El título I no tiene capítulos.",
+        "d) Cinco."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "9. Un celador destinado en una unidad psiquiátrica, debe saber que la contención mecánica:",
+      "options": [
+        "a) No está indicada ante una conducta violenta de un paciente que resulte peligrosa para él mismo o para los demás.",
+        "b) Sólo resultará tolerable ante aquellas situaciones de emergencia que comporten una amenaza urgente o inmediata para la vida y/o integridad física del propio paciente o de terceros.",
+        "c) Está contraindicada en pacientes agitados a los cuales no les resulta eficaz la medicación para reducir la agitación.",
+        "d) Está indicada en pacientes que se niegan a dormir."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "10. Las ambulancias de clase A1 y A2, ¿con qué dotación de personal deberán contar?",
+      "options": [
+        "a) Al menos, con un conductor que esté en posesión del título de formación profesional de técnico en emergencias sanitarias.",
+        "b) Al menos, con un conductor que esté en posesión del título de formación profesional de técnico en emergencias sanitarias, y con una persona profesional sanitaria que ostente el título universitario que habilite para el ejercicio de la profesión regulada de Enfermería.",
+        "c) Al menos, con un conductor que ostente, como mínimo, el certificado de profesionalidad de transporte sanitario y, cuando el tipo de servicio lo requiera, otro en funciones de ayudante con la misma cualificación.",
+        "d) Con un conductor que ostente el certificado de profesionalidad de transporte sanitario."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "11. El sistema que sirve para transportar documentos, muestras, y pequeños objetos en los hospitales y que consiste en un sistema de tuberías por el que se desplazan cilindros que contienen el material a transportar, se denomina:",
+      "options": [
+        "a) Tubo neumático.",
+        "b) Tubo de ensayo.",
+        "c) Tubo de Lamson.",
+        "d) Las respuestas a) y c) son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "12. ¿Por qué se dice que Internet es libre?",
+      "options": [
+        "a) Porque es gratuito.",
+        "b) Porque es una tecnología de pago.",
+        "c) Porque se basa en estándares abiertos y es una red descentralizada donde cualquiera puede publicar y compartir información.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "13. La actividad de suministro hace referencia:",
+      "options": [
+        "a) Al conjunto de tareas que tienen como finalidad el aprovisionamiento del economato.",
+        "b) Al conjunto de tareas que tienen como finalidad el suministro de los servicios de un hospital.",
+        "c) Al conjunto de tareas que tienen como finalidad aprovisionar de materias al almacén y a los servicios sanitarios.",
+        "d) A las tareas realizadas por los Celadores en los almacenes."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "14. ¿Qué se entiende por “riesgo laboral”?",
+      "options": [
+        "a) La posibilidad de que un trabajador sufra un determinado daño derivado del trabajo.",
+        "b) La posibilidad de que un trabajador sufra una enfermedad en el trabajo.",
+        "c) La posibilidad de que un trabajador sufra acoso.",
+        "d) El riesgo que supone el ir a trabajar."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "15. La situación en que se encuentra una persona que, en atención a su sexo, sea, haya sido o pudiera ser tratada de manera menos favorable que otra en situación homóloga se denomina:",
+      "options": [
+        "a) Discriminación directa.",
+        "b) Discriminación indirecta.",
+        "c) Acción positiva.",
+        "d) Acoso por razón de sexo."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "16. ¿Cuál es la norma institucional básica de Extremadura?",
+      "options": [
+        "a) La Constitución Española.",
+        "b) El Estatuto de Autonomía.",
+        "c) La Ley del Gobierno y de la Administración de la Comunidad Autónoma de Extremadura.",
+        "d) Las respuestas a) y b) son correctas."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "17. El Estatuto de Personal no Sanitario, está aprobado por:",
+      "options": [
+        "a) Una Orden Ministerial.",
+        "b) Un Decreto.",
+        "c) La Ley General de Sanidad.",
+        "d) Una Ley."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "18. Por cada cuántas camas habrá una unidad de enfermería:",
+      "options": [
+        "a) 10-15 camas.",
+        "b) 5-10 camas.",
+        "c) 20-25 camas.",
+        "d) 30-35 camas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "19. Para los fuegos de clase A, utilizaremos un extintor:",
+      "options": [
+        "a) De agua pulverizada.",
+        "b) De polvo seco tipo BC.",
+        "c) De nitrógeno líquido.",
+        "d) De CO2."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "20. Los celadores deberán tener en cuenta la siguiente serie de normas generales para realizar las movilizaciones:",
+      "options": [
+        "a) Mantener la intimidad del paciente en todo momento.",
+        "b) Garantizar la seguridad en todo momento.",
+        "c) Evitar movimientos bruscos al llevar a cabo las movilizaciones.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "21. ¿Cuál es el significado de antisepsia?",
+      "options": [
+        "a) Conjunto de procedimientos científicos destinados a preservar de gérmenes infecciosos el organismo.",
+        "b) Ausencia de materia séptica, libre de infección.",
+        "c) Etimológicamente significa sin putrefacción.",
+        "d) Método que consiste en combatir o prevenir padecimientos infecciosos destruyendo los microbios que los causan."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "22. ¿Debe amortajar el celador a un paciente fallecido en una planta del hospital?",
+      "options": [
+        "a) Sí.",
+        "b) No.",
+        "c) Excepcionalmente.",
+        "d) Solo el celador de autopsias."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "23. Para proceder a la contención mecánica de un paciente agitado, se deben tener en cuenta unos principios generales entre los que no se encuentra:",
+      "options": [
+        "a) Improvisar un plan de actuación de todos los que van a intervenir en la contención, incluido el Celador.",
+        "b) Despojarse de cualquier objeto peligroso para la integridad física del paciente y de los profesionales.",
+        "c) Que el número de personas sea cuatro o cinco.",
+        "d) La contención mecánica nunca se utilizará como un castigo."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "24. La Ley 55/2003, tiene por objeto:",
+      "options": [
+        "a) Establecer las bases reguladoras de la relación funcionarial general del personal estatutario de los servicios de salud que conforman el Sistema Nacional de Salud.",
+        "b) Regular las bases reguladoras de la relación funcionarial especial del personal estatutario de los servicios de salud que conforman el Sistema Nacional de Salud.",
+        "c) Regular las bases reguladoras de la relación funcionarial general del personal estatutario de los servicios de salud que conforman el Sistema Nacional de Salud.",
+        "d) Establecer las bases reguladoras de la relación funcionarial especial del personal estatutario de los servicios de salud que conforman el Sistema Nacional de Salud."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "25. ¿Cuál de las siguientes situaciones se considera una emergencia?",
+      "options": [
+        "a) Situaciones que pueden provocar la muerte en poco tiempo, si no se inicia un tratamiento.",
+        "b) Situaciones sin riesgo vital inmediato siempre que se diagnostiquen y traten precozmente.",
+        "c) Situaciones con riesgo vital inminente que obligan a poner en marcha recursos y medios especiales.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "26. La Historia Clínica contiene:",
+      "options": [
+        "a) La información necesaria para conocer la situación sociosanitaria del paciente.",
+        "b) La información necesaria para completar la base de datos del hospital.",
+        "c) La información necesaria para cumplir el objetivo asistencial.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "27. ¿Qué es el Sitemap?",
+      "options": [
+        "a) Una página Web.",
+        "b) Indica la estructura de una página Web.",
+        "c) Es un sitio Web.",
+        "d) Indica la estructura de un sitio Web."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "28. No se conoce como suministro interno:",
+      "options": [
+        "a) Aquella tarea dedicada a proveer desde el exterior al almacén.",
+        "b) Aquella tarea dedicada a proveer desde el almacén a los servicios.",
+        "c) Aquella tarea dedicada a proveer desde el almacén a las unidades.",
+        "d) Aquellas tareas que se hacen para proveer del material necesario a los servicios desde el almacén para poder llevar a cabo la actividad asistencial."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "29. Indica cuál es la definición de prevención:",
+      "options": [
+        "a) La probabilidad racional de que un riesgo se materialice de forma inminente.",
+        "b) El estudio de los procesos potencialmente peligrosos para el trabajo.",
+        "c) Conjunto de actividades o medidas adoptadas o previstas en todas las fases de actividad de la empresa con el fin de evitar o disminuir los riesgos derivados del trabajo.",
+        "d) Posibilidad de que un trabajador sufra un determinado daño derivado del trabajo."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "30. La igualdad efectiva de mujeres y hombres a nivel estatal se encuentra regulada a través de:",
+      "options": [
+        "a) Una Ley.",
+        "b) Una Ley Orgánica.",
+        "c) Un Real Decreto Legislativo.",
+        "d) Un Real Decreto."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "31. El órgano colegiado de consulta y participación que tiene como objetivo general la mejora de la actuación sanitaria en el área de salud, se denomina:",
+      "options": [
+        "a) Director de Salud de Área.",
+        "b) Gerencia de Área.",
+        "c) Consejo de Salud de Área.",
+        "d) Consejo de Dirección."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "32. La negociación colectiva con arreglo a las instrucciones emanadas del Consejo de Gobierno de la Junta de Extremadura y en los términos establecidos en el Real Decreto Legislativo 5/2015, de 30 de octubre, por el que se aprueba el texto refundido de la Ley del Estatuto Básico del Empleado Público, corresponde al siguiente órgano:",
+      "options": [
+        "a) A la Dirección Gerencia.",
+        "b) A la Dirección General de Planificación Económica.",
+        "c) A la Dirección General de Recursos Humanos.",
+        "d) A la Dirección General de Asistencia Sanitaria."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "33. El espacio mínimo que debe existir entre las camas de una misma habitación es de:",
+      "options": [
+        "a) 0,5 metros.",
+        "b) 1 metro.",
+        "c) 1,2 metros.",
+        "d) No es importante este espacio."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "34. Sobre los planes de emergencia contra incendios se puede afirmar que:",
+      "options": [
+        "a) Tienen el objetivo primordial de minimizar el tiempo de espera de los servicios de emergencia.",
+        "b) Tienen como finalidad la formación del personal sanitario en la lucha contra incendios y otras catástrofes y emergencias.",
+        "c) Ante una determinada situación de riesgo, el plan de emergencia contra incendios, puede ser enunciado como la planificación y organización humana, para la utilización óptima de los medios técnicos previstos, con la finalidad de reducir al máximo las posibles consecuencias económicas y humanas de la emergencia.",
+        "d) Tienen como objetivo primordial la dotación de medios técnicos para la lucha contra incendios a los centros sanitarios en el ámbito nacional o autonómico según el tipo de plan."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "35. Una movilización activa-resistida es aquella que:",
+      "options": [
+        "a) Realiza el paciente en contra de su voluntad.",
+        "b) Realiza el paciente con sus propias fuerzas de forma voluntaria o automática refleja, corregido o ayudado por el terapeuta o bien mediante sistemas instrumentados.",
+        "c) Realiza el paciente contra resistencia externa que se opone al movimiento.",
+        "d) Las respuestas a) y c) son correctas."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "36. En función del grado de contaminación de los tejidos, cuando se penetra en cavidades comunicadas con el exterior de forma controlada, hablamos de:",
+      "options": [
+        "a) Cirugía limpia.",
+        "b) Cirugía de alto riesgo.",
+        "c) Cirugía contaminada.",
+        "d) Cirugía limpia-contaminada."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "37. ¿El celador debe realizar las autopsias?",
+      "options": [
+        "a) Sí, en aquellas funciones que no requieran por su parte hacer uso de instrumental alguno sobre el cadáver.",
+        "b) Sí, y además limpiará la mesa y la propia sala de autopsias.",
+        "c) No.",
+        "d) Excepcionalmente y siempre bajo las indicaciones de Médicos, Supervisoras o Enfermeras."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "38. ¿Cuál de las siguientes respuestas con respecto a la contención mecánica no es correcta?",
+      "options": [
+        "a) Es el empleo de sistemas de inmovilización.",
+        "b) Debe aplicarse con suma discreción y máxima seguridad.",
+        "c) Hay que fomentar las conductas que desemboquen en la contención mecánica.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "39. Son ambulancias mixtas:",
+      "options": [
+        "a) Ambulancias clase A2, que en determinadas circunstancias podrán utilizarse para el traslado simultáneo de pacientes sentados y en camilla, o para el traslado de pacientes en camilla de forma individual, actuando como ambulancias de clase A1.",
+        "b) Ambulancias clase B, que en determinadas circunstancias podrán utilizarse para el traslado simultáneo de pacientes sentados y en camilla o para el traslado de pacientes en camilla de forma individual, actuando como ambulancias de clase A1.",
+        "c) Ambulancias clase B, que en determinadas circunstancias podrán utilizarse para el traslado de pacientes con necesidades de soporte vital avanzado, aunque no se disponga de la dotación de personal necesaria.",
+        "d) Ambulancias que cumplen las características de las ambulancias de clase B y C."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "40. El Estatuto de Autonomía es una norma:",
+      "options": [
+        "a) Jurídica.",
+        "b) Política.",
+        "c) Social.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "41. La Historia Clínica del paciente recoge información concerniente a las siguientes áreas:",
+      "options": [
+        "a) Preventiva.",
+        "b) Médica.",
+        "c) Social.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "42. ¿Cuál es el comando para seleccionar todo el texto en un documento de Word?",
+      "options": [
+        "a) Teclas CTRL + E.",
+        "b) Teclas CTRL + N.",
+        "c) Teclas CTRL + V.",
+        "d) Teclas CTRL + X."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "43. El suministro externo en las instituciones sanitarias es aquel:",
+      "options": [
+        "a) Que abastece al almacén desde el proveedor.",
+        "b) Que abastece a los proveedores.",
+        "c) Que abastece desde el almacén los distintos Servicios.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "44. Quedan bajo el ámbito de la Ley de Prevención de Riesgos Laborales:",
+      "options": [
+        "a) La totalidad de las relaciones laborales reguladas en el Estatuto de los Trabajadores.",
+        "b) La totalidad de las relaciones laborales establecidas en el ámbito de las funciones públicas de policía y seguridad.",
+        "c) La totalidad de las relaciones laborales establecidas en los servicios operativos de las Fuerzas Armadas y actividades militares de la Guardia Civil.",
+        "d) La totalidad de las relaciones laborales establecidas en los servicios operativos de protección civil y peritaje forense, en los casos de grave riesgo, catástrofe y calamidad pública."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "45. Con el fin de hacer efectivo el derecho constitucional a la igualdad, los Poderes Públicos adoptarán medidas específicas a favor de las mujeres para corregir situaciones patentes de desigualdad de hecho respecto de los hombres, en base al principio de:",
+      "options": [
+        "a) Fomento de la corresponsabilidad.",
+        "b) Reconocimiento de la maternidad.",
+        "c) Integración de la perspectiva de género.",
+        "d) Acción positiva."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "46. El marco territorial y poblacional de la atención primaria donde se recibe la prestación sanitaria mediante el acceso directo de la población, y en el que se ha de tener la capacidad de proporcionar una atención continuada, integral y permanente, a través de los profesionales integrantes del Equipo de Atención Primaria se denomina:",
+      "options": [
+        "a) Zona de salud.",
+        "b) Gerencia de Área.",
+        "c) Área de salud.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "47. La norma por la que fue aprobado el Estatuto de Personal no Sanitario, ¿de qué fecha es?",
+      "options": [
+        "a) Del 15 de junio de 1979.",
+        "b) Del 5 de julio de 1971.",
+        "c) Del 25 de agosto de 1982.",
+        "d) Del 7 de mayo de 1973."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "48. La Ley 55/2003, es aplicable al personal estatutario que desempeña su función en (señala la respuesta incorrecta):",
+      "options": [
+        "a) Los centros e instituciones sanitarias de los servicios de salud de las comunidades autónomas.",
+        "b) En los centros y servicios sanitarios de la Administración General del Estado.",
+        "c) En los centros sanitarios de la Administración Exterior del Estado.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "49. El agua es el agente extintor por excelencia, pero uno de sus inconvenientes es que:",
+      "options": [
+        "a) Provoca daños excesivos en la estructura y mobiliario de los edificios.",
+        "b) Requiere equipos de bombeo.",
+        "c) Es inadecuado para fuegos de materiales sólidos.",
+        "d) Conduce la electricidad."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "50. ¿Cómo se debe trasladar en un hospital a enfermos leves?",
+      "options": [
+        "a) En silla de ruedas.",
+        "b) El paciente podrá ir a pie.",
+        "c) En camilla.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "51. La cirugía que sirve para aliviar los síntomas de una enfermedad se denomina:",
+      "options": [
+        "a) Cirugía reparadora.",
+        "b) Cirugía exploratoria.",
+        "c) Cirugía paliativa.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "52. Finalizada la autopsia realizada a un cadáver, ¿cuál será la función del celador de autopsias, respecto a la mesa de autopsias y a la propia sala?",
+      "options": [
+        "a) Limpiará la mesa de autopsias, pero no la sala, cometido este último, propio del personal de limpieza de la Institución.",
+        "b) No es función del celador las labores de limpieza.",
+        "c) Deberá limpiar tanto la mesa de autopsias como la propia sala.",
+        "d) Deberá avisar al servicio de limpieza para que procedan a la limpieza de la mesa y de la sala de autopsias."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "53. Señale la respuesta incorrecta en relación con la contención mecánica:",
+      "options": [
+        "a) Debe realizarse por un mínimo de cuatro personas.",
+        "b) Una vez terminada, no permitirá administrar una perfusión intravenosa por el brazo.",
+        "c) Hay que comprobar periódicamente las sujeciones, por la seguridad y la comodidad del paciente.",
+        "d) La sujeción mecánica debe aplicarse durante el menor tiempo posible."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "54. Un servicio de urgencias es un servicio que debe ir evolucionando y modificándose en función de:",
+      "options": [
+        "a) Cambios sanitarios.",
+        "b) Cambios sociales.",
+        "c) Cambios demográficos.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "55. Indique cuál de los siguientes datos no aparecen en la Historia Clínica:",
+      "options": [
+        "a) Situación laboral del paciente.",
+        "b) Vacunaciones recibidas.",
+        "c) Procesos infecciosos en curso.",
+        "d) Situación patrimonial del paciente."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "56. ¿A quién corresponderá la convocatoria y resolución de los procedimientos de selección y provisión de plazas del personal estatutario del Servicio Extremeño de Salud?",
+      "options": [
+        "a) A la Dirección General de Recursos Humanos.",
+        "b) Al Consejero competente en materia de sanidad.",
+        "c) A la Dirección Gerencia del Servicio Extremeño de Salud.",
+        "d) A la Dirección General de los Servicios Jurídicos."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "57. ¿Qué servicio se utiliza para conectar a equipos remotos mediante la Red emulando un terminal del equipo al que se realiza la conexión?",
+      "options": [
+        "a) FTP.",
+        "b) SMTP.",
+        "c) Telnet.",
+        "d) HTTP."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "58. El Celador encargado de almacén se contempla:",
+      "options": [
+        "a) En el Acuerdo del Consejo de Ministros del 16/6/71.",
+        "b) En el Real Decreto-Ley 6/90.",
+        "c) En el Acuerdo del Consejo de Ministros del 29/6/90.",
+        "d) En el Real Decreto-Ley 3/97."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "59. ¿Cuál es la vigente Ley de Prevención de Riesgos Laborales?",
+      "options": [
+        "a) Ley 32/1995, de 8 de noviembre.",
+        "b) Ley 30/1996, de 8 de noviembre.",
+        "c) Ley 31/1995, de 6 de noviembre.",
+        "d) Ley 31/1995, de 8 de noviembre."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "60. ¿Qué principio general de actuación comprende las técnicas de análisis y planificación que tienen en cuenta la interacción que se produce entre el género y otros factores de discriminación, con el objetivo de atender a la diversidad de las mujeres, mediante la puesta en marcha de mecanismos antidiscriminación de acción integral?",
+      "options": [
+        "a) Representación equilibrada.",
+        "b) Interseccionalidad.",
+        "c) Integración de la perspectiva de género.",
+        "d) Impulso de la efectividad del principio de igualdad."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "61. ¿Cuántos representantes de los municipios del área de salud, elegidos por y entre ellos componen el Consejo de Dirección de Área?",
+      "options": [
+        "a) Cuatro.",
+        "b) Tres.",
+        "c) Dos.",
+        "d) Uno."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "62. La norma por la que fue aprobado el Estatuto de Personal no Sanitario, fue publicada en el BOE:",
+      "options": [
+        "a) Seis días después de la fecha de aprobación.",
+        "b) Catorce días después de la fecha de aprobación.",
+        "c) Diecisiete días después de la fecha de aprobación.",
+        "d) Veinte días después de la fecha de aprobación."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "63. El color de las paredes de una habitación de hospital debe ser:",
+      "options": [
+        "a) Negro.",
+        "b) Claro.",
+        "c) Oscuro.",
+        "d) Brillante."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "64. ¿Cuántos Títulos tiene la Constitución Española?",
+      "options": [
+        "a) Nueve.",
+        "b) Once.",
+        "c) Doce.",
+        "d) Diez."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "65. El Celador al acompañar a pie a enfermos leves y conscientes debe ir situado:",
+      "options": [
+        "a) Delante del paciente para orientarle en el camino.",
+        "b) Al lado del paciente y si es necesario proporcionarle apoyo y seguridad con el brazo.",
+        "c) Detrás del paciente para evitar posibles caídas y daños.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "66. Señala la respuesta incorrecta. En función del objetivo que se persigue con su realización, la cirugía puede ser:",
+      "options": [
+        "a) Diagnóstica.",
+        "b) Necesaria.",
+        "c) Reparadora.",
+        "d) Paliativa."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "67. El médico forense solicita al celador ayuda durante una autopsia; le encarga asear el cadáver, serrar el cráneo y posteriormente limpiar la sala de autopsias, ¿qué debe hacer el celador?",
+      "options": [
+        "a) Todo menos serrar el cráneo.",
+        "b) Todo, incluido serrar el cráneo ya que la sierra no se considera instrumental.",
+        "c) Todo menos limpiar la sala, que es función del personal de limpieza.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "68. No es una función del Celador en la unidad de psiquiatría:",
+      "options": [
+        "a) Trasladar a pacientes a otras unidades cuando esté indicado.",
+        "b) Ayudar al personal sanitario en la preparación de la medicación para los pacientes.",
+        "c) Realizar las funciones de traslado de documentación sanitaria, así como, objetos y mobiliario de la unidad.",
+        "d) Todas las respuestas anteriores son funciones del Celador."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "69. Respecto a la ubicación y distribución de la estructura física de un servicio de urgencias, no es correcto:",
+      "options": [
+        "a) Debe estar emplazado de manera que se tenga un acceso directo desde la calle.",
+        "b) Debe contar con dobles puertas automáticas que permitan la entrada holgada de camillas.",
+        "c) No es necesario prever de una zona de aparcamiento para los vehículos particulares.",
+        "d) El acceso debe estar bien señalizado, iluminado y libre de obstáculos."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "70. El Real Decreto que establece las disposiciones mínimas de seguridad y salud que deben cumplir los lugares de trabajo es el:",
+      "options": [
+        "a) Real Decreto 487/1997 de 14 de abril,",
+        "b) Real Decreto 486/1997 de 14 de abril.",
+        "c) Real Decreto 836/2012, de 25 de mayo.",
+        "d) Real Decreto 186/1997 de 14 de abril."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "RESERVAS. 1. ¿Quién actúa como Vicepresidente en el Consejo de Dirección de Área?",
+      "options": [
+        "a) El Gerente del Área.",
+        "b) El Director de Salud de Área.",
+        "c) El Secretario.",
+        "d) Un representante del Servicio Extremeño de Salud."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "RESERVAS. 2. ¿En qué artículo del Estatuto de Personal no Sanitario se encuentran recogidas las funciones del celador y del Jefe de personal subalterno?",
+      "options": [
+        "a) En los artículos 12.1 y 12.2, respectivamente.",
+        "b) En los artículos 12.2 y 12.3, respectivamente.",
+        "c) En los artículos 14.1 y 14.2, respectivamente.",
+        "d) En los artículos 14.2 y 14.1, respectivamente."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "RESERVAS. 3. La humedad de la habitación de un hospital debe establecerse, de forma general, entre:",
+      "options": [
+        "a) 5-10 %.",
+        "b) 40-60 %.",
+        "c) 10-20 %.",
+        "d) 1-3 %."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "RESERVAS. 4. Respecto de toda persona que pueda verse involucrada en una emergencia, es correcto afirmar que:",
+      "options": [
+        "a) Debe ser avisada con antelación sobre lo que debe hacer y cómo debe hacerlo.",
+        "b) La realización de simulacros periódicos no mejora en nada la preparación de los intervinientes en una posible emergencia.",
+        "c) Es la única responsable de su propia información y formación sobre emergencias.",
+        "d) Debe saber y poder manejar todos los equipos de extinción existentes en el mercado."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "RESERVAS. 5. Las patas del andador deben reposar en el suelo y los pies del paciente deben posicionarse a una distancia el uno del otro de:",
+      "options": [
+        "a) 12 cms.",
+        "b) 15 cms.",
+        "c) 7 cms.",
+        "d) 10 cms."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "RESERVAS. 6. ¿Qué Título de la Constitución Española se ocupa del Poder Judicial?",
+      "options": [
+        "a) El VI.",
+        "b) El V.",
+        "c) El VII.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 0
+    };
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
