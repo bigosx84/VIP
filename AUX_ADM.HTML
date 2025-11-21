@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">AUX. ADM</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+ {
+    "question": "64. Según lo dispuesto en la Ley de Prevención de Riesgos Laborales, la vigilancia del estado de salud de los trabajadores:",
+    "options": [
+      "a) Será obligatoria y periódica para todos los trabajadores sin excepción.",
+      "b) Solamente se realizará cuando el trabajador lo solicite expresamente.",
+      "c) Se realizará de forma voluntaria, salvo en circunstancias excepcionales previstas en la Ley.",
+      "d) Se llevará a cabo únicamente al inicio de la relación laboral y en caso de baja por enfermedad profesional."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "71. De acuerdo con lo previsto en la Ley de Salud de Extremadura, el Plan de Salud de Extremadura será aprobado por:",
+    "options": [
+      "a) El Consejo de Gobierno de la Junta de Extremadura, a propuesta de la Consejería competente en materia de sanidad, oído el Servicio Extremeño de Salud.",
+      "b) El Consejo de Gobierno de la Junta de Extremadura, a propuesta de la Consejería competente en materia de sanidad, oído el Consejo Extremeño de Salud.",
+      "c) El Consejo de Gobierno de la Junta de Extremadura, a propuesta de la Consejería competente en materia de sanidad, oído el Consejo Interterritorial del Sistema Nacional de Salud.",
+      "d) El Consejo de Gobierno de la Junta de Extremadura, a propuesta conjunta de la Consejería competente en materia de sanidad y el Consejo Extremeño de Salud."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "74. Según lo dispuesto en la Ley de Salud de Extremadura, ¿cuál de las siguientes no es una atribución del Director Gerente del Servicio Extremeño de Salud?:",
+    "options": [
+      "a) La aprobación del proyecto de presupuestos del Servicio Extremeño de Salud.",
+      "b) La resolución de los procedimientos de responsabilidad patrimonial derivada del ejercicio de sus competencias.",
+      "c) La administración, gestión y recaudación de los derechos económicos del organismo.",
+      "d) La autorización de la disposición de los gastos."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "75. De acuerdo con lo señalado en el Decreto 189/2004, de 14 de diciembre, … ¿cuál de las siguientes funciones no corresponde a las Direcciones de Recursos Humanos de las Áreas bajo la dependencia de la Gerencia de Área?:",
+    "options": [
+      "a) La elaboración de las directrices sobre vacaciones, permisos, licencias, jornadas y horario del personal.",
+      "b) La gestión y tramitación de los procedimientos en materia de prestación social del personal.",
+      "c) El control, y la evaluación de las plantillas del personal de todo tipo de los centros, establecimientos y servicios asistenciales y generales.",
+      "d) El régimen interior de personal de los centros, servicios y establecimientos sanitarios."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "76. En virtud de lo previsto en el Decreto 189/2004… ¿cuál de las siguientes no es una función específica de la Dirección de Salud?:",
+    "options": [
+      "a) Ejecución de programas de promoción de la salud y prevención de la enfermedad.",
+      "b) Control sanitario de los establecimientos sanitarios.",
+      "c) Inspecciones necesarias para la autorización administrativa de creación, modificación, apertura o supresión de los centros, servicios y establecimientos sanitarios.",
+      "d) Procedimientos de apertura de farmacias, traslado, medición de distancias y botiquines."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "80. De acuerdo con lo previsto en la Ley de información sanitaria y autonomía del paciente en la Comunidad Autónoma de Extremadura, la formalización del documento de expresión anticipada de voluntades se puede realizar:",
+    "options": [
+      "a) Ante el médico responsable de su asistencia y otros dos testigos, debiendo ser visado por el director del centro sanitario para que tenga validez.",
+      "b) Únicamente ante notario, ya que es la única forma que garantiza la validez legal y el registro de las voluntades del paciente.",
+      "c) Ante notario o ante tres testigos mayores de edad y con plena capacidad de obrar, de los cuales, como mínimo dos, no deben tener relación de parentesco hasta el segundo grado, ni estar vinculados con el otorgante por relación matrimonial, de hecho, o patrimonial.",
+      "d) Ante cualquier persona con plena capacidad de obrar, siempre y cuando se haga por escrito y con la firma del paciente."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "81. Indique la respuesta correcta teniendo en cuenta lo dispuesto en la Ley de información sanitaria y autonomía del paciente en la Comunidad Autónoma de Extremadura:",
+    "options": [
+      "a) Los centros sanitarios tienen la obligación de conservar la documentación obrante en la historia clínica… cinco años…",
+      "b) Se considera falta muy grave haber sido sancionado por la comisión de tres o más infracciones graves de la misma naturaleza durante cuatro años.",
+      "c) La información previa al consentimiento se facilitará… al menos 24 horas antes…",
+      "d) En el caso de pacientes fallecidos, se denegará el acceso a la historia clínica a personas vinculadas al paciente."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "115. De conformidad con lo previsto en la Ley de Igualdad… ¿qué organismo tiene como fin esencial promover las condiciones para que la igualdad sea real y efectiva…?",
+    "options": [
+      "a) La Consejería competente en materia de igualdad.",
+      "b) El Instituto de la Mujer de Extremadura.",
+      "c) El Centro de Estudios de Género.",
+      "d) La Red de Oficinas de Igualdad y Violencia de Género."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "137. De conformidad con lo dispuesto en la Constitución española de 1978, corresponde a los poderes públicos:",
+    "options": [
+      "a) Concurrir a la formación y manifestación de la voluntad popular.",
+      "b) La defensa y promoción de intereses económicos y sociales.",
+      "c) Promover las condiciones para que la libertad del individuo sea real y efectiva.",
+      "d) Garantizar la irretroactividad de las disposiciones sancionadoras no favorables."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "138. Según lo establecido en la Constitución española de 1978, los extranjeros gozarán en España:",
+    "options": [
+      "a) De los derechos reconocidos en la Constitución atendiendo a criterios de reciprocidad, en virtud de tratado o ley.",
+      "b) De las libertades públicas que garantiza el Título I de la Constitución, en los términos que establezcan los tratados y la ley.",
+      "c) De las libertades públicas… siempre que haya tratado de doble nacionalidad.",
+      "d) Del derecho a acceder en condiciones de igualdad a las funciones y cargos públicos…"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "139. De acuerdo con lo previsto en la Constitución española de 1978, constituye un derecho fundamental:",
+    "options": [
+      "a) El derecho de defender a España.",
+      "b) El derecho al trabajo.",
+      "c) El derecho a la propiedad privada.",
+      "d) El derecho al Juez ordinario predeterminado por la ley."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "140. En virtud de lo establecido en la Constitución española de 1978… cualquier ciudadano podrá recabar… la tutela de:",
+    "options": [
+      "a) Las libertades… artículo 14 y Sección segunda del Capítulo segundo del Título I.",
+      "b) Las libertades y derechos… artículo 14 y Sección primera del Capítulo segundo del Título I.",
+      "c) Los derechos y libertades reconocidos en el Capítulo segundo, sin excepción.",
+      "d) Los principios reconocidos en el Capítulo tercero del Título I."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "141. Según lo indicado en el Estatuto de Autonomía de Extremadura, son órganos de la Asamblea de Extremadura:",
+    "options": [
+      "a) El Pleno y las Comisiones.",
+      "b) El Presidente, la Mesa y la Diputación Permanente.",
+      "c) Los diputados, los grupos parlamentarios y la Mesa.",
+      "d) El Pleno, la Cámara, la Mesa y el Presidente."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "142. Conforme a lo dispuesto en el Estatuto de Autonomía de Extremadura, es una competencia exclusiva de la Comunidad Autónoma:",
+    "options": [
+      "a) Sanidad agrícola y animal.",
+      "b) Sanidad alimentaria.",
+      "c) Promoción de la investigación biomédica.",
+      "d) Regulación del abastecimiento, saneamiento y depuración de las aguas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "144. Según lo previsto en el Estatuto Marco… el personal estatutario ostenta el siguiente derecho individual:",
+    "options": [
+      "a) A la actividad sindical.",
+      "b) A la acción social.",
+      "c) A la huelga.",
+      "d) A utilizar los medios… en beneficio del paciente."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "145. De acuerdo con lo dispuesto en el Estatuto Marco… el personal estatutario sanitario se clasifica de la siguiente forma:",
+    "options": [
+      "a) Personal generalista y personal especialista.",
+      "b) Personal graduado en Ciencias de la Salud y personal postgraduado en Ciencias de la Salud.",
+      "c) Personal técnico superior y personal técnico sanitario.",
+      "d) Personal de formación universitaria y personal de formación profesional."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "146. De conformidad con lo indicado en el Estatuto Marco… la condición de personal estatutario fijo se adquiere por:",
+    "options": [
+      "a) Superación del proceso selectivo… nombramiento y toma de posesión.",
+      "b) Superación de las pruebas de selección… e incorporación a una plaza…",
+      "c) Nombramiento… declaración de reserva y confidencialidad…",
+      "d) Nombramiento… acto de acatamiento a la Constitución y al Estatuto…"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "150. La Ley de Salud de Extremadura será de aplicación a:",
+    "options": [
+      "a) Las Administraciones Públicas de la Comunidad Autónoma de Extremadura.",
+      "b) Todos los extremeños y residentes en cualquiera de los municipios de Extremadura…",
+      "c) Los no residentes en Extremadura…",
+      "d) Cualesquiera entidades o instituciones cuando así se establezca en una ley estatal."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "151. Conforme a lo dispuesto en los Estatutos del Organismo Autónomo Servicio Extremeño de Salud, son órganos de dirección y gestión del SES:",
+    "options": [
+      "a) La Dirección Gerencia y la Dirección General de Recursos Humanos.",
+      "b) La Dirección Gerencia y la Dirección General de Presupuestos.",
+      "c) La Dirección Gerencia y la Dirección General de Atención Primaria.",
+      "d) La Dirección Gerencia y la Dirección General de Salud Pública y Asistencia Hospitalaria."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "152. De acuerdo con lo previsto en los Estatutos del Organismo Autónomo Servicio Extremeño de Salud, la aprobación del anteproyecto del presupuesto anual es función de:",
+    "options": [
+      "a) La Dirección General de Planificación Económica.",
+      "b) La Dirección General de Presupuestos.",
+      "c) La Dirección Gerencia.",
+      "d) La Dirección General de Salud Pública."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "RESERVA 2. Conforme al Estatuto Marco… ¿cuál no se considera un principio básico por el que se rige la provisión de plazas?:",
+    "options": [
+      "a) Igualdad.",
+      "b) Mérito.",
+      "c) Transparencia.",
+      "d) Movilidad del personal en el conjunto del Sistema Nacional de Salud."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "RESERVA 5. Según la Ley de Salud de Extremadura, ¿cuál es el órgano colegiado de participación con carácter consultivo en el área de salud?:",
+    "options": [
+      "a) El Consejo Extremeño de Salud.",
+      "b) El Consejo de Dirección de Área.",
+      "c) El Consejo de Salud de Área.",
+      "d) El Consejo General."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "RESERVA 7. Según el Reglamento de Atención Primaria de Extremadura, no tienen consideración de Unidades de apoyo:",
+    "options": [
+      "a) Los Equipos de Conductas Adictivas.",
+      "b) Las Unidades de Salud Bucodental.",
+      "c) Los Equipos de Salud Mental.",
+      "d) Las Unidades de Radiología."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "RESERVA 11. Según el Estatuto de Autonomía de Extremadura, la participación en la planificación y coordinación general de la sanidad es una competencia:",
+    "options": [
+      "a) De desarrollo normativo y ejecución.",
+      "b) Exclusiva.",
+      "c) De ejecución.",
+      "d) De desarrollo y ejecución de normas suprautonómicas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "RESERVA 12. De acuerdo con el Estatuto Marco… es causa de extinción de la condición de estatutario fijo:",
+    "options": [
+      "a) La sanción disciplinaria firme de inhabilitación del servicio.",
+      "b) La pena principal de separación absoluta para el ejercicio de la correspondiente profesión.",
+      "c) La pena accesoria de inhabilitación absoluta.",
+      "d) La pérdida de vecindad en la Comunidad Autónoma de residencia."
+    ],
+    "correct": 2
+  }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
