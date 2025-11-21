@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">ABEL_EX_1.HTML</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+  {
+      "question": "1. Son Centros de Atención Primaria:",
+      "options": [
+        "a) Los consultorios locales.",
+        "b) Los centros de salud.",
+        "c) Los centros de las unidades de apoyo a la atención primaria.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "2. Según el artículo 14.2.3 del Estatuto de Personal no Sanitario, los celadores realizarán aquellas labores de limpieza que:",
+      "options": [
+        "a) El personal femenino no pueda realizar.",
+        "b) Les encomienden.",
+        "c) Excepcionalmente el personal femenino no pueda realizar.",
+        "d) Excepcionalmente se les encomienden."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "3. Paciente al que solamente se aplican las precauciones estándar para prevenir la infección relacionada con la asistencia sanitaria. Indica la respuesta correcta:",
+      "options": [
+        "a) Necesariamente se usarán guantes estériles.",
+        "b) Necesariamente se usará bata estéril.",
+        "c) Cambiarse de guantes en caso de rotura.",
+        "d) No es necesario lavarse las manos después de quitarse los guantes."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "4. Antes de tocar a un accidentado en contacto con la corriente eléctrica, deberá:",
+      "options": [
+        "a) Cortar la corriente.",
+        "b) Avisar a los compañeros.",
+        "c) Utilizar agua.",
+        "d) Protegerse con material no aislante."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "5. El bastón debe colocarse:",
+      "options": [
+        "a) En la misma mano que la extremidad inferior afectada.",
+        "b) En la mano contraria a la extremidad inferior afectada.",
+        "c) Es indiferente.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "6. Cuando no hay indicio de que una cirugía no vaya a ser favorable al paciente, es que la cirugía es:",
+      "options": [
+        "a) Optativa.",
+        "b) De bajo riesgo.",
+        "c) Cirugía mayor.",
+        "d) Compleja."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "7. ¿Qué norma regula las autopsias clínicas en España?",
+      "options": [
+        "a) Real Decreto 2230/1982, de 18 de junio, sobre autopsias clínicas.",
+        "b) Decreto 2230/1992, de 18 de junio, sobre autopsias clínicas.",
+        "c) Ley 23/2002 de 18 de junio, sobre autopsias clínicas.",
+        "d) Real Decreto 2230/1991, de 18 de junio, sobre autopsias clínicas."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "8. El Título Preliminar de la Constitución Española tiene:",
+      "options": [
+        "a) Diez capítulos.",
+        "b) Nueve artículos.",
+        "c) Dos secciones.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "9. ¿Cuál de los siguientes es una alteración de la consciencia?",
+      "options": [
+        "a) Hipervigilia.",
+        "b) Alucinaciones.",
+        "c) Ilusiones.",
+        "d) Dislalia."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "10. Los enfermos críticos agudos que lleguen en ambulancia a la puerta de urgencias, entrará directamente y sin demora:",
+      "options": [
+        "a) A la sala de triaje.",
+        "b) A la sala de reanimación o de urgencia vital.",
+        "c) A la Unidad de Cuidados Intensivos.",
+        "d) Al quirófano de urgencias."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "11. La información previa al consentimiento informado se facilitará normalmente de forma:",
+      "options": [
+        "a) Escrita.",
+        "b) Verbal.",
+        "c) Es indiferente.",
+        "d) Depende del procedimiento."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "12. El campo CCO de la cabecera de un mensaje de correo electrónico, qué significa:",
+      "options": [
+        "a) Archivo adjunto.",
+        "b) Que se envía una copia oculta del email a las direcciones que se indican en ese campo.",
+        "c) Que se envía una copia del email a las direcciones que se indican en ese campo.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "13. El término FEFO hace referencia a:",
+      "options": [
+        "a) El último artículo en entrar en un almacén es el primero en salir.",
+        "b) El primer artículo en entrar en un almacén es el primero en salir.",
+        "c) El primer artículo en caducar en un almacén es el primero en salir.",
+        "d) El último artículo en caducar en un almacén es el primero en salir."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "14. El artículo 23 de la LPRL establece la documentación que el empresario debe elaborar y conservar a disposición de la autoridad laboral. De las siguientes no está incluida:",
+      "options": [
+        "a) El plan de prevención de riesgos laborales.",
+        "b) La evaluación de los riesgos para la seguridad y la salud en el trabajo.",
+        "c) La planificación de la actividad laboral.",
+        "d) La relación de accidentes de trabajo y enfermedades profesionales que hayan causado al trabajador una incapacidad laboral superior a un día de trabajo."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "15. La situación en que la aplicación de una disposición, criterio o práctica aparentemente neutros pone a las personas de un sexo en desventaja particular con respecto a las personas del otro, recibe el nombre de:",
+      "options": [
+        "a) Discriminación directa.",
+        "b) Discriminación indirecta.",
+        "c) Discriminación trasversal.",
+        "d) Discriminación neutra."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "16. ¿Cuál de los siguientes no es un elemento diferencial de Extremadura?",
+      "options": [
+        "a) La vitalidad de su arraigada identidad colectiva.",
+        "b) El predominio del mundo rural.",
+        "c) Su proyección en Portugal e Iberoamérica.",
+        "d) La baja densidad de su población."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "17. Según el artículo 14.2.3 del Estatuto de Personal no Sanitario, los celadores realizarán excepcionalmente aquellas labores de limpieza que se les encomiende cuando su realización por el personal femenino no sea idónea o decorosa en orden a:",
+      "options": [
+        "a) La situación, desplazamiento y dificultad de manejo de los locales a limpiar.",
+        "b) El peso de los objetos, entre otros.",
+        "c) La situación, desplazamiento y locales a limpiar.",
+        "d) La situación, desplazamiento de los objetos, su dificultad de manejo y locales a limpiar."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "18. El mobiliario de una habitación de hospital debe ser de color:",
+      "options": [
+        "a) Beige.",
+        "b) Verde.",
+        "c) Claro.",
+        "d) Gris."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "19. Un fuego de clase “B” es el que:",
+      "options": [
+        "a) No origina brasas, la combustión se produce en la superficie superior o más externa.",
+        "b) Al arder origina brasas que permanecen en combustión una vez extinguidas las llamas, con la posibilidad de que se regenere el fuego.",
+        "c) Su combustión es violenta, y frecuentemente con deflagraciones.",
+        "d) No origina brasas, la combustión se produce en forma volumétrica (chorros, dardos, esferas)."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "20. El palo de suero de una camilla se posiciona:",
+      "options": [
+        "a) A la derecha del paciente si este es diestro.",
+        "b) A la izquierda del paciente si es zurdo.",
+        "c) Es indiferente.",
+        "d) Preferiblemente en el lado donde se encuentre la vía del paciente."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "21. Cuando un paciente requiere una atención quirúrgica inmediata con grave riesgo para la vida, hablamos de:",
+      "options": [
+        "a) Cirugía de emergencia.",
+        "b) Cirugía urgente.",
+        "c) Cirugía necesaria.",
+        "d) Cirugía opcional."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "22. Los estudios autópsicos clínicos solamente podrán realizarse, de acuerdo con lo dispuesto en la norma correspondiente:",
+      "options": [
+        "a) En los Centros o establecimientos que, reúnan las condiciones adecuadas de locales.",
+        "b) En los Centros o establecimientos que, reúnan las condiciones adecuadas de medios físicos.",
+        "c) En los Centros o establecimientos que, reúnan las condiciones adecuadas de personal.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "23. ¿La actuación del Celador que presta servicios en una unidad de psiquiatría se diferencia de la del resto de servicios?",
+      "options": [
+        "a) Sí, en lo que se refiere a la especial atención que ha de prestar a los pacientes en estas unidades.",
+        "b) No.",
+        "c) Sólo si lo indica el Jefe de Personal Subalterno.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "24. Para la elaboración de las normas aplicables al personal estatutario de cada servicio de salud, los órganos en cada caso competentes tomarán en consideración:",
+      "options": [
+        "a) Los principios generales establecidos en el artículo 4 de la Ley 55/2003.",
+        "b) Las peculiaridades propias del ejercicio de las profesiones sanitarias.",
+        "c) Las características organizativas de cada servicio de salud y de sus diferentes centros e instituciones.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "25. En la recepción de pacientes en la entrada de urgencias por parte del Celador, ¿cuál de las siguientes actuaciones es incorrecta?",
+      "options": [
+        "a) Recibir y ofrecer ayuda a los pacientes que acuden al Servicio de Urgencias en ambulancias, vehículos particulares y ambulantes.",
+        "b) Dar aviso urgente al personal sanitario de la llegada de un paciente al Servicio de Urgencias cuando su patología evidencie signos externos de requerir una atención inmediata.",
+        "c) Exclusivamente trasladará a los pacientes que vayan en silla de ruedas.",
+        "d) Tener localizadas y disponibles sillas de ruedas, y camillas para los pacientes, así como las bombonas de oxígeno, y que todas estén en perfecto estado y listas para su uso."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "26. En todos los casos en que el paciente haya expresado por escrito su consentimiento informado, tendrá derecho a obtener una copia de dicho documento. Esto es:",
+      "options": [
+        "a) Falso.",
+        "b) Verdadero.",
+        "c) Hay excepciones.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "27. Los protocolos más importantes de internet son:",
+      "options": [
+        "a) UDP.",
+        "b) TCP/IP.",
+        "c) WIFI.",
+        "d) Ethernet."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "28. Para una mayor eficacia del almacén:",
+      "options": [
+        "a) Contará con una adecuada estructura.",
+        "b) Contará con una persona que se responsabilice del control.",
+        "c) Tendrá a cargo una persona que garantice la organización del mismo.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "29. El artículo 29 de la LPRL establece las obligaciones de los trabajadores en materia de prevención de riesgos. De las siguientes no se considera una obligación del trabajador:",
+      "options": [
+        "a) Utilizar correctamente los medios y equipos de protección facilitados por el empresario, de acuerdo con las instrucciones recibidas de este.",
+        "b) Usar adecuadamente, de acuerdo con su naturaleza y los riesgos previsibles, las máquinas, aparatos, herramientas, sustancias peligrosas, equipos de transporte y, en general, cualesquiera otros medios con los que desarrollen su actividad.",
+        "c) Informar de inmediato a su superior jerárquico directo, y a los trabajadores designados para realizar las actualizaciones que consideren oportunas en el equipo de protección individual.",
+        "d) No poner fuera de funcionamiento y utilizar correctamente los dispositivos de seguridad existentes o que se instalen en los medios relacionados con su actividad o en los lugares de trabajo en los que esta tenga lugar."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "30. La situación en que se produce cualquier comportamiento verbal, no verbal o físico de índole sexual, con el propósito o el efecto de atentar contra la dignidad de una persona, en particular cuando se crea un entorno intimidatorio, hostil, degradante, humillante u ofensivo se denomina:",
+      "options": [
+        "a) Maltrato.",
+        "b) Acoso sexual.",
+        "c) Acoso por razón de sexo.",
+        "d) Discriminación indirecta."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "31. En cada Zona de Salud habrá:",
+      "options": [
+        "a) Un Centro de Salud.",
+        "b) Un Equipo de Atención Primaria.",
+        "c) Las respuestas a) y b) son correctas.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "32. ¿Cuál es el órgano superior del SES?",
+      "options": [
+        "a) La Dirección Gerencia.",
+        "b) La Dirección General de Recursos Humanos.",
+        "c) La Dirección General de Planificación Económica.",
+        "d) La Dirección General de Asistencia Sanitaria."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "33. El espacio existente entre una cama hospitalaria y la pared lateral, debe ser como mínimo de:",
+      "options": [
+        "a) No importa tal separación.",
+        "b) 0,5 metros.",
+        "c) 0,3 metros.",
+        "d) 1,10 metros."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "34. ¿Qué tipo de extintor es el más indicado en caso de fuego eléctrico?",
+      "options": [
+        "a) De nitrógeno líquido.",
+        "b) De polvo seco polivalente.",
+        "c) De agua tratada.",
+        "d) De CO2."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "35. ¿Cuáles son las partes de una camilla?",
+      "options": [
+        "a) Palo de suero, barandilla derecha e izquierda, barra frontal.",
+        "b) Barra trasera, cabeza y palo de suero.",
+        "c) Palo de suero, cabezal, barra trasera, barandillas y barra frontal.",
+        "d) Palo de suero, cabezal, barras laterales, barra trasera y lateral."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "36. Una desinfección que elimina bacterias patógenas en su forma vegetativa y algunos hongos es:",
+      "options": [
+        "a) Desinfección de alto nivel.",
+        "b) Desinfección de nivel intermedio.",
+        "c) Desinfección de bajo nivel.",
+        "d) Esterilización."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "37. La sala de autopsias debe de tener una superficie mínima de:",
+      "options": [
+        "a) 20 metros cuadrados.",
+        "b) 30 metros cuadrados.",
+        "c) 40 metros cuadrados.",
+        "d) 45 metros cuadrados."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "38. En la aplicación de la contención mecánica, después de la cintura se inmovilizará:",
+      "options": [
+        "a) El tórax.",
+        "b) Las extremidades inferiores.",
+        "c) Las extremidades superiores.",
+        "d) Es indiferente el orden a seguir en la aplicación de la contención mecánica."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "39. Entre las ventajas del sistema de triaje, en la identificación y estadiaje de las víctimas de una catástrofe es correcto que:",
+      "options": [
+        "a) Aumenta la eficacia de la atención a los pacientes.",
+        "b) Proporciona información sobre el estado del paciente y el tiempo aproximado de espera en la atención.",
+        "c) Orienta el flujo de pacientes en función de su gravedad.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "40. Las normas, disposiciones o actos de las instituciones de Extremadura:",
+      "options": [
+        "a) En ningún caso tendrán efectos extraterritoriales.",
+        "b) Tienen efectos extraterritoriales cuando sea necesario para el pleno ejercicio de aquellas de sus competencias.",
+        "c) Podrán tener efectos extraterritoriales cuando sea necesario para el pleno ejercicio de aquellas de sus competencias cuya naturaleza lo requiera.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "41. El consentimiento informado se prestará como norma general de forma:",
+      "options": [
+        "a) Verbal.",
+        "b) Escrita.",
+        "c) Por representación.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "42. ¿Cuál es el comando para deshacer la última acción realizada en Word?",
+      "options": [
+        "a) Teclas CTRL + C.",
+        "b) Teclas CTRL + Z.",
+        "c) Teclas CTRL + V.",
+        "d) Teclas CTRL + D."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "43. La clasificación de Pareto ordena los artículos por:",
+      "options": [
+        "a) Tamaño.",
+        "b) Flujos de entrada y salida.",
+        "c) Accesibilidad.",
+        "d) Caducidad."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "44. Según la ley 31/1995, de 8 noviembre, el acceso a la información médica de carácter personal se limitará:",
+      "options": [
+        "a) Al personal médico y autoridades sanitarias que lleven a cabo la vigilancia de la salud.",
+        "b) Al empresario como responsable directo.",
+        "c) Al inspector de trabajo.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "45. El término recogido en la ley 8/2011, de 23 de marzo denominado como “Representación equilibrada” significa que se debe garantizar la presencia de mujeres y hombres de forma que, en el conjunto de personas a que se refiera, cada sexo:",
+      "options": [
+        "a) Ni supere el sesenta por ciento ni sea menos del cuarenta por ciento.",
+        "b) Ni supere el setenta por ciento ni sea menos del cuarenta por ciento.",
+        "c) Ni supere el ochenta por ciento ni sea menos del treinta por ciento.",
+        "d) 50 % cada sexo."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "46. Entre las funciones de la Atención Primaria de Salud no se encuentra:",
+      "options": [
+        "a) Funciones asistenciales, de cuidados y de atención a la persona usuaria.",
+        "b) Funciones de formación, docencia e investigación.",
+        "c) Funciones de registro y gestión.",
+        "d) Funciones de atención indirecta."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "47. Según el artículo 14.2.4 del Estatuto de Personal no Sanitario, ¿quiénes cuidarán de que los enfermos no hagan uso indebido de los enseres de la Institución?",
+      "options": [
+        "a) Los celadores.",
+        "b) El personal no sanitario.",
+        "c) Todo el personal sanitario.",
+        "d) Los celadores y el resto del personal."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "48. La ordenación del régimen del personal estatutario de los servicios de salud se rige por los siguientes principios y criterios (señala la respuesta incorrecta):",
+      "options": [
+        "a) Sometimiento pleno a la ley y el derecho.",
+        "b) Igualdad, mérito, capacidad y publicidad en el acceso a la condición de personal estatutario.",
+        "c) Estabilidad en el empleo y en el mantenimiento de la condición de personal estatutario temporal.",
+        "d) Libre circulación del personal estatutario en el conjunto del Sistema Nacional de Salud."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "49. En el manejo de bocas de incendios equipadas ante un conato de incendio, se conseguirá una mayor rapidez y eficacia en la extinción del fuego:",
+      "options": [
+        "a) Rompiendo el cristal y abriendo la válvula que da paso al agua para facilitar la extensión de la manguera.",
+        "b) Rompiendo el cristal y abriendo la válvula que da paso al agua para facilitar la extensión de la manguera, y dirigiendo la lanza hacia la base de las llamas.",
+        "c) Rompiendo o abriendo el cristal, desenrollando la manguera, abriendo la válvula que da paso al agua, regulando la salida de agua, girando la boquilla de la lanza y dirigiéndola sobre el foco del fuego.",
+        "d) Rompiendo el cristal, desenrollando la manguera, abriendo la válvula a su máximo caudal y dirigiendo la lanza hacia las llamas."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "50. Al entrar en un ascensor con un paciente en silla de ruedas el paciente:",
+      "options": [
+        "a) Entrará de frente en el ascensor con lo cual quedará mirando al fondo del ascensor.",
+        "b) Es indiferente como entre en el ascensor.",
+        "c) Entrará de espaldas tirando el celador de la silla para que quede el paciente de frente a la puerta.",
+        "d) Es indiferente como entre, pero el Celador debe entrar siempre a su lado."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "51. El alcohol etílico, ¿a qué nivel de desinfección corresponde?",
+      "options": [
+        "a) Nivel alto.",
+        "b) Nivel intermedio.",
+        "c) Nivel bajo.",
+        "d) Nivel muy alto."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "52. La sala de autopsias debe estar dotada, señala la respuesta incorrecta:",
+      "options": [
+        "a) Con una mesa de autopsias.",
+        "b) Ventilación no forzada.",
+        "c) Iluminación eléctrica adecuada.",
+        "d) Agua corriente fría y caliente."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "53. ¿Cuántos tipos de contenciones se pueden aplicar a un paciente cuando exista indicación?",
+      "options": [
+        "a) Mecánica, automática y farmacológica.",
+        "b) Farmacológica, verbal y física o mecánica.",
+        "c) Total y parcial.",
+        "d) Abdominal y craneal."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "54. Corresponde a las siglas SET:",
+      "options": [
+        "a) Sistema de Emergencias y Triaje.",
+        "b) Sistema Español de Triaje o Sistema Estructurado de Triaje.",
+        "c) Servicio de Emergencias y Tratamiento.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "55. ¿Cuáles son las excepciones al consentimiento informado?",
+      "options": [
+        "a) Cuando existe riesgo para la salud pública.",
+        "b) Cuando existe riesgo inmediato grave para la integridad física del paciente.",
+        "c) En casos de intervención quirúrgica programada.",
+        "d) Las respuestas a) y b) son correctas."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "56. ¿Qué Decreto aprueba el Logotipo del Organismo Autónomo, Servicio Extremeño de Salud?",
+      "options": [
+        "a) El Decreto 221/2008, de 24 de octubre.",
+        "b) El Decreto 235/2023, de 12 de septiembre.",
+        "c) El Decreto 209/2001, de 27 de diciembre.",
+        "d) El Decreto 59/2014, de 15 de abril."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "57. Una wiki es:",
+      "options": [
+        "a) Una web de descarga.",
+        "b) Una red social.",
+        "c) Una web de noticias.",
+        "d) Una web donde los usuarios editan de forma colaborativa información."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "58. Según la clasificación de Pareto, los artículos de clase A:",
+      "options": [
+        "a) Son aquellos artículos de elevado coste, por lo que no pueden almacenarse en grandes cantidades.",
+        "b) Son aquellos que más se utilizan, y por tanto se guardarán en los lugares más próximos y de fácil acceso.",
+        "c) Son artículos intermedios.",
+        "d) Son aquellos que se consumen menos y tienen una rotación más lenta."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "59. Los instrumentos esenciales para la gestión y aplicación del Plan de prevención de riesgos laborales son:",
+      "options": [
+        "a) La evaluación de riesgos y la planificación de la actividad preventiva.",
+        "b) La evaluación inicial de riesgos y la formación.",
+        "c) La planificación y la gestión de la actividad preventiva.",
+        "d) La identificación y la evaluación de los riesgos."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "60. ¿Qué Título de la Ley 8/2011, de 23 de marzo recoge la integración de la perspectiva de género en las políticas públicas?",
+      "options": [
+        "a) Título I.",
+        "b) Título II.",
+        "c) Título III.",
+        "d) Título IV."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "61. El Hospital Materno Infantil pertenece al:",
+      "options": [
+        "a) Complejo Hospitalario de Mérida.",
+        "b) Complejo Hospitalario de Plasencia.",
+        "c) Complejo Hospitalario Universitario de Cáceres.",
+        "d) Complejo Hospitalario Universitario de Badajoz."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "62. Además de los enseres ¿de qué más cuidarán los Celadores al igual que el resto del personal, de que los enfermos no hagan uso indebido?",
+      "options": [
+        "a) De las persianas y cortinas de la Institución.",
+        "b) De los aparatos de la Institución.",
+        "c) De las ropas de la Institución.",
+        "d) Todas las respuestas anteriores son correctas."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "63. En el aislamiento entérico:",
+      "options": [
+        "a) La bata es necesaria si se va a tener contacto con el paciente.",
+        "b) La mascarilla es necesaria.",
+        "c) Normalmente la limpieza de la habitación requiere tomar precauciones especiales.",
+        "d) Las cuñas y orinales no serán de uso exclusivo."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "64. La Constitución Española entró en vigor:",
+      "options": [
+        "a) Al día siguiente de su publicación en el BOE.",
+        "b) El 29 de diciembre de 1978.",
+        "c) El 27 de diciembre de 1978, cuando fue sancionada por S. M. el Rey.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "65. Para trasladar a un paciente en camilla existen 4 posiciones, estas son:",
+      "options": [
+        "a) Sentado en una postura de 90º, semisentado en 45º, si tiene fractura de cadera en 20º y con fractura en la columna en 0º.",
+        "b) Sentado en una postura de 90º, semisentado en 50º, si tiene fractura de cadera en 0º y con fractura en la columna en 20º.",
+        "c) Sentado en una postura de 80º, semisentado en 40º, si tiene fractura de cadera en 0º y con fractura en la columna en 10º.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "66. En la terminología quirúrgica el sufijo “-ectomía” significa:",
+      "options": [
+        "a) Evitar el sangrado.",
+        "b) Extirpación.",
+        "c) Infección.",
+        "d) Sutura de la incisión."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "67. Para uso hospitalario, ¿cuándo deberá disponerse de instalación automática de extinción?",
+      "options": [
+        "a) Siempre, sin depender de la altura de evacuación del edificio.",
+        "b) Cuando el edificio tenga una altura de evacuación superior a 80 metros.",
+        "c) En las cocinas, cuando la potencia de instalación exceda de 30 KW.",
+        "d) Cuando el edificio tenga una altura doble que la anchura."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "68. ¿Cómo se denomina el trastorno cerebral causado por deficiencia de vitamina B1?",
+      "options": [
+        "a) Delirium tremens.",
+        "b) Síndrome de Wernicke-Korsakoff.",
+        "c) Enfermedad de Addison.",
+        "d) Tirotoxicosis."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "69. Según el SET, ¿cuántos niveles de prioridad para la atención médica se establecen?",
+      "options": [
+        "a) Tres.",
+        "b) Cuatro.",
+        "c) Cinco.",
+        "d) Seis."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "70. ¿Cuánto tiempo dura la obligación del secreto profesional en los profesionales sanitarios?",
+      "options": [
+        "a) 15 años.",
+        "b) 20 años.",
+        "c) 5 años.",
+        "d) Toda la vida."
+      ],
+      "correct": 3
+    },
+    {
+      "question": "R1. El Hospital Tierra de Barros pertenece al:",
+      "options": [
+        "a) Complejo Hospitalario de Mérida.",
+        "b) Complejo Hospitalario de Plasencia.",
+        "c) Complejo Hospitalario Universitario de Cáceres.",
+        "d) Complejo Hospitalario Universitario de Badajoz."
+      ],
+      "correct": 0
+    },
+    {
+      "question": "R2. Respecto a los útiles de servicio en general, los celadores (señala la respuesta incorrecta):",
+      "options": [
+        "a) Evitarán su deterioro.",
+        "b) Instruirán a los enfermos en su uso.",
+        "c) Repararán los que se deterioren.",
+        "d) Cuidarán de que no hagan uso indebido."
+      ],
+      "correct": 2
+    },
+    {
+      "question": "R3. ¿Cuál de las siguientes medidas se deben tomar ante un paciente sujeto a un aislamiento por gotas de Flügge?",
+      "options": [
+        "a) El uso de la mascarilla no es necesario.",
+        "b) El uso de la mascarilla quirúrgica cuando se esté trabajando a menos de 1 metro del paciente.",
+        "c) En los traslados el paciente no llevará la mascarilla.",
+        "d) La eliminación de los residuos en bolsas o contenedores no identificados."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "R4. En aplicación de la normativa sobre protección de incendios en los establecimientos sanitarios:",
+      "options": [
+        "a) En atención a la gravedad de la emergencia, podrán utilizarse todas las vías de entrada y salida del establecimiento.",
+        "b) Todas las vías de evacuación disponibles y las puertas de acceso a ellas deberán señalizarse adecuadamente y permanecerán siempre despejadas de cualquier obstáculo.",
+        "c) Todas las vías de evacuación disponibles y las puertas de acceso a ellas deberán señalizarse con la indicación “vía de evacuación”.",
+        "d) Se atenderá con la mayor rapidez posible al desalojo de cualquier obstáculo que impida la salida por las vías de evacuación."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "R5. ¿Cuál de estas posiciones no existe?",
+      "options": [
+        "a) Sims.",
+        "b) Cubilar.",
+        "c) Fowler.",
+        "d) Morestin."
+      ],
+      "correct": 1
+    },
+    {
+      "question": "R6. Señale la respuesta correcta. Los valores superiores de nuestro ordenamiento jurídico son:",
+      "options": [
+        "a) La libertad, la justicia, la igualdad y el pluralismo político.",
+        "b) La libertad, la justicia, la igualdad, la equidad y el pluralismo político.",
+        "c) La libertad, la justicia y la igualdad.",
+        "d) Ninguna de las respuestas anteriores es correcta."
+      ],
+      "correct": 0
+    }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
