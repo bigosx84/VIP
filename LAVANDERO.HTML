@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">LAVANDERO</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+ {
+  question: "42.- Los residuos de los centros sanitarios se clasifican en diferentes grupos, ¿en qué grupo se incluyen las lancetas?",
+  options: [
+    "a) Grupo I.",
+    "b) Grupo II.",
+    "c) Grupo III.",
+    "d) Grupo IV."
+  ],
+  correct: 2
+},
+{
+  question: "46.- ¿Cuáles son los cuatro factores del círculo de Sinner?",
+  options: [
+    "a) Tiempo, eficacia, temperatura y dinámica.",
+    "b) Calidad del agua, efectividad, tiempo y química.",
+    "c) Calidad del agua, temperatura, eficiencia y química.",
+    "d) Tiempo, temperatura, mecánica y química."
+  ],
+  correct: 3
+},
+{
+  question: "59.- Conforme a lo previsto en el artículo 3 de la Ley 8/2011, de 23 de marzo, de igualdad entre mujeres y hombres y contra la violencia de género en Extremadura, indique cuál de los siguientes, es un principio general de actuación de los poderes públicos:",
+  options: [
+    "a) La interoperabilidad.",
+    "b) La intersexualidad.",
+    "c) La interseccionalidad.",
+    "d) La interculturalidad."
+  ],
+  correct: 2
+},
+{
+  question: "60.- Conforme a la Ley 8/2011, de 23 de marzo, de igualdad entre mujeres y hombres y contra la violencia de género en Extremadura, “La situación en la que se encuentra una persona que, en atención a su sexo, sea, haya sido o pudiera ser tratada de manera menos favorable que otra en situación homóloga” define a:",
+  options: [
+    "a) La discriminación inversa.",
+    "b) La discriminación directa.",
+    "c) La discriminación indirecta.",
+    "d) El acoso sexual."
+  ],
+  correct: 1
+},
+{
+  question: "61.- Según la Ley 8/2011, de 23 de marzo de Igualdad entre mujeres y hombres y contra la violencia de género en Extremadura, se entiende por representación equilibrada aquella situación que garantice la presencia de mujeres y hombres de forma que, en el conjunto de personas a que se refiera, cada sexo:",
+  options: [
+    "a) Ni supere el 60% ni sea menos del 40%.",
+    "b) Ni supere el 70% ni sea menos del 30%.",
+    "c) Ni supere el 80% ni sea menos del 20%.",
+    "d) No supere el 25%."
+  ],
+  correct: 0
+},
+{
+  question: "62.- De acuerdo con lo previsto en el artículo 38 de la Ley 40/2015, de 1 de octubre, de Régimen Jurídico del Sector Público, aquella dirección electrónica, disponible para los ciudadanos a través de redes de telecomunicaciones, cuya titularidad corresponde a una Administración Pública, Organismo Público o Entidad de Derecho Público, es:",
+  options: [
+    "a) El portal de internet.",
+    "b) La red social.",
+    "c) La sede electrónica.",
+    "d) El dominio web."
+  ],
+  correct: 2
+},
+{
+  question: "63.- Respecto a la estructura de la Constitución Española de 1978 señale la respuesta CORRECTA:",
+  options: [
+    "a) Carece de Preámbulo y consta de Título Preliminar, 10 Títulos, 9 disposiciones adicionales, 4 transitorias, 1 derogatoria y 1 final.",
+    "b) Consta de Preámbulo, de Título Preliminar, 12 Títulos, 4 disposiciones adicionales, 9 transitorias, 1 derogatoria y 1 final.",
+    "c) Consta de Preámbulo, de Título Preliminar, 10 Títulos, 4 disposiciones adicionales, 9 transitorias, 1 derogatoria y 1 final.",
+    "d) Consta de 14 disposiciones adicionales."
+  ],
+  correct: 2
+},
+{
+  question: "64.- Según la Constitución Española de 1978, los poderes del Estado emanan:",
+  options: [
+    "a) Del Gobierno.",
+    "b) Del Rey.",
+    "c) Del pueblo español.",
+    "d) De las Cortes Generales."
+  ],
+  correct: 2
+},
+{
+  question: "65.- Según el Estatuto de Autonomía de Extremadura, la Comunidad Autónoma de Extremadura tiene competencias de ejecución en la siguiente materia:",
+  options: [
+    "a) Conservación, defensa y protección del Fuero de Baylío e instituciones de derecho consuetudinario.",
+    "b) Ordenación de la Hacienda de la Comunidad Autónoma.",
+    "c) Caza y explotaciones cinegéticas.",
+    "d) Productos farmacéuticos."
+  ],
+  correct: 3
+},
+{
+  question: "66.- Según el Estatuto de Autonomía de Extremadura, en caso de extraordinaria y urgente necesidad, la Junta de Extremadura puede dictar disposiciones legislativas provisionales bajo la forma de:",
+  options: [
+    "a) Decreto Legislativo.",
+    "b) Ley Orgánica.",
+    "c) Reglamento de Organización.",
+    "d) Decreto-Ley."
+  ],
+  correct: 3
+},
+{
+  question: "67.- Según el Estatuto Marco del personal estatutario de los servicios de salud, el personal que, una vez superado el correspondiente proceso selectivo, obtiene un nombramiento para el desempeño con carácter permanente de las funciones que de tal nombramiento se deriven, es personal:",
+  options: [
+    "a) Eventual.",
+    "b) Estatutario fijo.",
+    "c) Directivo.",
+    "d) Estatutario temporal."
+  ],
+  correct: 1
+},
+{
+  question: "68.- Según el Estatuto Marco del personal estatutario de los servicios de salud, el personal estatutario ostenta, en los términos establecidos en la Constitución y en la legislación específicamente aplicable, uno de los siguientes derechos colectivos:",
+  options: [
+    "a) A la actividad sindical.",
+    "b) A la movilidad voluntaria, promoción interna y desarrollo profesional...",
+    "c) A recibir asistencia y protección en el ejercicio de su profesión...",
+    "d) A la acción social en los términos que se determinen..."
+  ],
+  correct: 0
+},
+{
+  question: "69.- Según el Decreto 221/2008, de 24 de octubre, por el que se aprueban los Estatutos del Organismo Autónomo Servicio Extremeño de Salud, es un órgano de dirección y gestión del Servicio Extremeño de Salud:",
+  options: [
+    "a) La Dirección General de Asistencia Sanitaria.",
+    "b) El Consejo General.",
+    "c) El Consejo de Dirección.",
+    "d) La Dirección Gerencia del SEPAD."
+  ],
+  correct: 0
+},
+{
+  question: "70.- Según el Decreto 221/2008, de 24 de octubre, por el que se aprueban los Estatutos del Organismo Autónomo Servicio Extremeño de Salud, el órgano superior del Servicio Extremeño de Salud es:",
+  options: [
+    "a) La Dirección General de Recursos Humanos.",
+    "b) La Dirección General de Planificación Económica.",
+    "c) La Dirección Gerencia.",
+    "d) El Consejo de Dirección."
+  ],
+  correct: 2
+},
+
+/* PREGUNTAS DE RESERVA */
+
+{
+  question: "R1.- Según la Ley 40/2015, de 1 de octubre, de Régimen Jurídico del Sector Público, los medios o soportes en que se almacenen documentos deberán contar con medidas de seguridad, de acuerdo con lo previsto en el:",
+  options: [
+    "a) Sistema Nacional de Seguridad.",
+    "b) Esquema Nacional de Seguridad.",
+    "c) Consejo Nacional de Ciberseguridad.",
+    "d) Esquema Nacional de Interoperabilidad."
+  ],
+  correct: 1
+},
+{
+  question: "R5.- Según el Estatuto de Autonomía de Extremadura, corresponde a la Asamblea de Extremadura:",
+  options: [
+    "a) Controlar el ejercicio de las delegaciones legislativas y convalidar los Decretos-leyes.",
+    "b) Ordenar la publicación de los nombramientos del Delegado del Gobierno...",
+    "c) Firmar los decretos y acuerdos de la Junta...",
+    "d) Resolver conflictos de atribuciones entre miembros de la Junta."
+  ],
+  correct: 3
+}
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
