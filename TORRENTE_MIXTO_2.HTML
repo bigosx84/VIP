@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">TORRENTE TEST MIXTO 2</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+ {
+  question: "1. Según el Estatuto de Personal No Sanitario, los/as celadores/as tramitarán de unos servicios a otros:",
+  options: [
+    "a) aquella información médica, que esté seguro de que es real, al familiar.",
+    "b) sin tardanza, las comunicaciones verbales que le sean confiada por sus superiores.",
+    "c) los diagnósticos médicos a los familiares.",
+    "d) información sobre los tratamientos de la enfermedad al paciente."
+  ],
+  correct: 1
+},
+{
+  question: "2. ¿El gorro es una prenda que los celadores deben utilizar dentro del quirófano?",
+  options: [
+    "a) no, sólo deben utilizarlo las cirujanas.",
+    "b) es una prenda obligada para todas las personas que accedan al área quirúrgica.",
+    "c) sólo está indicado para el personal sanitario.",
+    "d) depende del tipo de cirugía que se realice, se utilizará o no."
+  ],
+  correct: 1
+},
+{
+  question: "3. Según los tipos de usuarios, una persona que 'nunca está segura, no sabe lo que le conviene, se decide y retrocede', se trata de un usuario de tipo:",
+  options: [
+    "a) agresivo.",
+    "b) discrepado.",
+    "c) indeciso.",
+    "d) desconfiado."
+  ],
+  correct: 2
+},
+{
+  question: "4. ¿Cómo se denominan también a los centros de día de salud mental?",
+  options: [
+    "a) hospital de día.",
+    "b) talleres ocupacionales.",
+    "c) pisos protegidos.",
+    "d) centros de rehabilitación psicosocial."
+  ],
+  correct: 3
+},
+{
+  question: "5. En un accidente laboral con riesgo de contaminación debido a un pinchazo, ¿qué acción inmediata es correcta?",
+  options: [
+    "a) no quitarse los guantes.",
+    "b) lavarse la herida con abundante agua y jabón.",
+    "c) presionar la herida para que no sangre.",
+    "d) comunicarlo a un compañero celador/a."
+  ],
+  correct: 1
+},
+{
+  question: "6. Las señales de protección contra incendios deben ser:",
+  options: [
+    "a) rectangulares o cuadradas. pictograma blanco sobre fondo rojo.",
+    "b) forma cuadrada. pictograma blanco sobre fondo verde.",
+    "c) forma rectangular. pictograma blanco sobre fondo azul.",
+    "d) ninguna de las respuestas anteriores es correcta."
+  ],
+  correct: 0
+},
+{
+  question: "7. La Clasificación de Pareto... ¿de qué clase serían los artículos que más se consumen?",
+  options: [
+    "A) Clase 'A'.",
+    "B) Clase 'B'.",
+    "C) Clase 'C'.",
+    "D) Los artículos no tienen clasificación Pareto."
+  ],
+  correct: 0
+},
+{
+  question: "8. ¿De qué color es la bolsa donde se desechan los residuos del grupo II?",
+  options: [
+    "A) Negra.",
+    "B) Roja.",
+    "C) Amarilla.",
+    "D) Marrón."
+  ],
+  correct: 2
+},
+{
+  question: "9. ¿Cuál de los siguientes dispositivos de administración produce la concentración de oxígeno más alta?",
+  options: [
+    "a) Mascarilla Venturi.",
+    "b) Mascarilla con bolsa de reservorio.",
+    "c) Mascarilla de traqueotomía.",
+    "d) Mascarilla oronasal de no reinhalación."
+  ],
+  correct: 3
+},
+{
+  question: "10. La movilización de los pacientes ingresados en la UCI, intubados o no, ¿deberá realizarla el celador?",
+  options: [
+    "a) no, ya que tiene que realizarla el personal sanitario.",
+    "b) sí, debiendo realizarla con precaución y siguiendo instrucciones del equipo sanitario.",
+    "c) sí, pero solo si lo ordena el facultativo.",
+    "d) no, en ningún caso."
+  ],
+  correct: 1
+},
+{
+  question: "11. Para evitar accidentes durante la administración de oxígeno, ¿qué medida NO es necesaria?",
+  options: [
+    "a) Evitar fumar al lado del paciente.",
+    "b) Controlar la temperatura de la habitación.",
+    "c) Ajustar flujo, humedad y concentración según prescripción.",
+    "d) Todas son necesarias."
+  ],
+  correct: 3
+},
+{
+  question: "12. ¿Qué tipo de ventilación mecánica no invasiva posibilita presión positiva continua sin ventilador?",
+  options: ["a) BIPAP.","b) CPAP.","c) NIPSV.","d) PEEP"],
+  correct: 1
+},
+{
+  question: "13. Entre las reglas básicas para realizar cambios posturales se encuentra:",
+  options: [
+    "a) Hacer el máximo uso de su centro de gravedad.",
+    "b) Mantener el centro de gravedad alto.",
+    "c) Hacer uso de los músculos de la espalda.",
+    "d) Todas son ciertas."
+  ],
+  correct: 0
+},
+{
+  question: "14. Identifique una característica del colchón antiescaras alternating:",
+  options: [
+    "a) necesita 100 L para llenarse.",
+    "b) funciona mediante compresión/descompresión de aire.",
+    "c) colchón de agua y bolas de poliuretano.",
+    "d) resortes mecánicos sincronizados."
+  ],
+  correct: 1
+},
+{
+  question: "15. ¿Qué se entiende por inventario de un almacén?",
+  options: [
+    "a) estancia provisional de la mercancía.",
+    "b) información sobre entradas, salidas y existencia.",
+    "c) llegada de mercancías del proveedor.",
+    "d) relación detallada y valorada de existencias en un momento."
+  ],
+  correct: 3
+},
+{
+  question: "16. Paciente ingresado con tuberculosis. ¿Qué medida es imprescindible?",
+  options: [
+    "a) utilizar ropa aséptica.",
+    "b) uso de gorro, mascarilla y guantes.",
+    "c) uso de calzas, mascarilla, guantes y extremar higiene.",
+    "d) uso de mascarilla de alta resolución."
+  ],
+  correct: 3
+},
+{
+  question: "17. Para un paciente desmayado, la posición adecuada es:",
+  options: [
+    "a) Sims.",
+    "b) Trendelemburg.",
+    "c) Hipovolémica.",
+    "d) Morestín."
+  ],
+  correct: 1
+},
+{
+  question: "18. Para proteger ligamentos, los músculos abdominales y glúteos deben:",
+  options: ["a) Relajar.","b) Contraer.","c) Estabilizar.","d) Reforzar."],
+  correct: 1
+},
+{
+  question: "19. El cuerpo del paciente tras la muerte se colocará normalmente:",
+  options: [
+    "a) decúbito prono, brazos a los lados.",
+    "b) supino, brazos a los lados o cruzados sobre abdomen.",
+    "c) supino, brazos extendidos y palmas arriba.",
+    "d) prono, brazos extendidos."
+  ],
+  correct: 1
+},
+{
+  question: "20. La expresión 'hemorragia exteriorizada' significa:",
+  options: [
+    "a) Sangre producida en el exterior del organismo.",
+    "b) Sangre interior que sale por drenajes.",
+    "c) Sangre interior extraída mediante jeringas.",
+    "d) Sangre interna que sale por un orificio natural."
+  ],
+  correct: 3
+},
+{
+  question: "21. El objetivo del decúbito lateral puede ser:",
+  options: [
+    "a) Aliviar zonas de presión.",
+    "b) Proporcionar comodidad.",
+    "c) Realizar higiene adecuada.",
+    "d) Todas son ciertas."
+  ],
+  correct: 3
+},
+{
+  question: "22. Si movemos a un enfermo hacia arriba en la cama y no coopera, la almohada:",
+  options: ["a) Deberemos quitarla.","b) Dejarla.","c) Colocarla bajo los pies.","d) Da igual."],
+  correct: 0
+},
+{
+  question: "23. Para movilizar a un paciente con hemiplejía se colocará:",
+  options: [
+    "a) En el lado hacia el que lo movemos.",
+    "b) En el lado opuesto.",
+    "c) En el lado que conserva movilidad.",
+    "d) En el lado afectado."
+  ],
+  correct: 2
+},
+{
+  question: "24. Cuando un paciente inicia deambulación con el celador, este:",
+  options: [
+    "a) Debe permanecer atento para evitar accidentes.",
+    "b) Debe dejarlo solo.",
+    "c) No debe hacer nada.",
+    "d) Debe dar consentimiento."
+  ],
+  correct: 0
+},
+{
+  question: "25. El bastón debe extenderse desde:",
+  options: [
+    "a) El trocánter mayor hasta el suelo.",
+    "b) La cintura al suelo.",
+    "c) La axila al suelo.",
+    "d) Lo decide el paciente."
+  ],
+  correct: 0
+},
+{
+  question: "26. Temperatura de la habitación para baño del encamado:",
+  options: ["a) 18°C.","b) 24°C.","c) 37°C.","d) 19°C."],
+  correct: 1
+},
+{
+  question: "27. Temperatura del agua para el aseo del paciente:",
+  options: ["a) 17°C.","b) 27°C.","c) 37°C.","d) 47°C."],
+  correct: 2
+},
+{
+  question: "28. Movimiento hacia fuera:",
+  options: ["a) Abducción.","b) Aducción.","c) Eversión.","d) Rotación."],
+  correct: 2
+},
+{
+  question: "29. La cama de somier rígido no permite colocar al paciente en:",
+  options: [
+    "a) Decúbito lateral.",
+    "b) Decúbito prono.",
+    "c) Fowler.",
+    "d) Todas son posibles."
+  ],
+  correct: 2
+},
+{
+  question: "30. La estufa Poupinel es un método de esterilización:",
+  options: [
+    "a) Físico, por presión.",
+    "b) Físico, por calor seco.",
+    "c) Químico, por calor seco.",
+    "d) Físico, por radiación."
+  ],
+  correct: 1
+},
+{
+  question: "31. El material metálico se suele esterilizar a:",
+  options: ["a) 135°C.","b) 120°C.","c) 110°C.","d) 100°C."],
+  correct: 0
+},
+{
+  question: "32. ¿Desde qué temperatura es efectivo el óxido de etileno?",
+  options: ["a) 5°C.","b) 10°C.","c) 20°C.","d) 30°C."],
+  correct: 3
+},
+{
+  question: "33. El celador, excepcionalmente:",
+  options: [
+    "a) Ayudará a asear a los enfermos masculinos encamados.",
+    "b) Ayudará a bañar a los pacientes.",
+    "c) Amortajará a los fallecidos.",
+    "d) Ninguna."
+  ],
+  correct: 0
+},
+{
+  question: "34. Para esterilizar material textil el método más conveniente es:",
+  options: [
+    "a) Estufa Poupinel.",
+    "b) Óxido de etileno.",
+    "c) Autoclave de vapor.",
+    "d) Glutaraldehído."
+  ],
+  correct: 2
+},
+{
+  question: "35. Tiempo entre puesta en marcha del autoclave y apertura en zona estéril:",
+  options: [
+    "a) Tiempo de secado.",
+    "b) Tiempo de descenso.",
+    "c) Tiempo de ciclo.",
+    "d) Tiempo de esterilización."
+  ],
+  correct: 2
+},
+{
+  question: "36. Para que el glutaraldehído esterilice, necesita tiempo de inmersión de:",
+  options: [
+    "a) 30 minutos.",
+    "b) 1 hora.",
+    "c) 5 horas.",
+    "d) 10 horas."
+  ],
+  correct: 3
+},
+{
+  question: "37. Método de esterilización con calor seco:",
+  options: ["a) Autoclave.","b) Rayos gamma.","c) UV.","d) Estufa Poupinel."],
+  correct: 3
+},
+{
+  question: "38. En sujeción del enfermo mental, ¿cuál debe usarse en último lugar?",
+  options: [
+    "a) Reducción farmacológica.",
+    "b) Reducción física.",
+    "c) Reducción verbal.",
+    "d) Reducción ambiental."
+  ],
+  correct: 1
+},
+{
+  question: "39. En sala de radiología, ¿quién coloca al paciente?",
+  options: [
+    "a) En urgencia, celador + familiares.",
+    "b) Celador.",
+    "c) Sólo personal de rayos.",
+    "d) Celador con ayuda y dirigido por personal sanitario."
+  ],
+  correct: 3
+},
+{
+  question: "40. El celador de UCI deberá:",
+  options: [
+    "a) Administrar sedantes.",
+    "b) Intubar.",
+    "c) Reparar camas.",
+    "d) Trasladar aparatos y ayudar en cambios posturales."
+  ],
+  correct: 3
+},
+{
+  question: "41. Número mínimo de personas para sujeción terapéutica:",
+  options: ["a) Cinco.","b) Tres.","c) Cuatro.","d) Dos."],
+  correct: 2
+},
+{
+  question: "42. Si dos reanimadores expertos presencian una PCR, la secuencia es:",
+  options: [
+    "a) 5 compresiones / 1 ventilación.",
+    "b) 2 compresiones / 30 ventilaciones.",
+    "c) 15 compresiones / 2 ventilaciones.",
+    "d) 30 compresiones / 2 ventilaciones."
+  ],
+  correct: 3
+},
+{
+  question: "43. Enfermo inconsciente que respira con normalidad:",
+  options: [
+    "a) Iniciar RCP.",
+    "b) Dejarlo como está.",
+    "c) Maniobra frente-mentón.",
+    "d) Posición lateral de seguridad y buscar ayuda."
+  ],
+  correct: 3
+},
+{
+  question: "44. Es un requisito de la unidad del paciente:",
+  options: [
+    "a) Condiciones ambientales favorables.",
+    "b) Correctas medidas de seguridad.",
+    "c) Proporcionar intimidad.",
+    "d) Todas son correctas."
+  ],
+  correct: 3
+},
+{
+  question: "45. Los extintores deberán emplazarse:",
+  options: [
+    "a) Cerca de zonas con mayor probabilidad de iniciarse incendio.",
+    "b) Alejados de salidas de evacuación.",
+    "c) Sobre soportes a 50 cm del suelo.",
+    "d) Ninguna."
+  ],
+  correct: 0
+},
+{
+  question: "46. Según la OMS, el lavado de manos debe durar:",
+  options: [
+    "a) 10 segundos.",
+    "b) 15 segundos.",
+    "c) 40-60 segundos.",
+    "d) 1-3 minutos."
+  ],
+  correct: 2
+},
+{
+  question: "47. La información al público debe ser:",
+  options: ["a) Compleja.","b) Escueta.","c) Clara.","d) Derivarlos a enfermería."],
+  correct: 2
+},
+{
+  question: "48. Maniobras de RCP básica:",
+  options: [
+    "a) Masaje cardiaco y respiración boca a boca.",
+    "b) Solo masaje cardiaco.",
+    "c) Comprobación del pulso + masaje.",
+    "d) Frente-mentón + PLs + ventilación + pulso."
+  ],
+  correct: 0
+},
+{
+  question: "49. ¿Qué método NO es físico?",
+  options: [
+    "a) Medios ultrasónicos.",
+    "b) Luz ultravioleta.",
+    "c) Radiaciones ionizantes.",
+    "d) Formaldehido."
+  ],
+  correct: 3
+},
+{
+  question: "50. Fin último de un almacén sanitario:",
+  options: [
+    "a) Reaprovisionamiento.",
+    "b) Distribución a los servicios.",
+    "c) Planificación de adquisición.",
+    "d) Petición del material."
+  ],
+  correct: 1
+}
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
