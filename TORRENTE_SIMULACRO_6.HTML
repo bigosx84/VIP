@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">TORRENTE TEST MIXTO 2</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+{
+  question: "1. ¿Qué título de la Constitución Española se refiere a la Corona?",
+  options: [
+    "a) El Título Preliminar",
+    "b) El Título II",
+    "c) El Título V",
+    "d) El Título VIII"
+  ],
+  correct: 1
+},
+{
+  question: "2. ¿En qué fecha se aprobó la Constitución Española en sesiones plenarias de las Cortes Generales?",
+  options: [
+    "a) El 28 de diciembre de 1978",
+    "b) El 6 de diciembre de 1979",
+    "c) El 27 de diciembre de 1978",
+    "d) Ninguna opción es correcta."
+  ],
+  correct: 3
+},
+{
+  question: "3. ¿Cuál es la forma política del Estado español según el artículo 1 de la Constitución Española?",
+  options: [
+    "a) Democracia parlamentaria",
+    "b) Estado social y democrático de derecho",
+    "c) Estado de las Autonomías",
+    "d) Ninguna es correcta"
+  ],
+  correct: 3
+},
+{
+  question: "4. ¿Cómo se adquiere, se conserva y se pierde la nacionalidad española según el artículo 11 de la Constitución Española?",
+  options: [
+    "a) Por nacimiento",
+    "b) De acuerdo con lo establecido por la Ley",
+    "c) Por nacimiento, adopción o acogimiento (si los progenitores o receptores de la tutela son españoles)",
+    "d) Por la residencia en cualquiera de los municipios existentes en el territorio nacional."
+  ],
+  correct: 1
+},
+{
+  question: "5. Según el artículo 18 de la Constitución Española, ¿podría hacerse una entrada o registro en el domicilio de alguien sin el consentimiento del titular o resolución judicial?",
+  options: [
+    "a) No, en ningún caso.",
+    "b) No, salvo en caso de flagrante delito.",
+    "c) No, salvo que se haya declarado un estado de Alarma.",
+    "d) Sí"
+  ],
+  correct: 1
+},
+{
+  question: "6. Según el artículo 26 de la Constitución Española, se prohíben los Tribunales de Honor…",
+  options: [
+    "a) En el ámbito de la Administración Civil y Militar",
+    "b) En el ámbito de la Administración Militar y Político",
+    "c) En el ámbito de la Administración Civil y de las organizaciones profesionales",
+    "d) En el ámbito de la Administración Civil y de las organizaciones sindicales"
+  ],
+  correct: 2
+},
+{
+  question: "7. Una ley de la Asamblea de Extremadura aprobada por mayoría absoluta regulará la composición, las competencias, el régimen jurídico, la organización y el funcionamiento del siguiente órgano:",
+  options: [
+    "a) Consejo de cuentas",
+    "b) Consejo Económico y Social",
+    "c) Personero del Común",
+    "d) Ninguno de los anteriores"
+  ],
+  correct: 0
+},
+{
+  question: "8. La última modificación del Estatuto de Autonomía de Extremadura se produjo…",
+  options: [
+    "a) En el año 1991",
+    "b) En el año 1994",
+    "c) En el año 1999",
+    "d) Ninguna opción de respuesta es correcta."
+  ],
+  correct: 3
+},
+{
+  question: "9. El escudo y el himno de Extremadura se regularán por ley de la Asamblea aprobada…",
+  options: [
+    "a) Por mayoría de dos tercios de los diputados.",
+    "b) Por mayoría de tres quintos de los diputados.",
+    "c) Por mayoría absoluta.",
+    "d) Por mayoría simple"
+  ],
+  correct: 0
+},
+{
+  question: "10. Según el artículo 6 del Estatuto de Autonomía de Extremadura, los derechos fundamentales de los extremeños son los establecidos en la Constitución. Además, podrán ejercer frente a los poderes públicos regionales aquellos otros derechos contenidos en este Estatuto o en la legislación, especialmente",
+  options: [
+    "a) El de participar en los asuntos públicos directamente o por medio de representantes",
+    "b) El de petición",
+    "c) El de igualdad ante la Ley",
+    "d) Los derechos recogidos en las opciones a) y b) son respuestas correctas a la pregunta."
+  ],
+  correct: 3
+},
+{
+  question: "11. Es una competencia de desarrollo normativo y ejecución según el contenido del Estatuto de Autonomía de Extremadura:",
+  options: [
+    "a) Ordenación de la Hacienda de la Comunidad Autónoma.",
+    "b) Ferias internacionales que se celebren en Extremadura.",
+    "c) Sanidad y salud pública. Sanidad agrícola y animal. Sanidad alimentaria.",
+    "d) Régimen de las nuevas tecnologías de la sociedad de la información y la comunicación."
+  ],
+  correct: 2
+},
+{
+  question: "12. Es una función del Presidente de la Comunidad Autónoma de Extremadura como supremo representante de la Comunidad Autónoma:",
+  options: [
+    "a) Suscribir convenios de colaboración con el Estado y acuerdos de cooperación con otras Comunidades Autónomas, sin perjuicio de su delegación en otras autoridades.",
+    "b) Promulgar en nombre del Rey las leyes aprobadas por la Asamblea de Extremadura y demás normas con rango de ley, ordenando su publicación en el DOE y, en su caso, en el BOE.",
+    "c) Establecer, de acuerdo con su programa político, las directrices generales de la acción de gobierno e impulsar, dirigir y coordinar la acción del mismo.",
+    "d) Todas las anteriores."
+  ],
+  correct: 0
+},
+{
+  question: "13. Si se supera un plazo determinado tras la primera votación de investidura y no se ha superado el proceso por ningún candidato, la Asamblea quedará disuelta. Dicho plazo es:",
+  options: [
+    "a) Dos meses",
+    "b) 1 mes",
+    "c) 4 años",
+    "d) 15 días"
+  ],
+  correct: 0
+},
+{
+  question: "14. Según el artículo 9 del Estatuto Marco, los nombramientos de personal estatutario temporal serán de:",
+  options: [
+    "a) Interinidad",
+    "b) Sustitución",
+    "c) Eventual",
+    "d) Las opciones a) y b) son correctas."
+  ],
+  correct: 0
+},
+{
+  question: "15. ¿Cuáles de las siguientes son razones por las que se acordará la finalización de la relación estatutaria temporal?",
+  options: [
+    "a) Por la finalización del plazo establecido y recogido expresamente en el nombramiento y por la finalización de la causa que originó el nombramiento.",
+    "b) Por la cobertura de la plaza que se desempeñe por personal estatutario fijo a través de cualquiera de los procedimientos legalmente establecidos y por razones de carácter organizativo.",
+    "c) Todas las anteriores juntas (a + b).",
+    "d) Por renuncia, pérdida de nacionalidad, sanción disciplinaria firme, inhabilitación, jubilación o incapacidad permanente."
+  ],
+  correct: 0
+},
+{
+  question: "16. Según el Estatuto Marco, ¿Supondrá la pérdida de la condición de personal estatutario la pena de inhabilitación especial para la correspondiente profesión?",
+  options: [
+    "a) Sí, en todo caso.",
+    "b) No, sólo en el caso de inhabilitación especial para empleo o cargo público, si afecta al correspondiente nombramiento.",
+    "c) Sí, si excediera de seis años.",
+    "d) No, salvo inhabilitación absoluta."
+  ],
+  correct: 2
+},
+{
+  question: "17. ¿En cuál de los siguientes supuestos la recuperación de la condición de estatutario NO supondría excedencia voluntaria?",
+  options: [
+    "a) Cuando se recupera tras incapacidad revisada dentro de los dos años siguientes.",
+    "b) En caso de pérdida por pérdida de la nacionalidad.",
+    "c) Cuando se recupera tras incapacidad revisada, sin límite temporal.",
+    "d) Las opciones b) y c) son correctas."
+  ],
+  correct: 0
+},
+{
+  question: "18. Es un criterio o principio de ordenación del régimen del personal estatutario:",
+  options: [
+    "a) Percepción puntual de retribuciones e indemnizaciones.",
+    "b) Dedicación prioritaria al servicio público y transparencia de intereses.",
+    "c) No discriminación por razón de nacimiento, raza, sexo, religión, opinión, orientación e identidad sexual, expresión de género, características sexuales o cualquier otra condición o circunstancia personal o social.",
+    "d) Negociación colectiva, representación y participación."
+  ],
+  correct: 1
+},
+{
+  question: "19. Atendiendo a la función desarrollada, el personal estatutario es clasificado en:",
+  options: [
+    "a) Personal de formación universitaria y de formación profesional.",
+    "b) Personal estatutario fijo, interino, sustituto.",
+    "c) Personal estatutario sanitario y personal estatutario no sanitario.",
+    "d) Ninguna es correcta."
+  ],
+  correct: 3
+},
+{
+  question: "20. En el Sistema Sanitario Público de Extremadura se garantizan los siguientes derechos, excepto uno. Señale el incorrecto.",
+  options: [
+    "a) A la información sobre los servicios sanitarios a que pueden acceder.",
+    "b) A la confidencialidad de toda información relacionada con su proceso.",
+    "c) A la libre elección de médico, enfermera, servicio y centro.",
+    "d) A la información sobre los factores, situaciones y causas de riesgo."
+  ],
+  correct: 2
+},
+{
+  question: "21. Las prestaciones ofrecidas por el Sistema Sanitario Público de Extremadura serán, como mínimo:",
+  options: [
+    "a) Las establecidas en cada momento para el propio sistema público autonómico.",
+    "b) Salud Pública, Atención Primaria, Atención Especializada, Urgencias y Emergencias y Transporte Sanitario.",
+    "c) Cartera común básica, suplementaria y de servicios accesorios.",
+    "d) Las establecidas en cada momento para el Sistema Nacional de Salud."
+  ],
+  correct: 3
+},
+{
+  question: "22. ¿Quién garantiza el funcionamiento armónico y eficaz del Sistema Sanitario Público de Extremadura?",
+  options: [
+    "a) La Consejería competente en materia sanitaria.",
+    "b) El Servicio Extremeño de Salud.",
+    "c) La Dirección Gerencia del Servicio Extremeño de Salud.",
+    "d) Ninguna es correcta."
+  ],
+  correct: 3
+},
+{
+  question: "23. ¿Cuál de los siguientes derechos se ejerce también respecto a los servicios privados según la Ley de Salud de Extremadura?",
+  options: [
+    "a) A las prestaciones y servicios de salud individual y colectiva.",
+    "b) A participar en actividades sanitarias por cauces previstos.",
+    "c) Al libre acceso al defensor de los usuarios del sistema público.",
+    "d) Cuando en ingresos voluntarios desaparezca la capacidad, el centro debe pedir autorización judicial."
+  ],
+  correct: 3
+},
+{
+  question: "24. Libre elección en Atención Primaria según la Ley de Salud de Extremadura significa:",
+  options: [
+    "a) Restringida al conjunto de médicos del EAP de la Zona de Salud donde resida.",
+    "b) A la unidad básica asistencial.",
+    "c) Como un derecho colectivo.",
+    "d) Exclusivo de la población adulta."
+  ],
+  correct: 1
+},
+{
+  question: "25. ¿Quién nombra al personal estatutario fijo según los Estatutos del SES?",
+  options: [
+    "a) El titular de la Consejería competente en materia sanitaria.",
+    "b) El titular de la Dirección Gerencia del SES.",
+    "c) El titular del órgano competente en planificación.",
+    "d) El titular de la Dirección General de Recursos Humanos del SES."
+  ],
+  correct: 3
+},
+{
+  question: "26. ¿A quién corresponde el asesoramiento interno del SES según el artículo 4 de sus estatutos?",
+  options: [
+    "a) A la Dirección Gerencia",
+    "b) A la Dirección de Planificación Económica",
+    "c) A la Secretaría General (actual Dirección General de RRHH)",
+    "d) A la Dirección General de Asistencia Sanitaria"
+  ],
+  correct: 0
+},
+{
+  question: "27. ¿Cuál es el órgano colegiado de coordinación del SES según el artículo 3?",
+  options: [
+    "a) La Dirección Gerencia",
+    "b) El Consejo de Salud",
+    "c) El Consejo General",
+    "d) El Consejo de Dirección"
+  ],
+  correct: 3
+},
+{
+  question: "28. “La ordenación y dirección de la policía sanitaria mortuoria” es función de:",
+  options: [
+    "a) La Dirección General de Asistencia Sanitaria",
+    "b) La Dirección General de Salud Pública",
+    "c) La Dirección Gerencia",
+    "d) La Dirección General de Recursos Humanos"
+  ],
+  correct: 1
+},
+{
+  question: "29. En caso de vacante, ausencia o enfermedad del titular, ¿quién presidirá el Consejo General del SES?",
+  options: [
+    "a) La Dirección General de Asistencia Sanitaria",
+    "b) La Secretaría General de la Consejería competente en materia sanitaria",
+    "c) El titular de la Consejería competente en materia sanitaria",
+    "d) El responsable del órgano competente en planificación sanitaria"
+  ],
+  correct: 3
+},
+{
+  question: "30. No es atribución del Consejo General del SES:",
+  options: [
+    "a) Aprobar la memoria anual de la gestión del SES",
+    "b) Proponer medidas para mejorar los servicios",
+    "c) Establecer criterios de actuación del organismo",
+    "d) Establecer la política sanitaria de la Junta de Extremadura"
+  ],
+  correct: 3
+},
+{
+  question: "31. El régimen patrimonial del SES se regirá por:",
+  options: [
+    "a) Ley General de Hacienda Pública de Extremadura, Ley de Patrimonio de la Comunidad Autónoma y Ley de Salud de Extremadura.",
+    "b) Ley de Salud de Extremadura, siendo de aplicación el régimen de la Ley General de Hacienda Pública y las Leyes de Presupuestos.",
+    "c) Ley de Salud de Extremadura, Ley General de Sanidad y Ley General de Hacienda Pública.",
+    "d) Ley General de Sanidad, Ley de Patrimonio de la Comunidad Autónoma y Ley de Presupuestos Generales."
+  ],
+  correct: 0
+},
+{
+  question: "32. ¿Qué norma publicó los Estatutos actualmente vigentes del SES?",
+  options: [
+    "a) Decreto 209/2001 de 27 de diciembre.",
+    "b) Decreto 221/2008 de 24 de octubre.",
+    "c) Real Decreto 137/1984 de 11 de enero.",
+    "d) Decreto 47/2023 de 10 de mayo."
+  ],
+  correct: 1
+},
+{
+  question: "33. ¿De quién es función en el SES “El nombramiento y cese del personal eventual del Organismo Autónomo”?",
+  options: [
+    "a) De la Dirección Gerencia",
+    "b) De la Dirección General de Recursos Humanos",
+    "c) De la Dirección General de Planificación Económica",
+    "d) De ninguno, no existe tal función."
+  ],
+  correct: 0
+},
+{
+  question: "34. El personal estatutario que obtiene nombramiento para desempeño permanente tras superar proceso selectivo es:",
+  options: [
+    "a) Personal estatutario interino",
+    "b) Personal estatutario temporal",
+    "c) Personal estatutario sustituto",
+    "d) Personal estatutario fijo"
+  ],
+  correct: 3
+},
+{
+  question: "35. ¿Cuántos miembros de la Asamblea se requieren para proponer una Moción de Censura?",
+  options: [
+    "a) 15 miembros",
+    "b) 15% de los miembros de la cámara",
+    "c) Mayoría absoluta",
+    "d) 2/3 partes de la cámara"
+  ],
+  correct: 1
+},
+  {
+    question: "36. De las instituciones estatutarias descritas en el Título II del Estatuto de Autonomía, ¿a cuál le pertenece la atribución de “Interponer recursos de inconstitucionalidad y demás procedimientos de la competencia del Tribunal Constitucional para los que esté legitimada, o personarse en ellos en defensa de los intereses de la Comunidad Autónoma”?",
+    options: [
+      "a) A la Asamblea de Extremadura.",
+      "b) A la Junta de Extremadura.",
+      "c) Las opciones a) y b) son correctas.",
+      "d) Al Consejo Consultivo."
+    ],
+    correct: 2
+  },
+  {
+    question: "37. Según el Estatuto de Autonomía de Extremadura, en caso de extraordinaria y urgente necesidad, la Junta de Extremadura puede dictar disposiciones legislativas provisionales bajo la forma de:",
+    options: [
+      "a) Decreto del Presidente",
+      "b) Decreto-Ley",
+      "c) Decreto-Legislativo",
+      "d) Orden Extraordinaria"
+    ],
+    correct: 1
+  },
+  {
+    question: "38. ¿En qué artículo de la Constitución Española se dispone que “La Ley fijará las obligaciones militares de los españoles y regulará, con las debidas garantías, la objeción de conciencia, así como las demás causas de exención del servicio militar obligatorio, pudiendo imponer, en su caso, una prestación social sustitutoria”?",
+    options: [
+      "a) En el artículo 14",
+      "b) En el artículo 30",
+      "c) En el artículo 53",
+      "d) En el artículo 75"
+    ],
+    correct: 1
+  },
+  {
+    question: "39. Según el artículo 43 de la Constitución Española, a través de medidas preventivas y de las prestaciones y servicios necesarios, compete a los poderes públicos organizar y tutelar:",
+    options: [
+      "a) La atención primaria",
+      "b) La asistencia sanitaria",
+      "c) El sistema sanitario",
+      "d) La salud pública"
+    ],
+    correct: 3
+  },
+  {
+    question: "40. ¿A qué se refiere la definición siguiente, contenida en el Real Decreto 137/1984 de 11 de enero?: “la demarcación poblacional y geográfica fundamental; delimitada a una determinada población, siendo accesible desde todos los puntos y capaz de proporcionar una atención de salud continuada, integral y permanente con el fin de coordinar las funciones sanitarias afines”",
+    options: [
+      "a) Atención Primaria",
+      "b) Zona de Salud",
+      "c) Área de Salud",
+      "d) Institución Sanitaria Cerrada"
+    ],
+    correct: 1
+  },
+  {
+    question: "41. “La estructura física y funcional que posibilita el desarrollo de una atención primaria de salud coordinada globalmente, integral, permanente y continuada, y con base en el trabajo en equipo de los profesionales sanitarios y no sanitarios que actúan en el mismo. En el desarrollará sus actividades y funciones el Equipo de Atención Primaria”, es:",
+    options: [
+      "a) Centro de Atención Primaria",
+      "b) Zona Básica de Salud",
+      "c) Centro de Salud",
+      "d) Consultorio Local"
+    ],
+    correct: 2
+  },
+  {
+    question: "42. Según el artículo 60 del Reglamento de Atención Primaria de Extremadura, los Puntos de Atención Continuada Accesorios…",
+    options: [
+      "a) Están ubicados en algún consultorio local de la ZS, prestarán asistencia a la población de la localidad donde se ubiquen.",
+      "b) Están ubicados en el CS de la zona, prestarán asistencia a la población de toda la ZS.",
+      "c) Están ubicados en un CS o en un CAP destinado al efecto, prestarán asistencia a la población asignada de varias zonas de salud contiguas.",
+      "d) Ninguna es correcta."
+    ],
+    correct: 0
+  },
+  {
+    question: "43. NO es una función de los celadores en Atención Primaria:",
+    options: [
+      "a) Realizar recepción y atención telefónica de las personas que acudan o llamen al CS.",
+      "b) Servir de ascensoristas cuando se requiera o se les asigne expresamente dicho cometido.",
+      "c) Vigilar y controlar el buen funcionamiento y uso del centro, así como del mobiliario, equipos y utillaje.",
+      "d) Apertura y cierre, cuando proceda, del centro sanitario."
+    ],
+    correct: 1
+  },
+  {
+    question: "44. Es una función común a todos los miembros de un Equipo de Atención Primaria:",
+    options: [
+      "a) Canalizar a los y las pacientes que soliciten asistencia, tanto en horario de normal funcionamiento del centro como en el turno de atención continuada, si se requiere, facilitando en todo momento la mejor atención.",
+      "b) Recoger los datos identificativos del/la paciente, registrarlos en el sistema de información establecido por el SES, y colaborar con la unidad administrativa en el tratamiento definitivo de datos en la base de datos de población protegida para la asistencia sanitaria.",
+      "c) Mantener y actualizar la propia competencia profesional conforme a los avances técnicos, sociales y científicos de su campo de actuación y conforme a la evaluación y acreditación de las competencias profesionales que en cada momento marque la administración sanitaria.",
+      "d) Todas las anteriores son funciones comunes de los miembros de un EAP."
+    ],
+    correct: 2
+  },
+  {
+    question: "45. Según el artículo 39.5 del Reglamento de Atención Primaria de Extremadura, con el objetivo de proporcionar una asistencia integral, longitudinal y personalizada a los/ las pacientes, ésta será prestada con carácter general por:",
+    options: [
+      "a) Sus profesionales de medicina y enfermería de referencia.",
+      "b) Los profesionales sanitarios que presenten mayor disponibilidad",
+      "c) Por la plantilla con denominación/función de Atención Continuada",
+      "d) Por profesionales centralizados, utilizando aparataje específico que debe ser compartido o en situaciones de emergencia."
+    ],
+    correct: 0
+  },
+  {
+    question: "46. ¿Quiénes son los órganos encargados de la ejecución de las directrices emanadas de los Consejos de Dirección de las distintas Áreas de Salud, actuando de conformidad con los planes estratégicos del Servicio Extremeño de Salud y constituyéndose como órganos territoriales del mismo?",
+    options: [
+      "a) Las Áreas de Salud",
+      "b) Las Direcciones de Salud de cada área.",
+      "c) Los Consejos de Salud de Área",
+      "d) Ninguna es correcta."
+    ],
+    correct: 3
+  },
+  {
+    question: "47. En atención especializada, con carácter general, el acceso a los servicios jerarquizados de especialidades que deben prestar atención a varias áreas de salud se realizará por indicación de:",
+    options: [
+      "a) Los médicos de Atención Primaria.",
+      "b) Otras especialidades médicas o quirúrgicas en atención especializada.",
+      "c) Cualquier Centro de Atención Primaria, incluidas las Unidades de Apoyo y unidades transversales.",
+      "d) La Dirección Gerencia del SES."
+    ],
+    correct: 1
+  },
+  {
+    question: "48. ¿A qué división del hospital se adscribe el área de “Unidades Especiales” según el reglamento de hospitales?",
+    options: [
+      "a) A la División de Enfermería",
+      "b) A la División Médica",
+      "c) A la División de Gerencia",
+      "d) A la División de Gestión y Servicios Generales"
+    ],
+    correct: 0
+  },
+  {
+    question: "49. ¿A qué división del hospital se adscribe el área de “Cirugía” según el reglamento de hospitales?",
+    options: [
+      "a) A la División de Enfermería",
+      "b) A la División Médica",
+      "c) A la División de Gerencia",
+      "d) A la División de Gestión y Servicios Generales"
+    ],
+    correct: 1
+  },
+  {
+    question: "50. Las disposiciones de carácter laboral contenidas en la Ley de Prevención de Riesgos Laborales y en sus normas reglamentarias tendrán en todo caso el carácter de",
+    options: [
+      "a) Derecho disponible mínimo necesario",
+      "b) Derecho necesario máximo indisponible",
+      "c) Derecho necesario mínimo disponible",
+      "d) Ninguna es correcta."
+    ],
+    correct: 3
+  },
+  {
+    question: "51. La Ley de Prevención de Riesgos Laborales, ¿Es aplicable en el ámbito de las funciones públicas de Policía, seguridad y resguardo aduanero?",
+    options: [
+      "a) Sí, en todos los casos.",
+      "b) No, en ningún caso",
+      "c) No será de aplicación en aquellas actividades cuyas particularidades lo impidan.",
+      "d) No, al igual que en los Servicios operativos de protección civil."
+    ],
+    correct: 2
+  },
+  {
+    question: "52. Según la Ley de Prevención de Riesgos Laborales, “la posibilidad de que un trabajador sufra un determinado daño derivado del trabajo” es:",
+    options: [
+      "a) Equipo de trabajo",
+      "b) Equipo de Protección Individual",
+      "c) Riesgo laboral",
+      "d) Riesgo laboral grave e inminente"
+    ],
+    correct: 2
+  },
+  {
+    question: "53. Según la Ley de Prevención de Riesgos Laborales, se entenderán como procesos, actividades, operaciones, equipos o productos «potencialmente peligrosos» aquellos que, originen riesgos para la seguridad y la salud de los trabajadores que los desarrollan o utilizan…",
+    options: [
+      "a) Aunque se haya materializado actividad preventiva tendente a eliminar o reducir el riesgo.",
+      "b) En ausencia de medidas preventivas específicas.",
+      "c) Cuando se hayan materializado en un daño, independientemente de si se han tomado medidas preventivas o no.",
+      "d) Cuando el empresario haya actuado frente a los mismos de manera activa."
+    ],
+    correct: 1
+  },
+  {
+    question: "54. Según la Ley de Prevención de Riesgos Laborales, cualquier máquina, aparato, instrumento o instalación utilizada en el trabajo es:",
+    options: [
+      "a) Relación laboral",
+      "b) Ambiente de trabajo",
+      "c) Equipo de Protección Individual",
+      "d) Equipo de trabajo"
+    ],
+    correct: 3
+  },
+  {
+    question: "55. El coste de las medidas relativas a la seguridad y la salud en el trabajo, ¿podrá recaer sobre los trabajadores?",
+    options: [
+      "a) Sólo en el caso de que la actividad preventiva sea desarrollada por una agencia externa.",
+      "b) Cuando no haya posibilidad de remuneración de la actividad o formación realizada.",
+      "c) No deberá recaer en modo alguno sobre los trabajadores.",
+      "d) No, salvo que voluntariamente convengan en participar en el mantenimiento de las mismas."
+    ],
+    correct: 2
+  },
+  {
+    question: "56. NO es un principio general aplicable a las medidas preventivas que debe aplicar el empresario:",
+    options: [
+      "a) Evitar los riesgos.",
+      "b) Evaluar los riesgos que se no se puedan evitar.",
+      "c) Combatir los riesgos en su origen.",
+      "d) Adoptar medidas que antepongan la protección individual a la colectiva."
+    ],
+    correct: 3
+  },
+  {
+    question: "57. Un empresario, ¿puede realizar controles periódicos de las condiciones de trabajo y de la actividad de los trabajadores en la prestación de sus servicios, para detectar situaciones potencialmente peligrosas?",
+    options: [
+      "a) Sí, en todos los casos.",
+      "b) Cuando el resultado de la evaluación lo hiciera necesario.",
+      "c) Cuando lo soliciten los trabajadores o sus delegados o responsables de prevención.",
+      "d) No, puesto que es considerado como ilegal."
+    ],
+    correct: 1
+  },
+  {
+    question: "58. ¿Pueden las empresas realizar el plan de prevención de riesgos laborales, la evaluación de riesgos y la planificación de la actividad preventiva de forma simplificada, aunque suponga una reducción del nivel de protección de la seguridad y salud de los trabajadores?",
+    options: [
+      "a) En atención al número de trabajadores y a la naturaleza y peligrosidad de las actividades realizadas.",
+      "b) En los términos que reglamentariamente se determinen.",
+      "c) Las opciones a) y b) son correctas.",
+      "d) No."
+    ],
+    correct: 3
+  },
+  {
+    question: "59. ¿Puede un equipo de trabajo presentar un riesgo específico para la seguridad y la salud de los trabajadores?",
+    options: [
+      "a) No, en ningún caso.",
+      "b) Sí, en cuyo caso el empresario adoptará las medidas necesarias con el fin de que sean utilizados por trabajadores encargados de su utilización.",
+      "c) Sí, en cuyo caso serán descartados como equipos de protección en ese ámbito del trabajo.",
+      "d) No, puesto que supondría un riesgo sobreañadido para los trabajadores."
+    ],
+    correct: 1
+  },
+  {
+    question: "60. NO es un principio general de la Ley de Igualdad entre mujeres y hombres y contra la violencia de género de Extremadura, de entre los descritos en su artículo 3:",
+    options: [
+      "a) La igualdad de trato entre mujeres y hombres.",
+      "b) La igualdad de oportunidades.",
+      "c) Respeto a la diversidad y a la diferencia.",
+      "d) La solución de la brecha de género en la Sociedad de la información, el Conocimiento y la Imaginación."
+    ],
+    correct: 3
+  },
+  {
+    question: "61. ¿Cuál de las siguientes definiciones dadas por la Ley de Igualdad entre mujeres y hombres y contra la violencia de género de Extremadura es la correcta en relación con el uso no sexista del lenguaje?",
+    options: [
+      "a) Consiste en la utilización de expresiones lingüísticamente correctas sustitutivas de otras, correctas o no, que invisibilizan el femenino o lo sitúan en un plano secundario respecto al masculino",
+      "b) Consiste en la utilización de expresiones lingüísticamente incorrectas o no sustitutivas de otras, que visibilizan el femenino o lo sitúan en un plano secundario respecto al masculino",
+      "c) Consiste en la utilización de expresiones lingüísticamente correctas sustitutivas de otras, correctas o no, que invisibilizan el femenino o lo sitúan en un plano secundario respecto al masculino",
+      "d) Consiste en la utilización de expresiones correctas sustitutivas de otras, que lingüísticamente invisibilizan el femenino o lo sitúan en un plano secundario respecto al masculino"
+    ],
+    correct: 2
+  },
+  {
+    question: "62. En relación con la Evaluación del impacto de género, ¿qué deben incorporar todos los proyectos de ley que apruebe el Consejo de Gobierno?",
+    options: [
+      "a) Un informe sobre su impacto por razón de género",
+      "b) Indicadores pertinentes en género",
+      "c) Medidas tendentes a eliminar o paliar los impactos negativos",
+      "d) Normas o directrices con las pautas a seguir en relación con la evaluación del impacto de género."
+    ],
+    correct: 0
+  },
+  {
+    question: "63. ¿Quién propone a la Junta de Extremadura el Plan Estratégico para la Igualdad entre Mujeres y Hombres?",
+    options: [
+      "a) El Consejo Extremeño de Participación de las Mujeres",
+      "b) La Consejería competente en materia sanitaria",
+      "c) La Consejería competente en materia de presidencia",
+      "d) La Consejería competente en materia de igualdad"
+    ],
+    correct: 3
+  },
+  {
+    question: "64. Según el artículo 32 de la Ley de Igualdad entre mujeres y hombres y contra la violencia de género de Extremadura, al objeto de acceder al empleo público en la Administración de la Comunidad Autónoma de Extremadura…",
+    options: [
+      "a) Los temarios para la celebración de pruebas selectivas incluirán materias relativas a la normativa sobre igualdad y violencia de género",
+      "b) La Administración de la Comunidad Autónoma de Extremadura garantizará la formación de su personal en esta materia",
+      "c) Las opciones a) y b) son correctas",
+      "d) Los tribunales de selección una representación equilibrada de mujeres y hombres con capacitación, competencia y preparación adecuada."
+    ],
+    correct: 0
+  },
+  {
+    question: "65. Según el artículo 38 de la Ley de Régimen Jurídico del Sector Público, la publicación en las sedes electrónicas de informaciones, servicios y transacciones respetará los principios de:",
+    options: [
+      "a) Seguridad y accesibilidad",
+      "b) Accesibilidad y uso",
+      "c) Seguridad y transparencia",
+      "d) Publicidad y seguridad"
+    ],
+    correct: 1
+  },
+  {
+    question: "66. La “dirección electrónica, disponible para los ciudadanos a través de redes de telecomunicaciones, cuya titularidad corresponde a una Administración Pública, o bien a una o varios organismos públicos o entidades de Derecho Público en el ejercicio de sus competencias” es:",
+    options: [
+      "a) Punto de acceso electrónico",
+      "b) Portal de internet",
+      "c) Sede ciudadana",
+      "d) Sede electrónica"
+    ],
+    correct: 3
+  },
+  {
+    question: "67. Según la Ley de Régimen Jurídico del Sector Público, los sistemas de firma para la actuación administrativa automatizada, podrán ser:",
+    options: [
+      "a) Sello electrónico de Administración Pública, órgano, organismo público o entidad de derecho público, basado en certificado electrónico reconocido o cualificado que reúna los requisitos exigidos por la legislación de firma electrónica.",
+      "b) Código seguro de verificación vinculado a la Administración Pública, órgano, organismo público o entidad de Derecho Público, en los términos y condiciones establecidos, permitiéndose en todo caso la comprobación de la integridad del documento mediante el acceso a la sede electrónica correspondiente.",
+      "c) Las opciones a) y b) son correctas.",
+      "d) Certificados reconocidos o cualificados de autenticación de sitio web o medio equivalente."
+    ],
+    correct: 2
+  },
+  {
+    question: "68. Todos los documentos utilizados en las actuaciones administrativas se almacenarán…",
+    options: [
+      "a) En formato físico, calvo cuando no sea posible",
+      "b) Por medios electrónicos, en todos los supuestos.",
+      "c) En formato físico o medio electrónico",
+      "d) Por medios electrónicos, salvo cuando no sea posible."
+    ],
+    correct: 3
+  },
+  {
+    question: "69. Según el artículo 46 de la Ley de Régimen Jurídico del Sector Público, los medios o soportes en que se almacenen documentos, deberán contar con medidas de seguridad, de acuerdo con lo previsto…",
+    options: [
+      "a) En la Ley Orgánica de Protección de datos de carácter personal.",
+      "b) En el Esquema Nacional de Seguridad",
+      "c) En la normativa que regula la certificación electrónica basada en estándares de firma electrónica reconocida o cualificada",
+      "d) En la Ley de Procedimiento Administrativo Común."
+    ],
+    correct: 1
+  },
+  {
+    question: "70. Los datos del censo electoral, los padrones municipales de habitantes y otros registros de población, datos fiscales relacionados con tributos propios o cedidos y datos de los usuarios del sistema nacional de salud, ¿podrán ser objeto de transferencia a un tercer país u organización internacional fuera de la Unión Europea?",
+    options: [
+      "a) No, en ningún caso.",
+      "b) No, con excepción de los que hayan sido objeto de una decisión de adecuación de la Comisión Europea",
+      "c) No, salvo cuando así lo exija el cumplimiento de las obligaciones internacionales asumidas por el Reino de España.",
+      "d) Las opciones b) y c) son correctas."
+    ],
+    correct: 3
+  },
+
+  /* PREGUNTAS DE RESERVA */
+
+  {
+    question: "R1. ¿En qué población de Extremadura se encuentra el Hospital Siberia-Serena?",
+    options: [
+      "a) En Villanueva de la Serena",
+      "b) En Almendralejo",
+      "c) En Cáceres",
+      "d) En Talarrubias"
+    ],
+    correct: 3
+  },
+  {
+    question: "R2. No es un área funcional de los Equipos de Atención Primaria según el contenido del Reglamento General de la Atención Primaria de Extremadura:",
+    options: [
+      "a) Asistencial",
+      "b) Suministros y mantenimiento",
+      "c) Urgencias",
+      "d) Salud Comunitaria"
+    ],
+    correct: 2
+  },
+  {
+    question: "R3. ¿Qué órgano colegiado ejerce las funciones propias de Gobierno de la Comunidad Autónoma de Extremadura?",
+    options: [
+      "a) El Presidente de la Comunidad.",
+      "b) El Presidente de la Asamblea de Extremadura",
+      "c) La Junta de Extremadura",
+      "d) La Diputación Permanente"
+    ],
+    correct: 2
+  },
+  {
+    question: "R4. ¿Qué Consejería de la Junta de Extremadura será la encargada del control de cumplimiento de las previsiones del artículo 27 de la Ley de Igualdad entre mujeres y hombres y contra la violencia de género de Extremadura (\"Lenguaje e imagen no sexista\")?",
+    options: [
+      "a) La Consejería competente en materia de Igualdad",
+      "b) La Consejería competente en materia de Sanitaria",
+      "c) La Consejería competente en materia de Presidencia",
+      "d) La Consejería competente en materia de Justicia"
+    ],
+    correct: 2
+  },
+  {
+    question: "R5. ¿Cuál es la Ley de Régimen Jurídico del Sector Público?",
+    options: [
+      "a) La Ley 40/2015 de 10 de octubre",
+      "b) La Ley 39/2015 de 10 de octubre",
+      "c) La Ley 40/2011 de 24 de octubre",
+      "d) La Ley 40/2015 de 1 de octubre"
+    ],
+    correct: 3
+  },
+  {
+    question: "R6. La renuncia a la condición de personal estatutario tiene carácter de acto voluntario y deberá ser solicitada por el interesado con una antelación mínima a la fecha en que se desee hacer efectiva de:",
+    options: [
+      "a) 1 día, para permitir la incorporación inmediata a otro puesto, si fuera el caso.",
+      "b) 15 días",
+      "c) 1 mes",
+      "d) 3 meses"
+    ],
+    correct: 1
+  }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
