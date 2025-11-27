@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">ABEL SIMULACRO 6</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+    {
+    "question": "1. Los servicios y actividades de los hospitales se agrupan en las siguientes divisiones:",
+    "options": [
+      "a) Gerencia, División Médica, División de Enfermería y División de Gestión y Servicios Generales.",
+      "b) Secretaría, División Médica, División de Enfermería y División de Gestión.",
+      "c) Secretaría, División Técnica, División Médica y División de Enfermería.",
+      "d) Gerencia, Secretaría, División Médica y División de Gestión y Servicios Generales."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "2. ¿Cuántas funciones específicas del celador se recogen dentro del artículo 14.2 del Estatuto de Personal no Sanitario?",
+    "options": [
+      "a) Veinte.",
+      "b) Veintiuna.",
+      "c) Veintidós.",
+      "d) Veintitrés."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "3. A un paciente al que se le aplica el protocolo de aislamiento estándar, ¿de las siguientes indicaciones cuál será la más adecuada?",
+    "options": [
+      "a) Bastará con lavarse las manos antes de empezar a trabajar.",
+      "b) Usar bata estéril y guantes.",
+      "c) Usar guantes limpios, no estériles, cuando se toque sangre, fluidos corporales, secreciones, excreciones y artículos contaminados.",
+      "d) Usar gorro y calzas estériles que se desecharán tras su uso."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "4. En caso de incendio, ¿qué métodos de traslado de pacientes se pueden utilizar?",
+    "options": [
+      "a) Por arrastre con silla.",
+      "b) Por arrastre con colchón.",
+      "c) Por levantamiento.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "5. El traslado de los enfermos tanto dentro de la institución como en el servicio de ambulancias será una función de:",
+    "options": [
+      "a) Las Auxiliares de Enfermería.",
+      "b) Las Enfermeras.",
+      "c) Los Celadores.",
+      "d) Los Conductores."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "6. ¿Qué tiene como fin curar, paliar o diagnosticar enfermedades, así como reparar o mejorar sus posibles secuelas por medio de intervenciones?",
+    "options": [
+      "a) La cirugía curativa.",
+      "b) La cirugía.",
+      "c) La parte de la medicina conocida como cirugía paliativa.",
+      "d) La cirugía exploradora y curativa."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "7. El Algor Mortis es el enfriamiento del cuerpo después del fallecimiento; se produce en condiciones normales a razón de:",
+    "options": [
+      "a) Medio grado centígrado por hora hasta alcanzar la temperatura ambiente.",
+      "b) Un grado centígrado por hora hasta alcanzar la temperatura ambiente.",
+      "c) Dos grados centígrados por hora hasta alcanzar la temperatura ambiente.",
+      "d) Un grado y medio por hora hasta alcanzar la temperatura ambiente."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "8. De la Reforma Constitucional:",
+    "options": [
+      "a) Es un Título independiente dentro de la Constitución Española.",
+      "b) Es un Capítulo dentro del Título dedicado al Tribunal Constitucional.",
+      "c) Es un Capítulo dentro del Título dedicado al Poder Judicial.",
+      "d) Se integra en la Parte Dogmática de la Constitución Española."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "9. El cinturón de contención abdominal puede instalarse en la cama:",
+    "options": [
+      "a) Antes de acostar al paciente.",
+      "b) Después de acostar al paciente.",
+      "c) Para conseguir la mayor seguridad del paciente.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "10. La forma más adecuada de trasladar a un paciente a su llegada al servicio de urgencias es:",
+    "options": [
+      "a) La camilla.",
+      "b) La cama hospitalaria.",
+      "c) La silla de ruedas.",
+      "d) Dependerá del estado del paciente."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "11. El peso que no se debe sobrepasar en una carga manejada entre la altura de los hombros y la altura de la cabeza y separada del cuerpo es de:",
+    "options": [
+      "a) 11 Kg.",
+      "b) 13 Kg.",
+      "c) 8 Kg.",
+      "d) 7 Kg."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "12. El protocolo para navegar por internet se denomina:",
+    "options": [
+      "a) SMTP.",
+      "b) WWW.",
+      "c) FTP.",
+      "d) DNS."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "13. La tarea intermedia, entre la previsión de aprovisionamientos y el procedimiento administrativo de contratación se denomina:",
+    "options": [
+      "a) Planificación de adquisiciones.",
+      "b) Petición de material.",
+      "c) Revisión de la mercancía.",
+      "d) Recepción."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "14. Se considera como “condición de trabajo”:",
+    "options": [
+      "a) Cualquier característica del trabajo que pueda tener una influencia significativa en la generación de riesgos.",
+      "b) La naturaleza de los agentes físicos, químicos y biológicos presentes en el ambiente.",
+      "c) Todas aquellas características del trabajo que influyan en los riesgos.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "15. La pérdida automática de los beneficios derivados de los programas de empleo a empresas sancionadas se hará efectiva desde:",
+    "options": [
+      "a) La fecha en que se cometió la infracción.",
+      "b) La fecha de la resolución administrativa firme.",
+      "c) La fecha en que se pruebe la infracción.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "16. Los principios rectores de los poderes públicos extremeños se regulan en el Estatuto de Autonomía:",
+    "options": [
+      "a) En el Capítulo I del Título I.",
+      "b) En el Capítulo I del Título Preliminar.",
+      "c) En el Capítulo I del Título I.",
+      "d) En el Capítulo II del Título Preliminar."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "17. Según el artículo 14.2.11., los celadores vigilarán respecto al comportamiento de los enfermos y visitantes:",
+    "options": [
+      "a) Que no fumen en las habitaciones.",
+      "b) Que no se sienten en la cama.",
+      "c) Toda aquella acción que perjudique al enfermo o al orden de la Institución.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "18. De las siguientes camas, ¿cuál está indicada para pacientes inmovilizados durante largos periodos?",
+    "options": [
+      "a) Cama de somier rígido.",
+      "b) Cama de Foster.",
+      "c) Cama libro.",
+      "d) Cama articulada."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "19. Respecto al emplazamiento de los extintores, señale la respuesta incorrecta:",
+    "options": [
+      "a) Fácilmente visibles y accesibles.",
+      "b) Próximos a los puntos con mayor probabilidad de incendio.",
+      "c) Parte superior situada entre 0,70 y 1,10 m.",
+      "d) Próximos a las salidas de evacuación y colocados en soportes fijos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "20. Es norma general para la movilización de un enfermo:",
+    "options": [
+      "a) Conocer si está contraindicada.",
+      "b) Lavarse las manos.",
+      "c) Proteger tubos y sondas.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "21. El bloque quirúrgico respecto al resto del hospital:",
+    "options": [
+      "a) Está funcionalmente diferenciado.",
+      "b) Está funcionalmente integrado.",
+      "c) Está físicamente diferenciados.",
+      "d) Las respuestas a) y c) son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "22. ¿Cuál de los siguientes conceptos significa “muerte”?",
+    "options": [
+      "a) Obitus.",
+      "b) Receso.",
+      "c) Cadáver.",
+      "d) Éxitus."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "23. La parte inferior del cinturón de contención abdominal se sujeta:",
+    "options": [
+      "a) A la cama.",
+      "b) A las barandillas de la cama.",
+      "c) Alrededor del paciente.",
+      "d) Alrededor de la cintura del paciente."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "24. Es personal estatutario sanitario el que ostenta esta condición en virtud de:",
+    "options": [
+      "a) Nombramiento para ejercicio de profesión sanitaria.",
+      "b) Nombramiento para funciones de gestión.",
+      "c) Nombramiento para oficios no sanitarios.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "25. En urgencias, es función del Celador:",
+    "options": [
+      "a) Ayudar a la dotación de la ambulancia.",
+      "b) Responsabilizarse de la colocación física en traslados exteriores.",
+      "c) Ayudar en equipos electromédicos.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "26. ¿Qué es el Consentimiento Informado?",
+    "options": [
+      "a) Aceptación involuntaria tras información médica.",
+      "b) Aceptación voluntaria tras información médica.",
+      "c) Aceptación libre, voluntaria, consciente, tras ser informado de riesgos y alternativas.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "27. El protocolo para obtener direcciones IP a partir de nombres se denomina:",
+    "options": [
+      "a) SMTP.",
+      "b) WWW.",
+      "c) FTP.",
+      "d) DNS."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "28. Una vez gestionada la compra de la mercancía precisa, se procede a:",
+    "options": [
+      "a) La recepción.",
+      "b) La petición del material.",
+      "c) El almacenaje.",
+      "d) La revisión."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "29. ¿Cuál es incorrecto entre los principios preventivos de la Ley de Prevención?",
+    "options": [
+      "a) Evaluar los riesgos que no se pueden evitar.",
+      "b) Priorizar medidas individuales a colectivas.",
+      "c) Combatir los riesgos en su origen.",
+      "d) Tener en cuenta la evolución de la técnica."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "30. Además de la pérdida automática de beneficios, las empresas sancionadas quedan excluidas del acceso durante:",
+    "options": [
+      "a) Un año.",
+      "b) Seis meses.",
+      "c) Nueve meses.",
+      "d) Dos años."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "31. ¿Cuál es el órgano unipersonal de dirección y gestión de cada División?",
+    "options": [
+      "a) Director Técnico General.",
+      "b) Director de la División.",
+      "c) Gerente.",
+      "d) Secretario."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "32. El Consejo General estará integrado, entre otros, por:",
+    "options": [
+      "a) El Presidente de la Junta.",
+      "b) El consejero de materia sanitaria.",
+      "c) Dos representantes de corporaciones locales.",
+      "d) Las respuestas b) y c) son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "33. Para realizar una ventilación adecuada debemos:",
+    "options": [
+      "a) Abrir ventanas durante espacios cortos alternadamente.",
+      "b) Abrir 60 minutos.",
+      "c) Abrir ventanas y puerta a la vez.",
+      "d) Que llegue aire directamente al paciente."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "34. ¿Cuál es la letra del agente extintor indicado para un fuego de gas?",
+    "options": [
+      "a) A.",
+      "b) B.",
+      "c) C.",
+      "d) D."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "35. Diartrosis es un tipo de articulación:",
+    "options": [
+      "a) Sin movimiento.",
+      "b) Con poco movimiento.",
+      "c) Muy móvil.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "36. Respecto al tamaño de los quirófanos:",
+    "options": [
+      "a) El tamaño normal oscila entre 36-42 m2.",
+      "b) No existe tamaño recomendado.",
+      "c) Tamaño recomendado 6 x 4 x 2 m.",
+      "d) Las respuestas a) y c) son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "37. ¿Qué tipo de autopsia es el examen realizado sobre un cadáver por enfermedad?",
+    "options": [
+      "a) Cualquier tipo.",
+      "b) Autopsia clínica.",
+      "c) Autopsia judicial.",
+      "d) Autopsia médico legal."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "38. ¿Cuántos kits de correas se necesitan para la sujeción total del paciente?",
+    "options": [
+      "a) Uno.",
+      "b) Dos.",
+      "c) Tres.",
+      "d) Cinco."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "39. Respecto a los visitantes y acompañantes, no es una función del Celador de urgencias hospitalarias:",
+    "options": [
+      "a) Prohibir el paso a los visitantes que quieran acceder al Hospital por la puerta de urgencias.",
+      "b) Facilitar información de tipo administrativo y general, nunca de tipo sanitario.",
+      "c) Actuar con eficacia ante situaciones potencialmente cambiantes.",
+      "d) Permitir el acceso sólo a visitantes autorizados."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "40. Además de los derechos fundamentales establecidos en la Constitución, los extremeños podrán ejercer frente a los poderes públicos regionales aquellos otros derechos contenidos en el Estatuto de Autonomía o en la legislación, especialmente el de:",
+    "options": [
+      "a) Participar en los asuntos públicos directamente.",
+      "b) Participar en los asuntos públicos por medio de representantes.",
+      "c) Petición.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "41. La distancia entre el punto medio de las manos al punto medio de los tobillos mientras se está en la posición de levantamiento, se denomina:",
+    "options": [
+      "a) Distancia H: horizontal.",
+      "b) Distancia A: aleatoria.",
+      "c) Distancia V: vertical.",
+      "d) Distancia A: acumulada."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "42. ¿Qué navegador está incorporado en el sistema operativo de Windows?",
+    "options": [
+      "a) Microsoft Edge.",
+      "b) Firefox.",
+      "c) Chrome.",
+      "d) Todos están instalados por defecto en Windows."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "43. ¿Cuál es la primera tarea de la Unidad de Suministros, tras recibir un pedido?",
+    "options": [
+      "a) Comprobarlo.",
+      "b) Abrirlo.",
+      "c) Registrarlo.",
+      "d) Revisarlo."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "44. En relación con la vigilancia de la salud que ha de garantizar el empresario, el acceso a la información médica de carácter personal:",
+    "options": [
+      "a) Se limitará al empresario y a los Servicios de Prevención propios.",
+      "b) Se limitará al Jefe inmediato del trabajador.",
+      "c) Solo será accesible al propio trabajador.",
+      "d) Se limitará al personal médico y a las autoridades sanitarias que lleven a cabo la vigilancia."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "45. En el plano internacional y dentro del marco de la Organización de las Naciones Unidas se han celebrado cuatro Conferencias Mundiales sobre las Mujeres que han establecido dos estrategias fundamentales para el desarrollo eficaz de las políticas de igualdad. ¿Cuáles son estas dos estrategias?",
+    "options": [
+      "a) La transversalidad de género y la paridad.",
+      "b) La representación equilibrada y la paridad de género.",
+      "c) La transversalidad de género y la representación equilibrada.",
+      "d) La interseccionalidad y la transversalidad de género."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "46. ¿De quién dependen orgánica y funcionalmente los Directores de las Divisiones Médica, de Enfermería y de Gestión y de Servicios Generales?",
+    "options": [
+      "a) Del Director Gerente.",
+      "b) Del Secretario General.",
+      "c) Del Director Médico del Área de Salud.",
+      "d) Del Subdirector Técnico General."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "47. Los celadores ayudarán a las enfermeras y auxiliares de planta a hacer las camas de pacientes encamados:",
+    "options": [
+      "a) Que requieran un trato especial en razón a sus dolencias.",
+      "b) A todos los enfermos masculinos encamados.",
+      "c) Las respuestas a) y b) son correctas.",
+      "d) Todas las respuestas anteriores son incorrectas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "48. Atendiendo al nivel académico del título exigido para el ingreso, el personal estatutario sanitario se clasifica en personal de formación universitaria. Este personal se divide en (señala la respuesta incorrecta):",
+    "options": [
+      "a) Licenciados con título de especialista en Ciencias de la Salud.",
+      "b) Licenciados sanitarios.",
+      "c) Diplomados con título de Especialista en Ciencias de la Salud.",
+      "d) Técnicos superiores."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "49. De las siguientes características, ¿cuáles corresponden al agente extintor de espuma física?",
+    "options": [
+      "a) Adecuado para fuegos de clase A.",
+      "b) Está formada por agua en más de un 95%.",
+      "c) No se puede utilizar en fuegos de alcohol.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "50. En el traslado de un paciente desde la habitación de la planta hasta el quirófano, el celador comprobará:",
+    "options": [
+      "a) Que el paciente va rasurado.",
+      "b) Que se ha preparado correctamente al paciente.",
+      "c) Que la identidad del paciente se corresponde con la historia clínica que le acompaña.",
+      "d) Las respuestas b) y c) son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "51. Las salas para procedimientos especiales, como cirugía cardiovascular y trasplantes, han de medir:",
+    "options": [
+      "a) Entre 36 y 42 m2.",
+      "b) Entre 40 y 60 m2.",
+      "c) Entre 50 y 65 m2.",
+      "d) 6 x 6 x 3 metros."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "52. ¿Qué tipo de autopsia es el estudio de un cadáver o restos humanos con el fin de informar a la autoridad judicial de las causas y circunstancias de su muerte?",
+    "options": [
+      "a) Autopsia no judicial.",
+      "b) Autopsia clínica.",
+      "c) Autopsia médico legal.",
+      "d) Autopsia sanitaria."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "53. Desde qué niveles de atención se aborda la Salud Mental:",
+    "options": [
+      "a) En los hospitales psiquiátricos.",
+      "b) En la Atención Primaria y la Atención Especializada.",
+      "c) En los manicomios.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "54. En el contexto de las fases del decálogo prehospitalario, ¿a qué se denomina alarma?",
+    "options": [
+      "a) Maniobras de reanimación indispensables.",
+      "b) Puesta en marcha del Sistema de Emergencias.",
+      "c) Actuaciones para asegurar funciones ventilatorias y hemodinámicas.",
+      "d) Clasificación de los pacientes."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "55. Los profesionales sanitarios tienen, entre otras, ¿cuál de las siguientes obligaciones en materia de expresión anticipada de voluntades?",
+    "options": [
+      "a) Razonar por escrito en la historia clínica la decisión final.",
+      "b) Entregar documentos al Registro de Voluntades Anticipadas.",
+      "c) Aconsejar actualizar el documento cuando cambien las posibilidades.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "56. ¿Quién preside el Consejo de Dirección?",
+    "options": [
+      "a) El Director Gerente del SES.",
+      "b) El Secretario General.",
+      "c) El Consejero competente en materia sanitaria.",
+      "d) Un Gerente de Área."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "57. En Microsoft Word para Windows, ¿dónde están los comandos Cortar, Copiar y Pegar?",
+    "options": [
+      "a) Pestaña Archivo → Información.",
+      "b) Pestaña Inicio → Portapapeles.",
+      "c) Pestaña Vista → Zoom.",
+      "d) Pestaña Insertar → Texto."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "58. Cuando se recepciona una mercancía, ¿qué datos se toman en el control de pedidos?",
+    "options": [
+      "a) Nombre del transportista.",
+      "b) Cantidad de bultos.",
+      "c) Número de pedido y nombre del proveedor.",
+      "d) Cuenteo de las unidades."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "59. El Plan de Prevención de Riesgos Laborales debe ser aprobado por:",
+    "options": [
+      "a) La dirección de la empresa.",
+      "b) La autoridad sanitaria.",
+      "c) Los representantes de los trabajadores.",
+      "d) Todos los trabajadores."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "60. ¿Cuál de los siguientes artículos de la Constitución española de 1978 no recoge ningún principio o derecho relacionado con la igualdad?",
+    "options": [
+      "a) El artículo 14.",
+      "b) El artículo 1.",
+      "c) El artículo 9.",
+      "d) El artículo 26."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "61. ¿A quién corresponde la representación del hospital y la superior autoridad y responsabilidad dentro del mismo?",
+    "options": [
+      "a) Al Director Gerente.",
+      "b) Al Director Médico.",
+      "c) Al Director de Gestión y Personal.",
+      "d) Al Director de Enfermería."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "62. ¿De qué manera ayudarán los celadores a las enfermeras y auxiliares de planta a hacer las camas?",
+    "options": [
+      "a) Solamente con el movimiento de los enfermos.",
+      "b) Aplicando la manera adecuada de posición de sábanas y mantas.",
+      "c) En el movimiento y traslado de los enfermos encamados.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "63. De las siguientes indicaciones, ¿cuál será la más adecuada aplicar ante un paciente con aislamiento aéreo?",
+    "options": [
+      "a) El celador no se pondrá la mascarilla al entrar.",
+      "b) El celador utilizará mascarilla siempre que vaya a entrar en la habitación.",
+      "c) La habitación individual no es recomendable.",
+      "d) Si es necesario el traslado, el celador llevará mascarilla pero no el paciente."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "64. La detención preventiva tiene un plazo máximo de:",
+    "options": [
+      "a) Cuarenta y ocho horas.",
+      "b) Treinta y seis horas.",
+      "c) Sesenta horas.",
+      "d) Setenta y dos horas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "65. Las articulaciones según su función se clasifican en:",
+    "options": [
+      "a) Diartrosis, anfiartrosis y sinartrosis.",
+      "b) Fibrosas, cartilaginosas y sinoviales.",
+      "c) En abducción, aducción y rotación.",
+      "d) Ninguna es cierta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "66. ¿Qué clase de puertas están recomendadas en los quirófanos?",
+    "options": [
+      "a) Abatibles.",
+      "b) Correderas.",
+      "c) Giratorias.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "67. El sudario también es conocido como:",
+    "options": [
+      "a) Mortaja.",
+      "b) Cadáver.",
+      "c) Crematorio.",
+      "d) Mortuorio."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "68. El propósito de la Ley General de Sanidad sobre el enfermo mental es:",
+    "options": [
+      "a) Integrarlo en el sistema general de asistencia sanitaria.",
+      "b) Aislarlo de la sociedad.",
+      "c) Crear hospitales psiquiátricos.",
+      "d) Integrarlo en un subsistema propio."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "69. Cuando se permita la entrada a familiares en urgencias para visita puntual, el Celador deberá:",
+    "options": [
+      "a) Indicar brevemente dónde está el paciente y seguir con sus tareas.",
+      "b) Valorar si están nerviosos.",
+      "c) Cuidar que no deambulen más de lo necesario.",
+      "d) Comentar con los familiares el estado de salud del paciente."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "70. Señale la respuesta incorrecta:",
+    "options": [
+      "a) La historia clínica acumulará toda la información clínica generada.",
+      "b) La historia clínica debe incluir el documento de alta voluntaria firmado.",
+      "c) La historia clínica es un documento que pertenece al paciente.",
+      "d) La historia clínica debe ser única por paciente."
+    ],
+    "correct": 2
+  },
+
+  /* --- PREGUNTAS DE RESERVA --- */
+
+  {
+    "question": "R1. ¿Cuál de las siguientes áreas de actividad no quedan adscritas a la Gerencia del hospital?",
+    "options": [
+      "a) Control de gestión.",
+      "b) Admisión.",
+      "c) Recepción e información.",
+      "d) Gestión económica."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "R2. Según el artículo 14.2.18, del Estatuto de Personal no Sanitario, cuando por circunstancias especiales concurrentes en el enfermo, no pueda este ser movido solo por las Enfermeras o Ayudantes de planta, los celadores:",
+    "options": [
+      "a) Bañarán a los enfermos masculinos.",
+      "b) Ayudarán en la colocación y retirada de las cuñas.",
+      "c) Lavarán y asearán a los enfermos masculinos.",
+      "d) Ayudarán a hacerles las camas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "R3. Los centinelas de cama son:",
+    "options": [
+      "a) Almohadillas de polietileno hinchadas con aire.",
+      "b) Dispositivos que se colocan sobre el paciente para que la ropa no le roce.",
+      "c) Dispositivos para alertar al control de enfermería.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "R4. ¿Qué medidas de prevención se deberán realizar para evitar la exposición a los gases tóxicos provocados por los incendios?",
+    "options": [
+      "a) Respirar el aire a nivel del suelo.",
+      "b) Caminar a gatas.",
+      "c) Protegerse nariz y boca con un pañuelo húmedo.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "R5. Al transferir a un paciente colaborador desde la cama al sillón, se le sujetará:",
+    "options": [
+      "a) Pasando el brazo por encima del cuello del celador.",
+      "b) Cogiéndolo de las manos.",
+      "c) Abrazándolo a la altura de los hombros.",
+      "d) Por la cintura o por debajo de las axilas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "R6. ¿Qué Título de la Constitución Española se ocupa de la Organización territorial del Estado?",
+    "options": [
+      "a) El VIII.",
+      "b) El VII.",
+      "c) El V.",
+      "d) El VI."
+    ],
+    "correct": 0
+  }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
