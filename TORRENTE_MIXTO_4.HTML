@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">TORRENTE TEST MIXTO 4</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+  {
+    question: "1. ¿EN QUÉ POSICIÓN ESTÁ UN PACIENTE TUMBADO EN DECÚBITO SUPINO CON LA CABEZA COLGANDO?",
+    options: [
+      "a) Sims",
+      "b) Roser",
+      "c) Morestín",
+      "d) Trendelenburg"
+    ],
+    correct: 1
+  },
+  {
+    question: "2. EN LA UNIDAD DE PSIQUIATRÍA, NO ES UNA TAREA PROPIA DEL/LA CELADOR/A:",
+    options: [
+      "a) Acompañar a los pacientes, junto con el personal sanitario, a los paseos por el exterior del recinto si así se le pidiera",
+      "b) Quitar la sujeción terapéutica cuando el mismo considera que el paciente ya está tranquilo",
+      "c) Colaborar en la sujeción o reducción del paciente",
+      "d) Las respuestas A y C son correctas"
+    ],
+    correct: 1
+  },
+  {
+    question: "3. SE RECOMIENDA LAVAR LAS MANOS CON AGUA Y JABÓN NO ANTISÉPTICO:",
+    options: [
+      "a) Antes de iniciar la jornada de trabajo y al finalizarla",
+      "b) Antes y después de preparar, repartir o servir la comida",
+      "c) Cada vez que las manos estén visiblemente sucias",
+      "d) Todas las respuestas anteriores son correctas"
+    ],
+    correct: 3
+  },
+  {
+    question: "4. UNA ZONA VIGILADA CON RIESGO DE EXPOSICIÓN EXTERNA, SE SEÑALIZARÁ MEDIANTE:",
+    options: [
+      "a) Trébol amarillo bordeado de puntas radiales sobre fondo blanco",
+      "b) Trébol naranja, bordeado de puntas radiales en campo punteado sobre fondo blanco",
+      "c) Trébol gris azulado bordeado de puntas radiales sobre fondo blanco",
+      "d) Trébol verde en campo punteado sobre fondo blanco"
+    ],
+    correct: 2
+  },
+  {
+    question: "5. SEÑALE, ENTRE LAS FUNCIONES QUE SE INDICAN, LA QUE CORRESPONDE AL CELADOR:",
+    options: [
+      "a) Trasladar a los enfermos dentro de las Instituciones Sanitarias",
+      "b) Ayudar a levantar a los enfermos encamados",
+      "c) Transportar a los visitantes que llegan en ambulancia en camilla o silla de ruedas",
+      "d) Las respuestas A, B y C, son funciones de los/as celadores/as"
+    ],
+    correct: 1
+  },
+  {
+    question: "6. ¿QUÉ ES EL PICKING?",
+    options: [
+      "a) Zona de almacenamiento",
+      "b) Zona de oficinas en un almacén",
+      "c) Zona de recepción y control de las mercancías",
+      "d) Zona de preparación de pedidos"
+    ],
+    correct: 3
+  },
+  {
+    question: "7. EL ÓXIDO DE ETILENO:",
+    options: [
+      "a) Requiere periodos cortos de tiempo",
+      "b) Mucha dificultad en la certificación del método",
+      "c) Permite la esterilización de material termosensible",
+      "d) No presenta toxicidad para el personal ni para el medio ambiente"
+    ],
+    correct: 2
+  },
+  {
+    question: "8. EL MATERIAL A ESTERILIZAR PREVIAMENTE SE:",
+    options: [
+      "a) Limpiará y empaquetará",
+      "b) Descontaminará y lubricará",
+      "c) Limpiará, secará, lubricará y empaquetará",
+      "d) Desinfectará y secará"
+    ],
+    correct: 2
+  },
+  {
+    question: "9. LOS CELADORES EN EL EJERCICIO DE SUS FUNCIONES REALIZARÁN LAS SIGUIENTES TAREAS: (INDIQUE LA RESPUESTA CORRECTA)",
+    options: [
+      "a) Servirán de ascensoristas cuando se les asigne especialmente ese cometido o las necesidades del servicio lo requieran",
+      "b) Velarán continuamente por conseguir el mayor orden y silencio en todas las dependencias de la Institución",
+      "c) Harán los servicios de guardia que correspondan dentro de los turnos que se establezcan",
+      "d) Todas las respuestas anteriores son correctas"
+    ],
+    correct: 3
+  },
+  {
+    question: "10. CUANDO HABLAMOS DE SEÑALIZACIÓN DE SEGURIDAD. LAS SEÑALES RELATIVAS A LOS EQUIPOS DE LUCHA CONTRA INCENDIOS, SON DE FORMA:",
+    options: [
+      "a) Forma triangular, pictograma negro, fondo amarillo, bordes negros",
+      "b) Forma rectangular o cuadrada, pictograma blanco, fondo rojo",
+      "c) Forma triangular, pictograma negro, fondo blanco, bordes y banda roja",
+      "d) Forma triangular, pictograma blanco, fondo azul"
+    ],
+    correct: 1
+  },
+  {
+    question: "11. UN PACIENTE CON LESIÓN MEDULAR NECESITA UNA CAMA:",
+    options: [
+      "a) Cama libro",
+      "b) Cama electrocircular",
+      "c) Armazón Foster",
+      "d) Ortopédica o de Judet"
+    ],
+    correct: 1
+  },
+  {
+    question: "12. LAS QUEMADURAS QUE SE CARACTERIZAN POR LA PRESENCIA DE ERITEMA SIN FLICTENAS Y DOLOR SON DE:",
+    options: [
+      "a) Primer grado",
+      "b) Segundo grado superficial",
+      "c) Segundo grado profundo",
+      "d) Tercer grado"
+    ],
+    correct: 0
+  },
+  {
+    question: "13. LA MANIOBRA DE R.C.P. EN UN ADULTO SE INICIA SIEMPRE:",
+    options: [
+      "a) Insuflando aire a los pulmones una sola vez",
+      "b) Con las compresiones torácicas para seguir con las insuflaciones",
+      "c) Realizando una insuflación y cinco compresiones",
+      "d) Insuflando aire dos veces a los pulmones"
+    ],
+    correct: 1
+  },
+  {
+    question: "14. EL ASEO DEL PACIENTE SE INICIA POR:",
+    options: [
+      "a) La cara",
+      "b) Los ojos",
+      "c) El tórax",
+      "d) La espalda"
+    ],
+    correct: 1
+  },
+  {
+    question: "15. ¿QUE TIPO DE GUANTES SE DEBEN UTILIZAR PARA LA PROTECCIÓN CONTRA LA RADIACIONES IONIZANTES?",
+    options: [
+      "a) Guantes de látex estériles",
+      "b) Guantes de nitrilo sin polvo",
+      "c) Guantes plomados",
+      "d) Cualquiera de ellos"
+    ],
+    correct: 2
+  },
+  {
+    question: "16. EL TRANSPORTE DE DOCUMENTACIÓN:",
+    options: [
+      "a) Debe realizarlo el Auxiliar Administrativo",
+      "b) Es función de otro tipo de personal",
+      "c) Es función del TCAE",
+      "d) Es función del/la celador/a"
+    ],
+    correct: 3
+  },
+  {
+    question: "17. UN/A CELADOR/A DESTINADO/A EN EL SERVICIO DE RADIOLOGÍA, ¿DEBE COLABORAR EN LA COLOCACIÓN DE CHASIS RADIOGRÁFICOS Y MANEJO DE LOS APARATOS?",
+    options: [
+      "a) Si, siempre",
+      "b) Solo a indicación del personal facultativo",
+      "c) Solo a indicación del Jefe del personal subalterno",
+      "d) Ninguna de las respuestas anteriores es correcta"
+    ],
+    correct: 3
+  },
+  {
+    question: "18. RESPECTO A LAS FUNCIONES ESTABLECIDAS PARA LOS/AS CELADORES/AS, DE LAS SIGUIENTES INDIQUE LA RESPUESTA INCORRECTA:",
+    options: [
+      "a) En caso de ausencia del peluquero o por urgencia en el tratamiento, rasurarán a los enfermos masculinos que vayan a ser sometidos a interacciones quirúrgicas en aquellas zonas de su cuerpo que lo requieran",
+      "b) Excepcionalmente, lavaran y asearán a los enfermos masculinos encamados o que no puedan realizarlo por sí mismos, atendiendo a las indicaciones de las Supervisoras de planta o servicio o personas que las sustituyan legalmente en sus ausencias",
+      "c) Ayudarán, asimismo, a las Enfermeras y Ayudantes de Planta al movimiento y traslado de los enfermos encamados que requieran un trato especial, en razón de sus dolencias, para hacerles las camas",
+      "d) Tendrán a su cargo la vigilancia diurna, tanto del interior como exterior del edificio, del que cuidarán estén cerradas las puertas de servicios complementarios"
+    ],
+    correct: 3
+  },
+  {
+    question: "19. SON MEDIOS FÍSICOS DE ESTERILIZACIÓN:",
+    options: [
+      "a) Peróxido de hidrógeno",
+      "b) Ebullición",
+      "c) Estufa de Poupinel",
+      "d) Compuestos clorados"
+    ],
+    correct: 2
+  },
+  {
+    question: "20. SEÑALE EL ALGORITMO CORRECTO EN EL SOPORTE VITAL BÁSICO EN ADULTOS SEGÚN LA GUÍA DEL EUROPEAN RESUCITATION COUNCIL (ERC):",
+    options: [
+      "a) 25:2",
+      "b) 15:2",
+      "c) 30:2",
+      "d) 30:1"
+    ],
+    correct: 2
+  },
+  {
+    question: "21. EN EL SERVICIO HOSPITALARIO DE URGENCIAS, PARA ASIGNAR LA PRIORIDAD ASISTENCIAL DE UN PACIENTE EN LA UNIDAD DE TRIAJE, LA ENFERMERA HABRÁ EMPLEADO EL SISTEMA SET, QUE ES EL ACRÓNIMO QUE CORRESPONDE A:",
+    options: [
+      "a) Sistema Enfermero de triaje",
+      "b) Sistema Especial de triaje",
+      "c) Sistema Español de triaje",
+      "d) Sistema Europeo de triaje"
+    ],
+    correct: 2
+  },
+  {
+    question: "22. EL RIGOR MORTIS PERTENECE A LOS SIGNOS:",
+    options: [
+      "a) Precoces de muerte",
+      "b) De muerte inminente",
+      "c) Tardíos de muerte",
+      "d) Prematuros de muerte"
+    ],
+    correct: 2
+  },
+  {
+    question: "23. UNA CAMA ABIERTA ES:",
+    options: [
+      "a) Una cama vacía, a la espera del ingreso de un paciente",
+      "b) Una cama que puede ser abierta ocupada o abierta desocupada por un paciente que se encuentra hospitalizado",
+      "c) Una cama que acaba de ser hecha por el auxiliar de enfermería",
+      "d) Una cama desprovista de barandillas de seguridad"
+    ],
+    correct: 1
+  },
+  {
+    question: "24. ¿QUÉ ES LA MANIOBRA DE HEIMLICH?",
+    options: [
+      "a) Maniobra de resucitación",
+      "b) Maniobra de obstrucción de las vías aéreas",
+      "c) Maniobra de desobstrucción de las vías aéreas",
+      "d) Maniobra de abertura de vía aérea frente-mentón"
+    ],
+    correct: 2
+  },
+  {
+    question: "25. ANTE LA DEMANDA DE REALIZAR LA AUTOPSIA DE UN CADÁVER, EL CELADOR:",
+    options: [
+      "a) Comprueba que el suelo de la sala esté limpio y seco",
+      "b) Comprueba si se ha avisado al servicio de seguridad para que enciendan las cámaras frigoríficas y se hagan cargo del cadáver",
+      "c) Extrae el cadáver de la cámara frigorífica y lo coloca en la mesa de autopsias",
+      "d) Pedirá autorización al jefe de personal subalterno para realizar la autopsia"
+    ],
+    correct: 2
+  },
+  {
+    question: "26. EL CELADOR:",
+    options: [
+      "a) Dará cuenta a sus inmediatos superiores de los desperfectos o anomalías que encuentre en la limpieza y conservación del edificio y materia",
+      "b) Cuidará de que los enfermos y resto de personal no deambulen por los pasillos y dependencias más de lo necesario para llegar al lugar donde concretamente se dirijan",
+      "c) Realizará habitualmente aquellas labores de limpieza que se le encomienden",
+      "d) Vigilará las entradas de la Institución, permitiendo el acceso a sus dependencias más que a las personas autorizadas para ello"
+    ],
+    correct: 0
+  },
+  {
+    question: "27. EL CELADOR EN LA UVI, DEBE:",
+    options: [
+      "a) Administrar medicación oral si fuera necesario",
+      "b) Colaborar en la realización de los cambios posturales",
+      "c) Revisar y reponer el carro de paradas",
+      "d) Realizar el mantenimiento de camas y camillas del servicio"
+    ],
+    correct: 1
+  },
+  {
+    question: "28. ¿CUÁL ES EL ORDEN CORRECTO PARA PONERLE EL CAMISÓN A UN PACIENTE QUE PADECE DE HEMIPLEJIA LATERAL DERECHA?",
+    options: [
+      "a) Brazo derecho, cabeza y brazo izquierdo",
+      "b) Brazo izquierdo, cabeza y brazo derecho",
+      "c) Cabeza, brazo izquierdo, brazo derecho",
+      "d) Es indiferente el orden"
+    ],
+    correct: 0
+  },
+  {
+    question: "29. ¿EN QUÉ SITUACIÓN COLOCARÁ EL CELADOR UNA CUÑA?",
+    options: [
+      "a) Siempre que se lo ordenen",
+      "b) El celador no coloca cuñas",
+      "c) Cuando el enfermo pueda moverse, sea varón y se lo pida el supervisor de planta",
+      "d) Cuando se lo diga un/a TCAE"
+    ],
+    correct: 1
+  },
+  {
+    question: "30. DE LAS SIGUIENTES OPCIONES CUÁL DE ELLAS DEFINE AL PACIENTE TERMINAL:",
+    options: [
+      "a) Presencia de una enfermedad avanzada, progresiva e incurable",
+      "b) Falta de posibilidades razonables de respuesta a tratamiento específico",
+      "c) Pronóstico de vida inferior a 6 meses",
+      "d) Todas las respuestas anteriores son correctas"
+    ],
+    correct: 3
+  },
+  {
+    question: "31. DURANTE UNA INTERVENCIÓN QUIRÚRGICA EL/LA CELADOR/A DEBE PERMANECER:",
+    options: [
+      "a) En la zona séptica",
+      "b) En la zona de intercambio informando a los familiares",
+      "c) En el almacén de sueros y farmacia en general",
+      "d) En el antequirófano estando atento a aquello para lo que se le pudiera requerir"
+    ],
+    correct: 3
+  },
+  {
+    question: "32. ES FUNCIÓN DE LOS CELADORES: (SEÑALE LA RESPUESTA INCORRECTA)",
+    options: [
+      "a) Se abstendrán de hacer comentarios con los familiares y visitantes de los enfermos sobre diagnósticos, exploraciones y tratamientos que se estén realizando a los mismos",
+      "b) Se abstendrán de informar a los familiares y visitantes de los enfermos sobre los pronósticos de su enfermedad, debiendo siempre orientar las consultas hacia el Jefe de servicio encargado de la asistencia del enfermo",
+      "c) Se abstendrán de informar a los familiares y visitantes de los enfermos sobre los pronósticos de su enfermedad, debiendo siempre orientar las consultas hacia el Médico encargado de la asistencia del enfermo",
+      "d) Las respuestas A y C son correctas"
+    ],
+    correct: 1
+  },
+  {
+    question: "33. DE ACUERDO CON EL ESTATUTO DE PERSONAL NO SANITARIO AL SERVICIO DE LAS INSTITUCIONES SANITARIAS, LOS CELADORES:",
+    options: [
+      "a) Velarán excepcionalmente por conseguir el mayor orden y silencio posible en todas las dependencias de la Institución",
+      "b) Darán cuenta al Servicio de Mantenimiento de los desperfectos o anomalías que encontraren en la limpieza y conservación del edificio y material",
+      "c) Mantendrán el régimen establecido por la Dirección para el acceso de enfermos, visitantes y personal a las distintas dependencias de la Institución",
+      "d) Vigilarán el acceso y estancias de los familiares y visitantes en las habitaciones de los enfermos, no permitiendo la entrada más que a las personas autorizadas, cuidando no introduzcan en las instituciones más que aquellos paquetes expresamente autorizados por la Dirección"
+    ],
+    correct: 3
+  },
+  {
+    question: "34. SEÑALE CUÁL DE LAS SIGUIENTES OPCIONES ES FUNCIÓN DEL CELADOR EN LA UVI:",
+    options: [
+      "a) Movilizar pacientes intubados",
+      "b) Movilizar pacientes no intubados",
+      "c) Transporte de muestras y documentación",
+      "d) Todas las respuestas anteriores son correctas"
+    ],
+    correct: 3
+  },
+  {
+    question: "35. EL CELADOR CUIDARÁ QUE LOS VISITANTES NO DEAMBULEN POR LOS PASILLOS Y DEPENDENCIAS, EXCEPTO LO NECESARIO PARA LLEGAR AL LUGAR DONDE CONCRETAMENTE SE DIRIJAN:",
+    options: [
+      "a) Sólo lo hará, si expresamente se lo indica su superior inmediato, en casos excepcionales",
+      "b) Sólo lo hará, si expresamente se lo indica la Enfermera Supervisora de planta, en casos de urgencia",
+      "c) No es función de los celadores vigilar los pasillos",
+      "d) Es una de sus funciones recogida en la normativa vigente"
+    ],
+    correct: 3
+  },
+  {
+    question: "36. PREVIO A LOS CUIDADOS POST-MORTEM ES NECESARIO:",
+    options: [
+      "a) Realizar la higiene del cadáver",
+      "b) Verificar el exitus por parte del facultativo",
+      "c) Retirar los objetos personales",
+      "d) Sujetar los tobillos con una venda"
+    ],
+    correct: 1
+  },
+  {
+    question: "37. NO ES UN MÉTODO DE ESTERILIZACIÓN POR CALOR SECO:",
+    options: [
+      "a) Flameado",
+      "b) Estufa de Poupinel",
+      "c) Incineración",
+      "d) Autoclave"
+    ],
+    correct: 3
+  },
+  {
+    question: "38. LAS HABITACIONES DE UN HOSPITAL DEBEN ESTAR DOTADAS NECESARIAMENTE CON:",
+    options: [
+      "a) Toma de nitrógeno y oxígeno",
+      "b) Toma de oxígeno y toma de vacío",
+      "c) Toma de aire medicinal y oxígeno",
+      "d) Toma de óxido nitroso y aire medicinal"
+    ],
+    correct: 1
+  },
+  {
+    question: "39. LA FINALIDAD DE LA AUTOPSIA MEDICOLEGAL ES:",
+    options: [
+      "a) Diseccionar el cadáver para comprobar actos violentos",
+      "b) Confirmar la causa de muerte por enfermedad",
+      "c) Informar de la patología del paciente antes de producirse el fallecimiento",
+      "d) Informar a la autoridad judicial de las causas y circunstancias de la muerte"
+    ],
+    correct: 3
+  },
+  {
+    question: "40. CUANDO UN PACIENTE USA BASTÓN, ADELANTARÁ A LA VEZ QUE EL BASTÓN:",
+    options: [
+      "a) La pierna no afectada",
+      "b) La pierna afectada",
+      "c) Es indiferente",
+      "d) Ninguna de las dos piernas"
+    ],
+    correct: 3
+  },
+  {
+    question: "41. UN/A CELADOR QUE SE ENCUENTRA DESTINADO EN EL ALMACÉN, EN EL CUAL TENDRÁ QUE MANEJAR CARGAS, SEGÚN EL INSTITUTO NACIONAL DE SEGURIDAD, SALUD Y BIENESTAR EN EL TRABAJO, COMO CRITERIO GENERAL SE CONSIDERARÁN CARGAS EN SENTIDO ESTRICTO AQUELLAS CUYO PESO EXCEDA DE:",
+    options: [
+      "a) 5 kg.",
+      "b) 3 kg.",
+      "c) 8 kg.",
+      "d) 10 kg."
+    ],
+    correct: 1
+  },
+  {
+    question: "42. EN EL BLOQUE QUIRÚRGICO, ¿POR DÓNDE SE ELIMINA TODO EL MATERIAL SUCIO PROCEDENTE DE LA INTERVENCIÓN?",
+    options: [
+      "a) Por la zona aséptica o área sucia",
+      "b) Por el antequirófano",
+      "c) Por la zona séptica o área sucia",
+      "d) Por el área de intercambio"
+    ],
+    correct: 2
+  },
+  {
+    question: "43. EL CELADOR ES EL ENCARGADO DE LA RECEPCIÓN DEL MATERIAL DE UN HOSPITAL, ¿CÓMO COMPRUEBA QUE EL PEDIDO ES EL CORRECTO?",
+    options: [
+      "a) Comprobando el libro de registros",
+      "b) Al/La celador/a no le corresponde esa función",
+      "c) A través de la factura de dicho material",
+      "d) A través del albarán de entrega"
+    ],
+    correct: 3
+  },
+  {
+    question: "44. SEGÚN LA DOCTORA KÜBLER ROSS, ¿QUÉ DOS TIPOS DE DEPRESIÓN EXISTEN EN UNA DE LAS ETAPAS POR LAS QUE PASA EL PACIENTE TERMINAL?",
+    options: [
+      "a) Depresión externa y depresión interna",
+      "b) Depresión reactiva y depresión preparatoria",
+      "c) Depresión activa y depresión reactiva",
+      "d) Depresión reactiva y depresión precipitada"
+    ],
+    correct: 1
+  },
+  {
+    question: "45. SEGÚN SE RECOGE EN EL ESTATUTO DE PERSONAL NO SANITARIO, EN EL TRASLADO DE LOS ENFERMOS ENCAMADOS QUE REQUIERAN UN TRATO ESPECIAL EN RAZÓN DE SUS DOLENCIAS, PARA HACERLES LA CAMA:",
+    options: [
+      "a) Sólo podrá llevarse a cabo por personal auxiliar",
+      "b) Se llevará a cabo sólo por personal no sanitario",
+      "c) Se realizará con los medios mecánicos adecuados indicados por el personal facultativo",
+      "d) Ninguna de las respuestas anteriores es correcta"
+    ],
+    correct: 3
+  },
+  {
+    question: "46. ¿QUE TENDRÁ QUE TENER EN CUENTA EL CELADOR EN LA MOVILIZACIÓN DE LOS PACIENTES ENCAMADOS EN UNA PLANTA DE HOSPITALIZACIÓN?",
+    options: [
+      "a) El estado del paciente",
+      "b) Si el paciente puede o no colaborar",
+      "c) El personal de enfermería de la unidad es el responsable de dicha movilización",
+      "d) Todas las respuestas anteriores son correctas"
+    ],
+    correct: 3
+  },
+  {
+    question: "47. ¿CUÁL DE LAS SIGUIENTES TAREAS LE CORRESPONDE AL CELADOR DE ALMACÉN?",
+    options: [
+      "a) Calcular el precio del pedido para informar al jefe de almacén",
+      "b) Hacer el pedido de los materiales fungibles",
+      "c) Preparar el material según está indicado en la hoja de pedido",
+      "d) Las respuestas B y C son correctas"
+    ],
+    correct: 2
+  },
+  {
+    question: "48. ¿QUIÉN REALIZA LA AUTOPSIA?",
+    options: [
+      "a) El celador",
+      "b) El médico especializado o patólogo",
+      "c) El técnico en Anatomía Patológica",
+      "d) Cualquiera de ellos"
+    ],
+    correct: 1
+  },
+  {
+    question: "49. ¿CÓMO SUBIR A UN PACIENTE EN LA CAMA HACIA EL CABECERO, SI ÉSTE COLABORA?",
+    options: [
+      "a) Poner la cama en posición horizontal o en ligero Trendelemburg",
+      "b) Pedimos al paciente que flexione las rodillas y que coloque los pies de tal manera que pueda impulsarse con ellos",
+      "c) Comprobar que la cama esté frenada",
+      "d) Todas las respuestas anteriores son correctas"
+    ],
+    correct: 3
+  },
+  {
+    question: "50. ¿CUÁLES SON LOS 5 MOMENTOS PARA LA HIGIENE DE MANOS?",
+    options: [
+      "a) 1. Antes de entrar en la habitación; 2. Antes de realizar una tarea aséptica; 3. Después del riesgo de exposición a fluidos corporales; 4. Después del contacto con el paciente; 5. Tras salir de la habitación",
+      "b) 1. Antes del contacto con el entorno del paciente; 2. Antes de realizar una tarea aséptica; 3. Después del riesgo de exposición a sangre; 4. Después del contacto con el paciente; 5. Después del contacto con el entorno del paciente",
+      "c) 1. Antes del contacto con el paciente; 2. Antes de realizar una tarea aséptica; 3. Después del riesgo de exposición a fluidos corporales; 4. Después del contacto con el paciente; 5. Después del contacto con el entorno del paciente",
+      "d) 1. Antes de entrar en la habitación; 2. Antes del contacto con el paciente; 3. Antes de realizar una tarea aséptica; 4. Después del riesgo de exposición a fluidos corporales; 5. Antes de salir de la habitación"
+    ],
+    correct: 2
+  }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
