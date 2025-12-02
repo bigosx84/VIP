@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Preguntas</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex; flex-wrap: wrap;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px; font-weight: normal;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            width: calc(100% - 20px); max-width: 100%;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm"></form>
+    </div>
+    
+    <script>
+        const questions = [
+{
+    "question": "11. El ámbito de aplicación de la Ley 3/2005, de 8 de julio, de información sanitaria y autonomía del paciente, se extiende:",
+    "options": [
+      "a) A todos los extremeños y residentes en cualquiera de los municipios de Extremadura.",
+      "b) A los profesionales de los centros, establecimientos y servicios sanitarios, públicos y privados, ubicados en el ámbito territorial de la Comunidad Autónoma de Extremadura.",
+      "c) A los no residentes en la Comunidad Autónoma de Extremadura, en las condiciones previstas en la legislación estatal y en los Convenios Nacionales e Internacionales que sean de aplicación.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+ {
+    "question": "13. Señala cuál no es una zona del almacén:",
+    "options": [
+      "a) Recepción.",
+      "b) Zona de apilado en bloque.",
+      "c) Zona de animalario.",
+      "d) Zona de rotos."
+    ],
+    "correct": 2
+  }, 
+{
+    "question": "23. ¿En qué centros proporcionan a los pacientes derivados de otros recursos asistenciales, una formación, orientación y adiestramiento en el trabajo de manera considerada protegida?",
+    "options": [
+      "a) Centros de día.",
+      "b) Pisos y talleres protegidos.",
+      "c) Talleres ocupacionales.",
+      "d) Las respuestas b) y c) son correctas."
+    ],
+    "correct": 2
+  },
+ {
+    "question": "32. ¿Quién propondrá para su nombramiento al titular de la Dirección Gerencia del SES?",
+    "options": [
+      "a) El Consejo de Gobierno de la Junta de Extremadura.",
+      "b) La Asamblea de Extremadura.",
+      "c) El Consejero competente en materia de sanidad.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+{
+    "question": "38. Los pacientes de psiquiatría que no pueden seguir ningún tratamiento rehabilitador serán atendidos en:",
+    "options": [
+      "a) Centros de larga estancia.",
+      "b) Unidades residenciales-rehabilitadoras de larga estancia.",
+      "c) Unidades rehabilitadoras de media estancia.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 3
+  },
+{
+    "question": "41. Para que un documento de Expresión Anticipada de Voluntades sea aceptado como válido deberá:",
+    "options": [
+      "a) Estar realizado ante notario.",
+      "b) Estar inscrito en el Registro de Expresión Anticipada de Voluntades.",
+      "c) Contar con la verificación del Registro Nacional de Instrucciones Previas.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 1
+  },
+ {
+    "question": "45. ¿Qué principio general impone a los poderes públicos de Extremadura la obligación de adoptar las medidas oportunas para garantizar el acceso y el ejercicio efectivo de los derechos políticos, civiles, económicos, sociales, laborales y culturales y para eliminar la discriminación?",
+    "options": [
+      "a) El principio de igualdad de oportunidades.",
+      "b) El principio de fomento de la corresponsabilidad.",
+      "c) El principio de igualdad de trato entre mujeres y hombres.",
+      "d) El principio de acción positiva."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "24. Los nombramientos de personal estatutario temporal serán de:",
+    "options": [
+      "a) Sustitución.",
+      "b) Eventualidad.",
+      "c) Interinidad.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "15. Los poderes públicos extremeños tienen la obligación de colaborar y coordinar sus actuaciones en materia de igualdad entre mujeres y hombres y contra la violencia de género. ¿Cuál es la finalidad de esta obligación?",
+    "options": [
+      "a) Que sus intervenciones sean más eficaces y acordes con una utilización racional de los recursos.",
+      "b) La adopción de medidas que aseguren la igualdad entre hombres y mujeres.",
+      "c) La garantía de la proximidad y el equilibrio de las intervenciones en casos de violencia de género.",
+      "d) El impulso de la efectividad del principio de igualdad de género en las relaciones entre particulares."
+    ],
+    "correct": 0
+  },
+ {
+    "question": "8. Señale la respuesta incorrecta. En el Preámbulo de la Constitución se dice que la Nación española proclama su voluntad de:",
+    "options": [
+      "a) Garantizar la convivencia democrática dentro de la Constitución y de las leyes conforme a un orden económico y social justo.",
+      "b) Consolidar un Estado de Derecho que asegure el imperio de la ley como expresión de la voluntad popular.",
+      "c) Establecer una sociedad económica avanzada.",
+      "d) Promover el progreso de la cultura y de la economía para asegurar a todos una digna calidad de vida."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "9. Los centros de media estancia tienen como finalidad:",
+    "options": [
+      "a) El ingreso parcial de los pacientes.",
+      "b) La protección social de los pacientes.",
+      "c) La rehabilitación del paciente tras un ingreso de 6 a 12 meses.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 2
+  },
+    {
+    "question": "4. ¿Cuántos celadores/as para cada montacamas se destinarán para la utilización del mismo desde el interior en caso de emergencia?",
+    "options": [
+      "a) Uno.",
+      "b) Dos.",
+      "c) Tres.",
+      "d) Cuatro."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "R4. ¿A quién le corresponde elegir el método de traslado de los enfermos ante una evacuación hospitalaria?",
+    "options": [
+      "a) Al personal de extinción de incendios.",
+      "b) A la supervisora de la unidad, en todo caso.",
+      "c) Al facultativo responsable de la unidad.",
+      "d) A los celadores."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "28. Señala la respuesta incorrecta. Son almacenes de materiales de uso relacionado directamente con los pacientes:",
+    "options": [
+      "a) Almacén de farmacia.",
+      "b) Almacén clínico fungible.",
+      "c) Almacén de mantenimiento.",
+      "d) Almacén de aparataje."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R5. ¿En qué cavidad de nuestro cuerpo se encuentra la cavidad peritoneal?",
+    "options": [
+      "a) En la cavidad pélvica.",
+      "b) En la cavidad abdominal.",
+      "c) En la cavidad torácica.",
+      "d) En la cavidad mediastínica."
+    ],
+    "correct": 1
+  },
+{
+    "question": "34. Señala la respuesta correcta en relación con los sistemas de bocas de incendio equipadas (BIE):",
+    "options": [
+      "a) Se situarán siempre a una distancia máxima de 5 metros de las salidas del sector de incendio, medida sobre un recorrido de evacuación, sin que constituyan obstáculo para su utilización.",
+      "b) Para las BIE con manguera semirrígida o manguera plana, la separación máxima entre cada BIE y su más cercana será de 30 metros.",
+      "c) Para facilitar su manejo, la longitud máxima de la manguera de las BIE con manguera plana será de 30 metros y con manguera semirrígida será de 20 metros.",
+      "d) La longitud máxima de las mangueras que se utilicen en estas BIE de alta presión será de 50 metros."
+    ],
+    "correct": 0
+  },  
+  {
+    "question": "13. Señala la respuesta incorrecta. Son datos que se pueden tomar para el control de calidad:",
+    "options": [
+      "a) Dictamen.",
+      "b) Devolución al proveedor.",
+      "c) Entrada a rotos.",
+      "d) Etiquetado de mercancía."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "23. La unión del eje longitudinal y el eje transversal delimitan el plano:",
+    "options": [
+      "a) Frontal.",
+      "b) Sagital.",
+      "c) Transversal.",
+      "d) Oblicuo."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "31. ¿Cuántos vocales en representación de los órganos de participación social integran la Comisión de Bienestar Social?",
+    "options": [
+      "a) Ocho.",
+      "b) Seis.",
+      "c) Cinco.",
+      "d) Tres."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "32. No es una de las funciones del Consejo General del Servicio Extremeño de Salud:",
+    "options": [
+      "a) Coordinación, deliberación, y participación en la toma de decisiones.",
+      "b) Establecer los criterios de actuación del Organismo Autónomo, de acuerdo con las directrices de la Consejería responsable en materia de sanidad.",
+      "c) La propuesta de adopción de medidas encaminadas a la mejor prestación de los servicios gestionados por el Organismo Autónomo.",
+      "d) Aprobar la memoria anual de la gestión del Servicio Extremeño de Salud."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "64. La Constitución Española no dedica un Capítulo en el Título I a:",
+    "options": [
+      "a) La suspensión de los derechos y libertades.",
+      "b) Las garantías de las libertades y derechos fundamentales.",
+      "c) Las garantías de los derechos y deberes de los ciudadanos.",
+      "d) Los españoles y extranjeros."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "45. ¿Cómo se define la situación en que se produce un comportamiento relacionado con el sexo de una persona, con el propósito o el efecto de atentar contra la dignidad de la persona y crear un entorno intimidatorio, hostil, degradante, humillante u ofensivo?",
+    "options": [
+      "a) Como acoso sexual.",
+      "b) Como discriminación indirecta siempre.",
+      "c) Como discriminación por razón de sexo.",
+      "d) Como acoso por razón de sexo."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "40. En qué materias corresponden a la Comunidad Autónoma de Extremadura las actividades de policía, de servicio público y de fomento:",
+    "options": [
+      "a) En las materias en las que ejerce competencias exclusivas.",
+      "b) En las materias en las que ejerce competencias no delegadas ni transferidas por el Estado.",
+      "c) En todas las de su competencia.",
+      "d) En las materias en las que ejerce competencias exclusivas y de desarrollo normativo."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "36. Si la temperatura de un quirófano es alta (señala la respuesta incorrecta):",
+    "options": [
+      "a) Aumenta la aparición de infección.",
+      "b) Aumenta el riesgo de explosión de los gases empleados.",
+      "c) Se genera un medio relativamente conductor.",
+      "d) Aumenta el crecimiento bacteriano."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "40. No es una competencia exclusiva de la Comunidad Autónoma de Extremadura:",
+    "options": [
+      "a) Sanidad y salud pública, en lo relativo a la organización, funcionamiento interno, coordinación y control de los centros, servicios y establecimientos sanitarios en la Comunidad Autónoma.",
+      "b) Las prestaciones económicas de asistencia social diferentes de las de seguridad social.",
+      "c) Protección civil y emergencias.",
+      "d) La sanidad alimentaria."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "14. La actividad preventiva deberá planificarse:",
+    "options": [
+      "a) Para un período determinado.",
+      "b) Para un período ilimitado.",
+      "c) Anualmente.",
+      "d) Para un período máximo de 3 años."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "17. ¿Cuántas funciones del Celador se recogen dentro del artículo 14.2?",
+    "options": [
+      "a) Veinte.",
+      "b) Veintiuna.",
+      "c) Veintidós.",
+      "d) Veintitrés."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "23. No es un dispositivo sanitario de salud mental:",
+    "options": [
+      "a) Centro de día.",
+      "b) Hospital de día.",
+      "c) Equipo de salud mental.",
+      "d) Unidad de corta estancia."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "37. De los siguientes métodos tanatopráxicos, ¿cuál es el acondicionamiento térmico que permite mantener al cadáver durante las primeras 24-48 horas retrasando los procesos de putrefacción?",
+    "options": [
+      "a) Refrigeración.",
+      "b) Congelación.",
+      "c) Climatización.",
+      "d) Embalsamamiento."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "43. Después de la fase de recepción de la mercancía, se procede a su:",
+    "options": [
+      "a) Revisión.",
+      "b) Clasificación.",
+      "c) Almacenamiento.",
+      "d) Codificación."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "48. Es personal estatutario de gestión y servicios quien ostenta tal condición en virtud de:",
+    "options": [
+      "a) Nombramiento expedido para el ejercicio de una profesión o especialidad sanitaria",
+      "b) Nombramiento por razones de necesidad, de urgencia o para el desarrollo de programas de carácter temporal, coyuntural o extraordinario.",
+      "c) Nombramiento expedido para el desempeño de funciones de gestión o para el desarrollo de profesiones u oficios que no tengan carácter sanitario.",
+      "d) Ninguna de las anteriores."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "4. Las revisiones de las instalaciones de protección contra incendios se realizarán:",
+    "options": [
+      "a) 1 vez al mes.",
+      "b) 1 vez cada 2 años.",
+      "c) 1 vez cada 6 meses.",
+      "d) 1 vez cada 12 meses."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "49. Las señales de salvamento o socorro son de color:",
+    "options": [
+      "a) Rojo.",
+      "b) Azul.",
+      "c) Verde.",
+      "d) Amarillo."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "55. ¿Durante cuánto tiempo se conservará la información que se considere relevante a efectos preventivos, epidemiológicos, de investigación o de organización y funcionamiento del Sistema Nacional de Salud?",
+    "options": [
+      "a) Veinte años.",
+      "b) Diez años.",
+      "c) Cinco años.",
+      "d) Indefinidamente."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "56. ¿Quién nombrará al titular de la Dirección Gerencia del SES?",
+    "options": [
+      "a) El Consejero competente en materia sanitaria.",
+      "b) El Presidente de la Junta de Extremadura.",
+      "c) La Asamblea de Extremadura.",
+      "d) El Consejo de Gobierno de la Junta de Extremadura."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "66. El bloque quirúrgico estructuralmente comprende:",
+    "options": [
+      "a) Los locales donde se desarrolla el proceso asistencial del procedimiento quirúrgico (quirófanos y unidad de recuperación) y los locales de soporte que precisa.",
+      "b) Personal no sanitario.",
+      "c) Personal sanitario.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "70. La gestión de la historia clínica será responsabilidad de:",
+    "options": [
+      "a) La Dirección del centro sanitario.",
+      "b) El Gerente del centro.",
+      "c) La unidad de admisión y documentación clínica.",
+      "d) La unidad de archivo y gestión sanitaria."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R4. Las señales relativas a la lucha contra incendios son:",
+    "options": [
+      "a) Pictograma amarillo sobre fondo negro.",
+      "b) Pictograma blanco sobre fondo rojo.",
+      "c) Pictograma amarillo sobre fondo azul.",
+      "d) Pictograma rojo sobre fondo negro."
+    ],
+    "correct": 1
+  }
+
+
+            ];
+
+        const form = document.getElementById('quizForm');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                radio.addEventListener('change', () => {
+                    if (i === q.correct) {
+                        optionItem.classList.add('correct');
+                        optionItem.classList.remove('incorrect');
+                    } else {
+                        optionItem.classList.add('incorrect');
+                        optionItem.classList.remove('correct');
+                    }
+                });
+
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.appendChild(questionDiv);
+        });
+    </script>
+</body>
+</html>
