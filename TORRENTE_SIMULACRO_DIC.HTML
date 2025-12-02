@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">TORRENTE SIMULACRO DIC.</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+  {
+    "question": "1. ¿Qué normativa regula actualmente la gestión y producción de residuos sanitarios en la comunidad de Extremadura?",
+    "options": [
+      "a) Ley 1/2004 de 28 de diciembre",
+      "b) Decreto 109/2015 de 19 de mayo",
+      "c) Decreto 1147/2011 de 29 de julio",
+      "d) Ley 19/2016 de 25 de junio"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "2. Si en el etiquetado de un residuo se encuentra un pictograma que representa una calavera sobre tibias cruzadas, nos indica que se trata de un residuo:",
+    "options": [
+      "a) Corrosivo",
+      "b) Irritante",
+      "c) Tóxico",
+      "d) Nocivo"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "3. ¿Qué características constructivas de los quirófanos es cierta?",
+    "options": [
+      "a) Las unidades de iluminación del techo se instalarán en un solo pivote y las puertas deben estar diseñadas para disminuir al máximo la turbulencia del aire, al abrirse y cerrarse.",
+      "b) Las paredes, techo y suelo deben estar construidas con un material no poroso de fácil limpieza y el habitáculo que se corresponde con el mismo debe estar insonorizado.",
+      "c) No debe haber ventanas y existirá una instalación de aire acondicionado independiente de la del resto del hospital y con capacidad para renovar el aire, poseyendo el sistema filtros de partículas de alta seguridad.",
+      "d) Todas las anteriores son ciertas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "4. Según recoge el Decreto 109/2015, por el que se regula la producción y gestión de los residuos sanitarios en la comunidad autónoma de Extremadura, los residuos peligrosos de los grupos III y IV se recogerán en recipientes de un solo uso con las siguientes características:",
+    "options": [
+      "a) Cierre hermético adecuado, con posibilidad de apertura una vez cerrado",
+      "b) Volumen máximo de 50 litros, en función de su resistencia a la carga",
+      "c) Asepsia total en su interior",
+      "d) Opacidad a la vista"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "5. Según la normativa vigente en Extremadura, los residuos que comparten características de más de un grupo:",
+    "options": [
+      "a) Tendrán la consideración que resulte más exigente para garantizar la protección de la salud",
+      "b) Tendrán la consideración que resulte más exigente para garantizar la protección de la salud humana y la salud animal",
+      "c) Tendrán la consideración que resulte más exigente para garantizar la protección de la salud y el medio ambiente",
+      "d) Tendrán la consideración que resulte más exigente para garantizar la protección de la salud humana, la salud animal y vegetal"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "6. ¿Qué características, entre otras, deben tener los contenedores para el almacenamiento de los residuos del grupo IV en la comunidad autónoma de Extremadura?",
+    "options": [
+      "a) Rígidos, estancos, resistentes a roturas y de color Amarillo",
+      "b) Rígidos, estancos, opacos, y de color Rojo",
+      "c) Rígidos, resistentes, opacos y de color Negro",
+      "d) Rígidos, estancos, opacos y de color Verde"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "7. La historia clínica debe ser:",
+    "options": [
+      "a) Única para cada paciente",
+      "b) Confidencial",
+      "c) Acumulativa",
+      "d) Todas las respuestas anteriores son correctas"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "8. Según la legislación autonómica de Extremadura en materia de información sanitaria, los centros sanitarios tienen la obligación de conservar indefinidamente aquella información de la historia clínica siempre que:",
+    "options": [
+      "a) Se considere relevante a efectos terapéuticos, de evaluación y acreditación",
+      "b) Se considere relevante a efectos preventivos, epidemiológicos, de investigación o de organización y funcionamiento del Sistema Nacional de Salud.",
+      "c) Se considere relevante a efectos de evaluación, acreditación y docencia",
+      "d) Se considere relevante a efectos de acreditación, docencia y estadística sanitaria"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "9. ¿Qué tipo de infracción supone acceder a la documentación obrante en las historias clínicas falseando las condiciones que legitiman para ello, según lo dispuesto en la Ley 3/2005, de 8 julio, de información y autonomía del paciente?:",
+    "options": [
+      "a) Infracción leve",
+      "b) Infracción grave",
+      "c) Infracción muy grave",
+      "d) No es considerado una infracción"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "10. Para evaluar los planes de autoprotección y asegurar la eficacia y operatividad de los planes de actuación en emergencias, se realizarán simulacros de emergencia, con:",
+    "options": [
+      "a) la periodicidad mínima que fije cada plan de emergencias incluido en el plan de autoprotección.",
+      "b) vigencia indeterminada; se mantendrá adecuadamente actualizado, y se revisará, al menos, con una periodicidad no superior a tres años",
+      "c) la periodicidad mínima que fije el propio plan, y en todo caso, al menos una vez al año evaluando sus resultados",
+      "d) ninguna respuesta es correcta"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "11. En relación con la salud mental, la Ley General de Sanidad establece que:",
+    "options": [
+      "a) Se considerarán de modo especial aquellos problemas referentes a la psiquiatría infantil y psicogeriatría.",
+      "b) La hospitalización de los pacientes por procesos que así lo requieran se realizará en las unidades psiquiátricas de los hospitales específicos creados para ello.",
+      "c) Se limitarán los servicios de rehabilitación y reinserción social para una adecuada atención de los problemas de salud mental.",
+      "d) Todas las respuestas anteriores son correctas"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "12. ¿Cuál es el primer paso ante un niño inconsciente que no responde?",
+    "options": [
+      "a) Iniciar compresiones torácicas.",
+      "b) Aplicar desfibrilación inmediata.",
+      "c) Evaluar respuesta y respiración.",
+      "d) Administrar ventilación de rescate."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "13. ¿Qué debe hacerse después de administrar una descarga con desfibrilador en parada cardiorrespiratoria?",
+    "options": [
+      "a) Evaluar ritmo inmediatamente.",
+      "b) Reiniciar RCP inmediatamente comenzando con compresiones.",
+      "c) Administrar adrenalina.",
+      "d) Ventilar por 2 minutos."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "14. ¿Cuál de los siguientes es un objetivo específico del proceso de triaje?",
+    "options": [
+      "a) Es innecesaria la reevaluación continua.",
+      "b) Ayuda corregir situaciones de saturación en urgencias.",
+      "c) Diagnosticar a los pacientes de riesgo vital inmediato (rojo/emergencia).",
+      "d) Todas son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "15. Según la guía de la ERC (European Resuscitation Council) las compresiones torácicas son de alta calidad si:",
+    "options": [
+      "a) Se realizan a un ritmo 90-100 por minuto.",
+      "b) Se realizan la mitad inferior del esternón.",
+      "c) Con profundidad de más de 6 cm.",
+      "d) Permanecer apoyado en el tórax, dejando que se reexpanda."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "16. Ante una agitación psicomotriz que precisa contención mecánica, ¿cuál es el número de profesionales aconsejado que deben participar en la misma?",
+    "options": [
+      "a) 2.",
+      "b) 3.",
+      "c) 4.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "17. ¿Cuál de las siguientes relaciones según el triaje Manchester es INCORRECTA?",
+    "options": [
+      "a) Nivel IV (azul). No urgente. Demora de 120 minutos",
+      "b) Nivel III (amarillo). Urgente. Demora de 60 minutos.",
+      "c) Nivel II (naranja). Emergencia. Demora 10 minutos.",
+      "d) Nivel I (rojo). Reanimación. Demora 0 minutos."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "18. Una de las utilidades principales de la expresión anticipada de voluntades es:",
+    "options": [
+      "a) Sustituir la decisión del médico en cualquier situación clínica.",
+      "b) Permitir a la persona expresar preferencias sobre tratamientos médicos en situaciones futuras en las que no pueda manifestarse.",
+      "c) Servir como documento de referencia para trámites administrativos no sanitarios.",
+      "d) Eliminar la obligación de solicitar consentimiento informado en cualquier acto médico."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "19. ¿Cuál de las siguientes es una medida fundamental para la prevención de infecciones nosocomiales?",
+    "options": [
+      "a) Uso sistemático de antibióticos profilácticos en todos los pacientes.",
+      "b) Lavado de manos con soluciones hidroalcohólicas antes y después de cada contacto asistencial",
+      "c) Evitar el aislamiento de pacientes.",
+      "d) Esterilizar únicamente el material desechable."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "20. El dosímetro personal en Radioterapia debe colocarse habitualmente en:",
+    "options": [
+      "a) En el bolsillo.",
+      "b) Donde le resulte más cómodo al trabajador.",
+      "c) El tórax, por debajo del delantal plomado si se utiliza.",
+      "d) La zona lumbar."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "21. ¿Cómo es la sangre y como brota de la hemorragia venosa?",
+    "options": [
+      "a) La sangre brota de forma continua y babeante, es de color rojo azulado.",
+      "b) La sangre brota en múltiples puntos en forma de sábana, es de color rojo intenso.",
+      "c) La sangre sale a presión, es de color rojo azulado.",
+      "d) La sangre brota de forma continua, es de color rojo intenso."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "22. ¿Cómo se denomina la desaparición total/absoluta de cualquier actividad biológica del organismo?",
+    "options": [
+      "a) Muerte Aparente.",
+      "b) Muerte Intermedia.",
+      "c) Muerte Relativa.",
+      "d) Muerte Absoluta"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "23. ¿Cuál es función del celador en relación con los pacientes fallecidos?",
+    "options": [
+      "a) Ayudar a las enfermeras o personas encargadas de los cuidados postmortem durante los mismos.",
+      "b) El traslado de los cadáveres al mortuorio.",
+      "c) Facilitar el certificado de defunción al médico para que lo firme.",
+      "d) Son ciertas las respuestas a) y b)."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "24. La administración de sustancias nutritivas a través de una sonda que estará alojada en el tubo digestivo se denomina nutrición:",
+    "options": [
+      "a) Enteral.",
+      "b) Parenteral.",
+      "c) Oral.",
+      "d) Intramuscular."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "25. ¿Cuántas personas mínimas se requieren para un traslado de la cama a la silla de ruedas cuando el paciente es no colaborador?",
+    "options": [
+      "a) 1.",
+      "b) 2.",
+      "c) 3.",
+      "d) 4."
+    ],
+    "correct": 1
+  },
+   {
+    "question": "26. ¿Qué posición es la más frecuentemente utilizada a nivel quirúrgico?",
+    "options": [
+      "a) Decúbito supino.",
+      "b) Decúbito prono.",
+      "c) Posición de Antitrendelemburg.",
+      "d) Posición de Roser."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "27. ¿Cómo se denomina también la posición de Trendelenburg invertido?",
+    "options": [
+      "a) Posición de Roser.",
+      "b) Posición de Morestín.",
+      "c) Posición de litotomía.",
+      "d) Posición de Sims."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "28. El criterio de renovación de mercancías, en el que se tiene en cuenta la caducidad de las mercancías se corresponde con el criterio:",
+    "options": [
+      "a) FIFO.",
+      "b) LIFO.",
+      "c) FEFO.",
+      "d) PMP"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "29. ¿Cómo se denomina la herramienta o instrumento que se emplea en la sala de autopsias para la apertura de la bóveda craneal?",
+    "options": [
+      "a) Cizalla",
+      "b) Enterótomo.",
+      "c) Costótomo.",
+      "d) Escoplo"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "30. El documento que tiene como objeto prevenir y controlar los riesgos sobre las personas y bienes y con respuestas a las posibles situaciones de emergencia se denomina:",
+    "options": [
+      "a) plan de autoprotección",
+      "b) norma básica contra incendios",
+      "c) manual de Actuación contra emergencias",
+      "d) ninguna respuesta es correcta"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "31. En qué orden deben evacuarse los pacientes de un hospital en caso de emergencia",
+    "options": [
+      "a) pacientes ambulantes que pueden desplazarse por sí mismos, pacientes dependientes más cercanos a la puerta de salida y pacientes dependientes más alejados de la puerta de salida",
+      "b) pacientes dependientes más cercanos a la puerta de salida, pacientes dependientes más alejados de la puerta de salida y pacientes ambulantes",
+      "c) pacientes ambulantes, pacientes dependientes más alejados de la puerta de salida y pacientes dependientes más cercanos a la puerta de salida",
+      "d) pacientes ordenados de más grave a menos grave, con respecto a su estado de salud"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "32. En la combustión al aire libre de un trozo de papel ¿cuál es el comburente?",
+    "options": [
+      "a) el papel",
+      "b) el oxígeno",
+      "c) el calor",
+      "d) el humo originado"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "33. En el manejo de las bocas de incendio la manguera cuenta con 3 posiciones",
+    "options": [
+      "a) cierre, chorro y pulverización",
+      "b) cierre, aspersión y pulverización",
+      "c) cierre, apertura y chorro",
+      "d) cierre, pulverización y difusión"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "34. ¿Qué medio de extinción está indicado utilizar en aparatos eléctricos?",
+    "options": [
+      "a) extintor de espuma polivalente",
+      "b) extintor de CO2",
+      "c) la BIE más cercana",
+      "d) ninguna de las respuestas anteriores es correcta"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "35. Una zona séptica es:",
+    "options": [
+      "a) Una zona desinfectada.",
+      "b) Una zona sucia.",
+      "c) Una zona con riesgo parcial de contaminación.",
+      "d) Una zona estéril."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "36. El acceso del paciente a la atención de urgencia hospitalaria se realiza por:",
+    "options": [
+      "a) Por razones de urgencia o riesgo vital que puedan requerir medidas terapéuticas exclusivas del medio hospitalario.",
+      "b) Por remisión del médico de atención primaria.",
+      "c) Por remisión del médico de atención especializada.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "37. Se reconoce varios tipos de usuario en virtud de sus rasgos personales. Uno de estos tipos es el usuario que cree saberlo todo y es dominante que se le clasifica como un usuario:",
+    "options": [
+      "a) Desconfiado.",
+      "b) Discrepador",
+      "c) Impulsivo",
+      "d) Prepotente."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "38. El agua que empleamos a lo largo del proceso de lavado del paciente encamado:",
+    "options": [
+      "a) Será siempre la misma",
+      "b) Sólo se cambiará cuando se ensucie en exceso",
+      "c) Será cambiada, entre otros casos, cuando se hiciere demasiado jabonosa",
+      "d) Se cambiará dos veces: con la primera será lavada la parte superior del cuerpo y con la segunda la parte inferior"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "39. El hecho de no aceptar el tratamiento dispuesto:",
+    "options": [
+      "a) Dará lugar al alta forzosa en todo caso.",
+      "b) No dará lugar al alta forzosa cuando existan tratamientos alternativos, aunque tengan carácter paliativo, siempre que los preste el centro sanitario y el paciente acepte recibirlos.",
+      "c) Dará lugar al alta forzosa, y se podrá obligar al paciente a someterse a tratamientos alternativos, aunque tengan carácter paliativo, prestándolos el propio centro sanitario.",
+      "d) Dará lugar al alta voluntaria, pero se podrá obligar al paciente a someterse a tratamientos alternativos, aunque tengan carácter paliativo, prestándolos el propio centro sanitario."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "40. El celador destinado en el animalario, ¿tendrá a su cargo la alimentación de los animales experimentales?",
+    "options": [
+      "a) Sí",
+      "b) No",
+      "c) No, pero si los cuidará, aseándolos y manteniendo sus jaulas limpias.",
+      "d) Ninguna respuesta es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "41. De las siguientes funciones del celador, señala aquella que no corresponde con una función específica del celador de quirófano:",
+    "options": [
+      "a) Transportar a los pacientes desde sus respectivas habitaciones al quirófano para las intervenciones programadas.",
+      "b) El montaje de los accesorios de la mesa quirúrgica.",
+      "c) Informar a los familiares de los pacientes dónde deben esperar durante el transcurso de la intervención y la duración aproximada de la misma.",
+      "d) Transportar muestras biológicas en el trascurso de la intervención."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "42. Según se puede leer en el estatuto de personal no sanitario, cuando las necesidades del servicio lo requieran:",
+    "options": [
+      "a) El celador hará servicios de guardia dentro de los turnos que se establezcan.",
+      "b) El celador realizará labores de limpieza.",
+      "c) El celador tendrá a su cargo la vigilancia nocturna.",
+      "d) Ninguna respuesta es correcta"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "43. Una herida quirúrgica o traumática, con apertura de mucosas con evidencias de infección pero sin pus, aunque con derrame grosero del contenido intestinal en cavidad y violación mayor de la técnica aséptica, se considerará:",
+    "options": [
+      "a) Limpia contaminada",
+      "b) Contaminada",
+      "c) Sucia",
+      "d) Aséptica"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "44. Según el Decreto 47/2023 de 10 de Mayo, en la información y asesoramiento de los usuarios y usuarias, de forma presencial, telefónica, o por los medios que se determinen, sobre actividades y normas del centro, canalización y circulación de personas, el celador:",
+    "options": [
+      "a) Vigilará y controlará el buen funcionamiento y uso del centro.",
+      "b) Participará activamente, adaptándose a las normas de los sistemas de registro que se establezcan en cada momento, con las herramientas facilitadas a tal efecto.",
+      "c) Las respuestas a) y b) son correctas",
+      "d) Las respuestas a y b) son incorrectas"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "45. Según el Decreto 47/2023 de 10 de Mayo, el celador respecto a el material, la documentación, la correspondencia, y cualquier otro objeto necesario para el trabajo en equipo en el ejercicio de sus funciones deberá:",
+    "options": [
+      "a) Transportarlo y almacenarlo, tanto en el centro como fuera del mismo.",
+      "b) Transportarlo, almacenarlo y ordenarlo tanto en el centro como fuera del mismo.",
+      "c) Transportarlo y almacenarlo en el centro, tanto en su horario habitual como fuera del mismo.",
+      "d) Ninguna respuesta es correcta"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "46. Según establece el DECRETO 92/2006, de 16 de mayo, son dispositivos hospitalarios diseñados para dar atención a pacientes cuya situación psicopatológica persiste después del tratamiento habitual implantado en los Equipos de Salud Mental y las Unidades de Hospitalización Breve, y para proporcionar terapéuticas rehabilitadoras de las funciones que se hayan podido ver afectadas.",
+    "options": [
+      "a) Unidades de Media Estancia",
+      "b) Unidades de Rehabilitación Hospitalaria",
+      "c) Centros de Rehabilitación Psicosocial",
+      "d) Hospitales de día"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "47. ¿Cómo se denomina el lugar donde se multiplican, viven y se desarrollan los microorganismos?",
+    "options": [
+      "a) Fuente nosocomial.",
+      "b) Vector.",
+      "c) Reservorio.",
+      "d) Nido"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "48. ¿A qué temperatura debemos programar en una estufa POUPINEL para que quede el material perfectamente esterilizado en un tiempo de 2 horas y 30 minutos?",
+    "options": [
+      "a) 150ºC",
+      "b) 160ºC",
+      "c) 170ºC",
+      "d) 180ºC"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "49. El aislamiento de un paciente infectocontagioso, en el que la vía de trasmisión es por gotas:",
+    "options": [
+      "a) Se realiza para evitar el contagio con agentes que se transportan por partículas mayores de 5 micras (de Pflugge) y requiere el uso de mascarilla de alta resolución",
+      "b) Se realiza para evitar el contagio con agentes que se transportan por partículas menores de 5 micras (de Pflugge) y requiere el uso de mascarilla de alta resolución",
+      "c) Está diseñado para reducir el riesgo de transmisión de agentes infecciosos vía entérica.",
+      "d) Se realiza para evitar el contagio con agentes que se transportan por partículas mayores de 5 micras (de Pflugge) y requiere el uso de mascarilla quirúrgica al trabajar a menos de un metro aproximadamente del paciente"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "50. La posición lateral de seguridad también recibe el nombre de:",
+    "options": [
+      "a) Posición Anti-shock",
+      "b) Posición de Recuperación.",
+      "c) Posición lateral simple.",
+      "d) Las respuestas A y B son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "51. El celador debe saber que está prohibido fumar en los centros sanitarios y deberá avisar de dicha circunstancia de darse dicha situación con alguien en el hospital, desde la publicación de:",
+    "options": [
+      "a) La Ley 28/2015, de 16 de Septiembre, de medidas sanitarias frente al tabaquismo y reguladora de la venta, el suministro, el consumo y la publicidad de los productos del tabaco.",
+      "b) La Ley 28/2010, de 26 de Octubre, de medidas sanitarias frente al tabaquismo y reguladora de la venta, el suministro, el consumo y la publicidad de los productos del tabaco.",
+      "c) La Ley 28/2008, de 6 de Septiembre, de medidas sanitarias frente al tabaquismo y reguladora de la venta, el suministro, el consumo y la publicidad de los productos del tabaco.",
+      "d) La Ley 28/2005, de 26 de Diciembre, de medidas sanitarias frente al tabaquismo y reguladora de la venta, el suministro, el consumo y la publicidad de los productos del tabaco."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "52. Son funciones del almacén:",
+    "options": [
+      "a) Custodia, aprovisionamiento y distribución.",
+      "b) Custodia, almacenaje y distribución",
+      "c) Almacenar, proteger y contabilizar.",
+      "d) Proteger, distribuir y contabilizar."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "53. Señala la respuesta correcta respecto a la actividad de aprovisionamiento en el almacén.",
+    "options": [
+      "a) Consta de dos etapas principales: precompra y compra",
+      "b) Consta de tres etapas principales: precompra, compra y recepción",
+      "c) Consta de cuatro etapas principales: precompra, compra, recepción y pago",
+      "d) Consta de cinco etapas principales: precompra, compra, recepción, almacenaje y distribución de mercancías."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "54. Un celador trabajando en la puerta de acceso de una Institución, observa que una persona pretende entrar con varios paquetes muy voluminosos. Ante esta situación, el celador:",
+    "options": [
+      "a) Permitirá la entrada de aquellos paquetes que no estén expresamente autorizados por la dirección.",
+      "b) Ejercerá el debido y discreto control de paquetes y bultos de que sean portadoras las personas ajenas a la Institución que tengan acceso a la misma.",
+      "c) Cuidará que no se introduzcan en la institución más que aquellos paquetes expresamente autorizados por la dirección.",
+      "d) Permitirá la entrada de aquellos paquetes que contenga alimentos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "55. Planificar la organización humana con los medios necesarios que posibiliten respuesta a la emergencia, supone que personas entrenadas y organizadas para prevenir y actuar en caso de emergencias en el centro de trabajo constituyan los equipos de autoprotección. De los siguientes, ¿quiénes forman parte de esos equipos?",
+    "options": [
+      "a) E.P.I. y E.S.I.",
+      "b) Equipo de Alarma y Evacuación (E.A.E.) y Equipo de Primeros Auxilios (E.P.A.)",
+      "c) Las respuestas a) y b) son correctas",
+      "d) Las respuestas a) y b) son incorrectas"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "56. En el servicio de rehabilitación, el disco de Böhler o Freeman es:",
+    "options": [
+      "a) Utilizado para la realización de diferentes ejercicios propioceptivos",
+      "b) Fortalecimiento de cuádriceps",
+      "c) Para la recuperación funcional de las extremidades superiores.",
+      "d) Para realizar ejercicios de hombro y recuperar movilidad"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "57. ¿Qué regla básica de la asepsia quirúrgica no es cierta respecto al riesgo de infección relacionado con la intervención?",
+    "options": [
+      "a) Los extremos de un paquete o contenedor estéril se consideran estériles.",
+      "b) Dentro del campo estéril debe usarse solo material estéril.",
+      "c) El campo estéril debe crearse lo más cerca posible del momento en que va a ser utilizado.",
+      "d) Las batas del personal lavado se consideran estériles por delante, del hombro a la cintura, y las mangas hasta cinco centímetros por encima del codo."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "58. Las funciones del celador en el almacén de farmacia no incluyen:",
+    "options": [
+      "a) Acondicionamiento del material.",
+      "b) Transporte de productos desde unidades el hospital hasta la farmacia.",
+      "c) Recepción de material.",
+      "d) Clasificación y ordenamiento de los fármacos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "59. El conjunto de tareas que tienen como finalidad aprovisionar de materiales al almacén y servicios sanitarios se denomina:",
+    "options": [
+      "a) Aprovisionamiento.",
+      "b) Suministro.",
+      "c) Reparto.",
+      "d) Rellenado."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "60. Los centinelas de cama son:",
+    "options": [
+      "a) Luz auxiliar en la unidad del paciente.",
+      "b) Almohadillas hinchables para la protección de las balderas",
+      "c) Piezas triangulares acolchadas para mantener la estabilidad del paciente o de algún segmento del cuerpo.",
+      "d) Ninguna respuesta es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "61. ¿Qué clase de ambulancias deberán contar, al menos, con un conductor que ostente, como mínimo, el certificado de profesionalidad de transporte sanitario y, cuando el tipo de servicio lo requiera, otro en funciones de ayudante con la misma cualificación?",
+    "options": [
+      "a) Ambulancias asistenciales C.",
+      "b) Ambulancias asistenciales A1 y A2.",
+      "c) Ambulancias convencionales",
+      "d) Ambulancias asistenciales B."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "62. ¿Qué es el armazón de Foster?",
+    "options": [
+      "a) Es una férula con una superficie exterior de plástico e interior almohadillado en el que se introduce el pie para inmovilizarlo. Evita la flexión plantar (hacia adelante) y el pie en péndulo (hacia los lados).",
+      "b) También denominado marco de Balkan, sujeta las poleas y el equipo de tracción, que cuelga de él en la cama ortopédica, traumatológica o de Judet, utilizada en pacientes con fracturas o parálisis de las extremidades.",
+      "c) Es un armazón para el volteo que consta de 2 bastidores metálicos con cubiertas acolchadas y permite el paso del paciente de supino a prono sin movilizarlo girando alrededor del eje longitudinal.",
+      "d) Es un arco o armazón que se coloca sobre el paciente para que la ropa de cama descanse sobre él y evitarle el peso de la misma."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "63. La cama que mantiene un giro continuo permite giros y cambios de posición laterales y longitudinales produciendo una disminución de los puntos de presión, y está provista de sujeciones y almohadillas amortiguadoras, es:",
+    "options": [
+      "a) Cama libro",
+      "b) Cama de Gatch",
+      "c) Cama rotorest",
+      "d) Cama electrocircular o de Stryker"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "64. El sistema español de triage (SET), cuenta con 5 niveles de atención y se le asigna un color a cada nivel. ¿Qué nivel corresponde al color azul?",
+    "options": [
+      "a) Nivel I",
+      "b) Nivel III",
+      "c) Nivel IV",
+      "d) Nivel V"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "65. Cuando en el proceso de la comunicación, el receptor asiente y con ello comunica al emisor que ha entendido la información dada, se produce en la comunicación lo que se denomina:",
+    "options": [
+      "a) Una interrupción ya que el receptor no debe invadir en la comunicación el campo del emisor.",
+      "b) Una retroalimentación o feedback.",
+      "c) Una redundancia, ya que el receptor está repitiendo lo dicho por el emisor.",
+      "d) Nada de lo anterior es cierto."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "66. La instalación de aire acondicionado con filtros de partículas de alta seguridad existentes en quirófanos deben renovar el aire (renovaciones/hora), cada:",
+    "options": [
+      "a) 5 a 10 veces.",
+      "b) 10 a 15 veces.",
+      "c) 15 a 20 veces.",
+      "d) 5 a 30 veces."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "67. Los falsos recuerdos, las distorsiones y los errores amnésicos patológicos se conocen como:",
+    "options": [
+      "a) Paramnesia.",
+      "b) Hipermnesia.",
+      "c) Amnesia.",
+      "d) Hipoamnesia."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "68. ¿Qué es la clasificación de Spaulding?",
+    "options": [
+      "a) Una clasificación sobre el riesgo de infección de las heridas",
+      "b) Clasifica en críticos, semicríticos y no críticos las distintas zonas de un centro sanitario.",
+      "c) Una clasificación sobre la extensión de las quemaduras",
+      "d) Una clasificación del material según su capacidad infectiva"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "69. La custodia, conservación y dispensación de medicamentos de uso humano corresponderá exclusivamente a:",
+    "options": [
+      "a) Oficinas de farmacia abiertas al público, legalmente autorizadas",
+      "b) Servicios de farmacia de los hospitales, centros de salud y estructuras de atención primaria",
+      "c) Las respuestas a) y b) son correctas",
+      "d) Las respuestas a) y b) son incorrectas"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "70. Toda materia, cualquiera que sea su origen (humano, animal, vegetal, químico o de otro tipo) a la que se atribuye una actividad apropiada para constituir un medicamento.",
+    "options": [
+      "a) Excipiente",
+      "b) Materia prima",
+      "c) Principio activo",
+      "d) Medicamento"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R1. El termino antisepsia es sinónimo de:",
+    "options": [
+      "a) Asepsia",
+      "b) Esterilización",
+      "c) Desinfección",
+      "d) Contaminación"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R2. En relación con la historia clínica, el celador:",
+    "options": [
+      "a) No tiene acceso a ella en ningún caso",
+      "b) Podrá acceder a ella libremente",
+      "c) Tendrá acceso a los datos imprescindibles para el desempeño de sus funciones",
+      "d) Tendrá acceso a ella previa autorización del personal médico"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R3. Según el Decreto 109/2015, de 19 de mayo, por el que se regula la producción y gestión de los residuos sanitarios en Extremadura, ¿qué grupo de residuos sanitarios se generan en el área de citostáticos del servicio de farmacia?",
+    "options": [
+      "a) Grupo II",
+      "b) Grupo III",
+      "c) Grupo IV",
+      "d) Grupo V"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R4. El celador dentro de sus funciones en el servicio del almacén de farmacia directamente acondiciona:",
+    "options": [
+      "a) Medicamentos.",
+      "b) Fórmulas para nutrición artificial.",
+      "c) Botes de suero fisiológico.",
+      "d) Estupefacientes y psicótropos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R5. Un trébol gris con puntas radiales y fondo punteado delimita una zona:",
+    "options": [
+      "a) Vigilada con riesgo de irradiación y contaminación.",
+      "b) Controlada con riesgo de irradiación y contaminación.",
+      "c) De permanencia limitada con riesgo de irradiación y contaminación.",
+      "d) De permanencia reglamentada con riesgo de irradiación y contaminación."
+    ],
+    "correct": 0
+  }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
