@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">Torrente Temas 7 y 9</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+  {
+    "question": "1. Según la Ley de Salud de Extremadura, ¿cuál de las siguientes es una “Actividad de Asistencia\nSanitaria” desarrollada por el Sistema Sanitario Público de Extremadura?\na) Desarrollo de los programas de atención a los grupos de población de mayor riesgo.\nb) Promoción y protección de la salud escolar.\nc) Promoción y protección de la salud alimentaria.\nd) Prevención de los factores de riesgo y protección de la salud frente a las sustancias susceptibles de\ngenerar dependencia.",
+    "options": [
+      "a) Desarrollo de los programas de atención a los grupos de población de mayor riesgo.",
+      "b) Promoción y protección de la salud escolar.",
+      "c) Promoción y protección de la salud alimentaria.",
+      "d) Prevención de los factores de riesgo y protección de la salud frente a las sustancias susceptibles de\ngenerar dependencia."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "2. En la Ley 41/2002, de 14 de noviembre, básica reguladora de la autonomía del paciente y de derechos\ny obligaciones en materia de información y documentación clínica, “la persona que requiere asistencia\nsanitaria y está sometida a cuidados profesionales para el mantenimiento o recuperación de su salud” es\nla definición de:\na) Paciente.\nb) Usuario.\nc) Enfermo.\nd) Asegurado protegido.",
+    "options": [
+      "a) Paciente.",
+      "b) Usuario.",
+      "c) Enfermo.",
+      "d) Asegurado protegido."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "3. El cartel que indica la presencia de un extintor debe estar colocado de forma que desde la parte\nsuperior del cartel hasta el techo haya una distancia mínima de:\na) 20 cm.\nb) 25 cm.\nc) 30 cm.\nd) 35 cm.",
+    "options": [
+      "a) 20 cm.",
+      "b) 25 cm.",
+      "c) 30 cm.",
+      "d) 35 cm."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "4. ¿Qué requisito exige la Ley de Salud de Extremadura para que un núcleo de población disponga de\nconsultorio local?\na) Tener más de 50 habitantes.\nb) Tener más de 500 habitantes.\nc) Que esté a más de 25 kilómetros del centro de salud de referencia.\nd) Tener Ayuntamiento.",
+    "options": [
+      "a) Tener más de 50 habitantes.",
+      "b) Tener más de 500 habitantes.",
+      "c) Que esté a más de 25 kilómetros del centro de salud de referencia.",
+      "d) Tener Ayuntamiento."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "5. ¿Cuál es la norma que regula la Estructura, Organización y Funcionamiento de los Hospitales?\na) Orden Ministerial de 3 de febrero de 1985.\nb) Real Decreto 521/1987, de 15 de abril.\nc) Real Decreto 137/1984, de 11 de enero.\nd) Decreto 47/2023, de 10 de mayo.",
+    "options": [
+      "a) Orden Ministerial de 3 de febrero de 1985.",
+      "b) Real Decreto 521/1987, de 15 de abril.",
+      "c) Real Decreto 137/1984, de 11 de enero.",
+      "d) Decreto 47/2023, de 10 de mayo."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "6. Según el Reglamento sobre Estructura, Organización y Funcionamiento de los Hospitales, los\nServicios Jerarquizados de Especialidades que, por sus características, deban prestar asistencia sanitaria\na más de un Área de Salud, se denominarán:\na) Servicios de referencia.\nb) Servicios transversales.\nc) Servicios periféricos.\nd) Servicios extrahospitalarios.",
+    "options": [
+      "a) Servicios de referencia.",
+      "b) Servicios transversales.",
+      "c) Servicios periféricos.",
+      "d) Servicios extrahospitalarios."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "7. Las funciones del celador se regulan en el:\na) Art. 23 de la Orden de 5 de julio de 1971 del Ministerio de trabajo.\nb) Art. 14 de la Orden de 5 de julio de 1971 del Ministerio de trabajo.\nc) Art. 14 de la Ley 14/1986 Ley General de Sanidad.\nd) Art. 23 de la Ley 14/1986 Ley General de Sanidad.",
+    "options": [
+      "a) Art. 23 de la Orden de 5 de julio de 1971 del Ministerio de trabajo.",
+      "b) Art. 14 de la Orden de 5 de julio de 1971 del Ministerio de trabajo.",
+      "c) Art. 14 de la Ley 14/1986 Ley General de Sanidad.",
+      "d) Art. 23 de la Ley 14/1986 Ley General de Sanidad."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "8. ¿De quién será la responsabilidad de mantener el régimen establecido por la Dirección para el acceso\nde los enfermos, visitantes y personal a las distintas dependencias de la Institución?\na) Del Director de Gestión y Servicios Generales.\nb) Del Jefe de Personal Subalterno.\nc) De los celadores.\nd) Del vigilante de seguridad.",
+    "options": [
+      "a) Del Director de Gestión y Servicios Generales.",
+      "b) Del Jefe de Personal Subalterno.",
+      "c) De los celadores.",
+      "d) Del vigilante de seguridad."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "9. Según el Estatuto de Personal No Sanitario al Servicio de las Instituciones Sanitarias de la Seguridad\nSocial, NO se encuentra entre las funciones del celador:\na) Hacer los turnos de guardia que se establezcan.\nb) Realizar labores cotidianas de limpieza en la sala de autopsia.\nc) Ayudar a amortajar a los enfermos fallecidos.\nd) Tener a su cargo la vigilancia nocturna del exterior de la institución.",
+    "options": [
+      "a) Hacer los turnos de guardia que se establezcan.",
+      "b) Realizar labores cotidianas de limpieza en la sala de autopsia.",
+      "c) Ayudar a amortajar a los enfermos fallecidos.",
+      "d) Tener a su cargo la vigilancia nocturna del exterior de la institución."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "10. Según el Estatuto de Personal No Sanitario al Servicio de las Instituciones Sanitarias, el Jefe de\nPersonal Subalterno controlará el cumplimiento del horario y la permanencia en su puesto de trabajo de:\na) El personal de oficio y subalterno.\nb) El personal subalterno.\nc) El personal de oficio.\nd) El personal de contratas de mantenimiento y servicios generales que trabajan en la Institución.",
+    "options": [
+      "a) El personal de oficio y subalterno.",
+      "b) El personal subalterno.",
+      "c) El personal de oficio.",
+      "d) El personal de contratas de mantenimiento y servicios generales que trabajan en la Institución."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "11. ¿Qué tipo de cama se utiliza para pacientes con inmovilización corporal absoluta?\na) Cama traumatológica o de Judet.\nb) Cama electrocircular o de Striker.\nc) Cama libro.\nd) Cama roto-rest.",
+    "options": [
+      "a) Cama traumatológica o de Judet.",
+      "b) Cama electrocircular o de Striker.",
+      "c) Cama libro.",
+      "d) Cama roto-rest."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "12. ¿Qué posición se emplea para realizar la higiene del cabello en un paciente encamado?\na) Posición de Sims.\nb) Posición de Proetz.\nc) Posición de Kraske.\nd) Posición de Fowler.",
+    "options": [
+      "a) Posición de Sims.",
+      "b) Posición de Proetz.",
+      "c) Posición de Kraske.",
+      "d) Posición de Fowler."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "13. Si realizamos el baño completo de un enfermo en la cama, el orden de lavado debe ser:\na) Cara, cuello y orejas, tórax, brazos y manos, abdomen.\nb) Cara, cuello y orejas, brazos y manos, tórax, abdomen.\nc) Tórax, brazos y manos, abdomen, cara, cuello y orejas.\nd) Cara, cuello y orejas, abdomen, tórax, brazos y manos.",
+    "options": [
+      "a) Cara, cuello y orejas, tórax, brazos y manos, abdomen.",
+      "b) Cara, cuello y orejas, brazos y manos, tórax, abdomen.",
+      "c) Tórax, brazos y manos, abdomen, cara, cuello y orejas.",
+      "d) Cara, cuello y orejas, abdomen, tórax, brazos y manos."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "14. La altura y la longitud de una cama estándar son:\na) 200 cm-220 cm de longitud y 70 cm de altura con colchón.\nb) 200 cm-220 cm de longitud y 70 cm de altura sin colchón.\nc) 190 cm-200 cm de longitud y 70 cm de altura sin colchón.\nd) 190 cm-200 cm de longitud y 70 cm de altura con colchón.",
+    "options": [
+      "a) 200 cm-220 cm de longitud y 70 cm de altura con colchón.",
+      "b) 200 cm-220 cm de longitud y 70 cm de altura sin colchón.",
+      "c) 190 cm-200 cm de longitud y 70 cm de altura sin colchón.",
+      "d) 190 cm-200 cm de longitud y 70 cm de altura con colchón."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "15. ¿A qué se denomina centinela de cama?\na) Timbre o interruptor de la luz.\nb) Soporte que se coloca para aliviar el peso de la ropa de la cama.\nc) Almohadilla de polietileno hinchable con aire.\nd) Respaldo regulable compuesto por un marco metálico.",
+    "options": [
+      "a) Timbre o interruptor de la luz.",
+      "b) Soporte que se coloca para aliviar el peso de la ropa de la cama.",
+      "c) Almohadilla de polietileno hinchable con aire.",
+      "d) Respaldo regulable compuesto por un marco metálico."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "16. En el contexto de la evacuación, el espacio exterior seguro debe estar a una distancia de la salida del\nedificio que se calcula en metros multiplicando:\na) 0,1 x P (número de personas que se evacuan).\nb) 0,2 x P (número de personas que se evacuan).\nc) 0,3 x P (número de personas que se evacuan).\nd) 0,5 x P (número de personas que se evacuan).",
+    "options": [
+      "a) 0,1 x P (número de personas que se evacuan).",
+      "b) 0,2 x P (número de personas que se evacuan).",
+      "c) 0,3 x P (número de personas que se evacuan).",
+      "d) 0,5 x P (número de personas que se evacuan)."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "17. Cuando trasladamos a una persona hemipléjica de la cama al sillón debemos evitar:\na) Que el pie del lado no afectado se deslice a la hora del apoyo.\nb) Que la rodilla del lado no afectado se pueda doblar con fuerza para erguirse.\nc) Colocarnos en el lado donde el paciente no conserva su movilidad.\nd) Que el pie del lado afectado se deslice a la hora del apoyo y que la rodilla del lado afecto se pueda\ndoblar al realizar la fuerza para erguirse.",
+    "options": [
+      "a) Que el pie del lado no afectado se deslice a la hora del apoyo.",
+      "b) Que la rodilla del lado no afectado se pueda doblar con fuerza para erguirse.",
+      "c) Colocarnos en el lado donde el paciente no conserva su movilidad.",
+      "d) Que el pie del lado afectado se deslice a la hora del apoyo y que la rodilla del lado afecto se pueda\ndoblar al realizar la fuerza para erguirse."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "18. Para hacer un uso correcto de muletas es necesario:\na) Que los artefactos queden situados a 8-10 cm por debajo de la axila, y los codos queden ligeramente\nflexionados formando un ángulo de 45º al apoyarse.\nb) Que los artefactos queden situados a 12-13 cm por debajo de la axila, y los codos queden ligeramente\nflexionados formando un ángulo de 30º al apoyarse.\nc) Que los artefactos queden situados a 4-5 cm por debajo de la axila, y los codos queden ligeramente\nflexionados formando un ángulo de 15-20º al apoyarse.\nd) Graduar los artefactos en altura estando acostado el paciente.",
+    "options": [
+      "a) Que los artefactos queden situados a 8-10 cm por debajo de la axila, y los codos queden ligeramente\nflexionados formando un ángulo de 45º al apoyarse.",
+      "b) Que los artefactos queden situados a 12-13 cm por debajo de la axila, y los codos queden ligeramente\nflexionados formando un ángulo de 30º al apoyarse.",
+      "c) Que los artefactos queden situados a 4-5 cm por debajo de la axila, y los codos queden ligeramente\nflexionados formando un ángulo de 15-20º al apoyarse.",
+      "d) Graduar los artefactos en altura estando acostado el paciente."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "19. El banco de Colson es de utilidad para el fortalecimiento de:\na) Tríceps.\nb) Cuádriceps.\nc) Lumbares.\nd) Dorsales.",
+    "options": [
+      "a) Tríceps.",
+      "b) Cuádriceps.",
+      "c) Lumbares.",
+      "d) Dorsales."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "20. La Mesa de Kanavel está diseñada para la recuperación funcional de:\na) Tobillos y pies.\nb) Rodillas y tobillos.\nc) Manos y brazos.\nd) Caderas.",
+    "options": [
+      "a) Tobillos y pies.",
+      "b) Rodillas y tobillos.",
+      "c) Manos y brazos.",
+      "d) Caderas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "21. ¿Cómo deben ser las conteras de bastones, andadores y muletas?\na) Las conteras en la parte que contacta con el suelo no deben estar gastadas y las estrías no deben estar\nmarcadas.\nb) Las conteras serán estrechas y cóncavas para permitir una buena fijación al suelo.\nc) Las conteras serán anchas y cóncavas para permitir una buena fijación al suelo.\nd) Las conteras en la parte que contacta con el suelo deben estar gastadas y las estrías deben estar\nmarcadas.",
+    "options": [
+      "a) Las conteras en la parte que contacta con el suelo no deben estar gastadas y las estrías no deben estar\nmarcadas.",
+      "b) Las conteras serán estrechas y cóncavas para permitir una buena fijación al suelo.",
+      "c) Las conteras serán anchas y cóncavas para permitir una buena fijación al suelo.",
+      "d) Las conteras en la parte que contacta con el suelo deben estar gastadas y las estrías deben estar\nmarcadas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "22. El celador que está asignado en UCI es requerido para la realización de una radiografía a un\npaciente; ¿cuál de las siguientes funciones es propia del celador?\na) Colocará el aparato a la altura que le indique el Técnico de RX y movilizará al paciente.\nb) Colocará el aparato y el chasis bajo el paciente.\nc) Colocará el aparato, lo conectará, y ayudará en la movilización del paciente que lo requiera.\nd) Ayudará en la movilización del paciente que lo requiera.",
+    "options": [
+      "a) Colocará el aparato a la altura que le indique el Técnico de RX y movilizará al paciente.",
+      "b) Colocará el aparato y el chasis bajo el paciente.",
+      "c) Colocará el aparato, lo conectará, y ayudará en la movilización del paciente que lo requiera.",
+      "d) Ayudará en la movilización del paciente que lo requiera."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "23. Señale la opción incorrecta relativa a un campo estéril:\na) Dentro de un campo estéril solo debe usarse material estéril.\nb) Las batas del personal lavado se consideran estériles por delante y por detrás.\nc) El campo estéril debe crearse lo más cerca posible del momento en que va a ser utilizado.\nd) Las mesas cubiertas con paños estériles se consideran estériles sólo en la superficie.",
+    "options": [
+      "a) Dentro de un campo estéril solo debe usarse material estéril.",
+      "b) Las batas del personal lavado se consideran estériles por delante y por detrás.",
+      "c) El campo estéril debe crearse lo más cerca posible del momento en que va a ser utilizado.",
+      "d) Las mesas cubiertas con paños estériles se consideran estériles sólo en la superficie."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "24. En la estructura de la unidad del bloque quirúrgico, ¿en qué zona se sitúa la denominada URPA?\na) Zona de preparación prequirúrgica.\nb) Zona postquirúrgica.\nc) Zona de acceso y recepción.\nd) Zona de personal de anestesia y cirugía.",
+    "options": [
+      "a) Zona de preparación prequirúrgica.",
+      "b) Zona postquirúrgica.",
+      "c) Zona de acceso y recepción.",
+      "d) Zona de personal de anestesia y cirugía."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "25. No es miembro del equipo de lavado estéril en área quirúrgica:\na) Cirujano/a.\nb) Enfermero/a instrumentista.\nc) Enfermero/a circulante.\nd) Ayudante de cirujano.",
+    "options": [
+      "a) Cirujano/a.",
+      "b) Enfermero/a instrumentista.",
+      "c) Enfermero/a circulante.",
+      "d) Ayudante de cirujano."
+    ],
+    "correct": 2
+  },
+   {
+    "question": "26. Señale la opción incorrecta relativa a las características de los quirófanos:\na) Existirá una instalación de aire acondicionado independiente de la del resto del hospital y con\ncapacidad para renovar el aire entre 15 y 20 veces por hora.\nb) La temperatura debe mantenerse entre 22 y 26 ºC.\nc) La humedad del ambiente debe mantenerse entre 45 y 55 %.\nd) Las paredes, techo y suelo deben estar construidas con un material poroso de fácil limpieza.",
+    "options": [
+      "a) Existirá una instalación de aire acondicionado independiente de la del resto del hospital y con\ncapacidad para renovar el aire entre 15 y 20 veces por hora.",
+      "b) La temperatura debe mantenerse entre 22 y 26 ºC.",
+      "c) La humedad del ambiente debe mantenerse entre 45 y 55 %.",
+      "d) Las paredes, techo y suelo deben estar construidas con un material poroso de fácil limpieza."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "27. ¿Qué posición quirúrgica se emplea sobre todo en intervenciones de la columna torácica o lumbar?\na) Posición de laminectomía.\nb) Posición de kraske.\nc) Posición de litotomía.\nd) Posición de craneotomía.",
+    "options": [
+      "a) Posición de laminectomía.",
+      "b) Posición de kraske.",
+      "c) Posición de litotomía.",
+      "d) Posición de craneotomía."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "28. El conjunto de técnicas que garantiza la ausencia de materia séptica o microorganismos infecciosos,\ntanto en la superficie como en la profundidad, de los materiales expuestos o de los seres vivos, se conoce\ncomo:\na) Desinfección.\nb) Esterilización.\nc) Antisepsia.\nd) Asepsia.",
+    "options": [
+      "a) Desinfección.",
+      "b) Esterilización.",
+      "c) Antisepsia.",
+      "d) Asepsia."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "29. ¿Cuál sería el tiempo necesario para esterilizar un material en la estufa Poupinel a una temperatura\nde 150 ºC?\na) 30 minutos.\nb) 60 minutos.\nc) 120 minutos.\nd) 150 minutos.",
+    "options": [
+      "a) 30 minutos.",
+      "b) 60 minutos.",
+      "c) 120 minutos.",
+      "d) 150 minutos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "30. ¿Qué tipo de aislamiento se utilizará en pacientes inmunodeprimidos?\na) Aislamiento inverso.\nb) Aislamiento entérico.\nc) Aislamiento estricto.\nd) Aislamiento respiratorio.",
+    "options": [
+      "a) Aislamiento inverso.",
+      "b) Aislamiento entérico.",
+      "c) Aislamiento estricto.",
+      "d) Aislamiento respiratorio."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "31. ¿A quién corresponde la función de amortajamiento de un fallecido?\na) A los técnicos en cuidados auxiliares de enfermería.\nb) Al médico.\nc) A los enfermeros, que podrán delegar en un técnico en cuidados auxiliares de enfermería.\nd) Al celador, con ayuda de los técnicos en cuidados auxiliares de enfermería.",
+    "options": [
+      "a) A los técnicos en cuidados auxiliares de enfermería.",
+      "b) Al médico.",
+      "c) A los enfermeros, que podrán delegar en un técnico en cuidados auxiliares de enfermería.",
+      "d) Al celador, con ayuda de los técnicos en cuidados auxiliares de enfermería."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "32. ¿En qué consiste la Tanatopraxia?\na) La descomposición de la materia orgánica muerta por la acción de las bacterias.\nb) El examen realizado sobre el cadáver de una persona fallecida a causa de la enfermedad.\nc) La vestimenta que envuelve el cadáver para su enterramiento.\nd) Toda práctica mortuoria que permite la conservación y exposición del cadáver con las debidas\ngarantías sanitarias.",
+    "options": [
+      "a) La descomposición de la materia orgánica muerta por la acción de las bacterias.",
+      "b) El examen realizado sobre el cadáver de una persona fallecida a causa de la enfermedad.",
+      "c) La vestimenta que envuelve el cadáver para su enterramiento.",
+      "d) Toda práctica mortuoria que permite la conservación y exposición del cadáver con las debidas\ngarantías sanitarias."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "33. ¿Cuál no es una función del Celador de Autopsias?\na) Recomponer y asear el cadáver una vez finalizada la autopsia.\nb) Limpiar la mesa, y la propia sala.\nc) Colocar el cadáver para realizar la autopsia, así como efectuar los movimientos de este que fueran\nnecesarios para su práctica.\nd) Vigilar que acceda a las dependencias personal no autorizado para ello.",
+    "options": [
+      "a) Recomponer y asear el cadáver una vez finalizada la autopsia.",
+      "b) Limpiar la mesa, y la propia sala.",
+      "c) Colocar el cadáver para realizar la autopsia, así como efectuar los movimientos de este que fueran\nnecesarios para su práctica.",
+      "d) Vigilar que acceda a las dependencias personal no autorizado para ello."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "34. Uno de los requisitos indispensables en el traslado del cadáver al mortuorio será:\na) El celador irá siempre acompañado por un familiar.\nb) El traslado se hará por zonas frecuentadas acompañado por otro celador y de forma discreta.\nc) Una vez que se haya recibido el parte de traslado correspondiente y por lugares poco frecuentados.\nd) Traslado del cadáver sin cubrir hasta el depósito de este en la cámara frigorífica.",
+    "options": [
+      "a) El celador irá siempre acompañado por un familiar.",
+      "b) El traslado se hará por zonas frecuentadas acompañado por otro celador y de forma discreta.",
+      "c) Una vez que se haya recibido el parte de traslado correspondiente y por lugares poco frecuentados.",
+      "d) Traslado del cadáver sin cubrir hasta el depósito de este en la cámara frigorífica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "35. En lo referido a las autopsias, ¿en qué consiste la técnica de Letulle?\na) Disección de los órganos por separado comenzando por la cavidad craneal y siguiendo por el cuello,\ncapacidad torácica y abdomen.\nb) Extracción de los órganos en tres bloques, cuello y tórax abdomen y retroperitoneo.\nc) Extracción en un solo bloque de todas las vísceras realizándose la disección fuera del cadáver.\nd) Disección de los órganos por separado comenzando por la cavidad craneal y siguiendo por el\nabdomen y la cavidad torácica.",
+    "options": [
+      "a) Disección de los órganos por separado comenzando por la cavidad craneal y siguiendo por el cuello,\ncapacidad torácica y abdomen.",
+      "b) Extracción de los órganos en tres bloques, cuello y tórax abdomen y retroperitoneo.",
+      "c) Extracción en un solo bloque de todas las vísceras realizándose la disección fuera del cadáver.",
+      "d) Disección de los órganos por separado comenzando por la cavidad craneal y siguiendo por el\nabdomen y la cavidad torácica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "36. Las medidas mínimas de la mesa de autopsias deben ser:\na) 2 m de longitud por 0,75 m de anchura.\nb) 2,10 m de longitud por 0,75 m de anchura.\nc) 2 m de longitud por 0,70 m de anchura.\nd) 2,05 m de longitud por 0,75 m de anchura.",
+    "options": [
+      "a) 2 m de longitud por 0,75 m de anchura.",
+      "b) 2,10 m de longitud por 0,75 m de anchura.",
+      "c) 2 m de longitud por 0,70 m de anchura.",
+      "d) 2,05 m de longitud por 0,75 m de anchura."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "37. Señale la opción incorrecta en relación al procedimiento para realizar una contención mecánica:\na) Se utiliza en aquellas situaciones de emergencia que comporten una amenaza urgente para la vida y/o\nintegridad física del propio paciente o de terceros.\nb) Implica a todo el personal presente en la unidad al margen de su categoría profesional.\nc) Es un método extraordinario con finalidad terapéutica.\nd) Se sujetarán primero las extremidades en la zona proximal y posteriormente se colocará el cinturón\nabdominal.",
+    "options": [
+      "a) Se utiliza en aquellas situaciones de emergencia que comporten una amenaza urgente para la vida y/o\nintegridad física del propio paciente o de terceros.",
+      "b) Implica a todo el personal presente en la unidad al margen de su categoría profesional.",
+      "c) Es un método extraordinario con finalidad terapéutica.",
+      "d) Se sujetarán primero las extremidades en la zona proximal y posteriormente se colocará el cinturón\nabdominal."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "38. Según la OMS, “constituye una psicosis afectiva que puede aparecer ya en forma depresiva, ya\nmaniaca, en forma sucesiva o con intervalo de normalidad”:\na) Neurosis.\nb) Trastorno bipolar.\nc) Trastorno obsesivo–compulsivo.\nd) Esquizofrenia.",
+    "options": [
+      "a) Neurosis.",
+      "b) Trastorno bipolar.",
+      "c) Trastorno obsesivo–compulsivo.",
+      "d) Esquizofrenia."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "39. Según la organización y funcionamiento de la atención a la salud mental en la Comunidad\nAutónoma de Extremadura; “son servicios especializados, de orientación comunitaria y composición\nmultidisciplinar, que actúan como unidad de apoyo a la atención primaria”:\na) Unidad de Hospitalización Breve.\nb) Equipo de Salud Mental.\nc) Unidad de Media Estancia.\nd) Centro de Rehabilitación Psicosocial.",
+    "options": [
+      "a) Unidad de Hospitalización Breve.",
+      "b) Equipo de Salud Mental.",
+      "c) Unidad de Media Estancia.",
+      "d) Centro de Rehabilitación Psicosocial."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "40. ¿Cuál es el plazo para solicitar autorización judicial en un internamiento involuntario y urgente de\nun enfermo mental?\na) 24 horas.\nb) 48 horas.\nc) No se requiere autorización judicial para el internamiento de un enfermo mental.\nd) 18 horas.",
+    "options": [
+      "a) 24 horas.",
+      "b) 48 horas.",
+      "c) No se requiere autorización judicial para el internamiento de un enfermo mental.",
+      "d) 18 horas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "41. En el sistema de triaje de Manchester, ¿cuál será el tiempo de atención médica recomendable para un\nnivel de urgencia 2, color naranja?\na) Inmediata.\nb) 10 minutos.\nc) 30 minutos.\nd) 60 minutos.",
+    "options": [
+      "a) Inmediata.",
+      "b) 10 minutos.",
+      "c) 30 minutos.",
+      "d) 60 minutos."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "42. ¿Qué fase del decálogo prehospitalario implica la puesta en marcha del sistema de emergencias?\na) Alarma.\nb) Alerta.\nc) Triaje.\nd) Soporte vital (básico y avanzado).",
+    "options": [
+      "a) Alarma.",
+      "b) Alerta.",
+      "c) Triaje.",
+      "d) Soporte vital (básico y avanzado)."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "43. Según la Ley 41/2002, de 14 de noviembre, básica reguladora de la autonomía del paciente y de\nderechos y obligaciones en materia de información y documentación clínica, ¿qué se entiende por “todo\ndato, cualquiera que sea su forma, clase o tipo, que permite adquirir o ampliar conocimientos sobre el\nestado físico y la salud de una persona, o la forma de preservarla, cuidarla, mejorarla o recuperarla”?\na) Historia clínica.\nb) Documentación clínica.\nc) Información clínica.\nd) Informe médico.",
+    "options": [
+      "a) Historia clínica.",
+      "b) Documentación clínica.",
+      "c) Información clínica.",
+      "d) Informe médico."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "44. Sobre las funciones de los Celadores en atención primaria, señale la respuesta incorrecta:\na) Colaborar en las tareas de apoyo en el traslado y desplazamientos de las personas que lo necesiten.\nb) Vigilar y controlar el buen funcionamiento y uso del centro, así como del mobiliario, equipos y\nutillaje.\nc) No participarán activamente en la información y asesoramiento de los usuarios y usuarias, de forma\npresencial, telefónica, o por los medios que se determinen, sobre actividades y normas del centro,\ncanalización y circulación de personas, ya que esta función le corresponde al personal administrativo.\nd) Apertura y cierre, cuando proceda, del centro sanitario.",
+    "options": [
+      "a) Colaborar en las tareas de apoyo en el traslado y desplazamientos de las personas que lo necesiten.",
+      "b) Vigilar y controlar el buen funcionamiento y uso del centro, así como del mobiliario, equipos y\nutillaje.",
+      "c) No participarán activamente en la información y asesoramiento de los usuarios y usuarias, de forma\npresencial, telefónica, o por los medios que se determinen, sobre actividades y normas del centro,\ncanalización y circulación de personas, ya que esta función le corresponde al personal administrativo.",
+      "d) Apertura y cierre, cuando proceda, del centro sanitario."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "45. En el ámbito de Atención Primaria, se crea una nueva función denominada “Celador de Atención\nContinuada”, que se regula en:\na) Decreto 47/2023 de 10 de mayo.\nb) Resolución 30 de enero de 2015.\nc) No ha sido creada la citada función.\nd) Ley 55/2003 de 16 de diciembre.",
+    "options": [
+      "a) Decreto 47/2023 de 10 de mayo.",
+      "b) Resolución 30 de enero de 2015.",
+      "c) No ha sido creada la citada función.",
+      "d) Ley 55/2003 de 16 de diciembre."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "46. En el mapa del almacén, ¿a qué zona se le conoce como zona de “picking”?\na) Pulmón de entrada.\nb) Zona de expedición.\nc) Zona de estanterías de almacenaje.\nd) Zona de preparación de pedidos.",
+    "options": [
+      "a) Pulmón de entrada.",
+      "b) Zona de expedición.",
+      "c) Zona de estanterías de almacenaje.",
+      "d) Zona de preparación de pedidos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "47. Atendiendo a la clasificación de Pareto, según criterios de ordenación de almacenes, los artículos\nque más se utilizan y, por tanto, se guardan en los lugares más próximos y de fácil acceso, son\ncatalogados como:\na) De clase A.\nb) De clase B.\nc) De clase C.\nd) De clase D.",
+    "options": [
+      "a) De clase A.",
+      "b) De clase B.",
+      "c) De clase C.",
+      "d) De clase D."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "48. El medicamento destinado a un paciente individualizado, preparado por un farmacéutico, o bajo su\ndirección, para cumplimentar expresamente una prescripción facultativa detallada de los principios\nactivos que incluye, según las normas de correcta elaboración y control de la calidad establecidas al\nef
+ecto, dispensado en oficina de farmacia o servicio farmacéutico, se conoce como:\na) Principio activo.\nb) Fórmula magistral.\nc) Forma galénica.\nd) Forma farmacéutica.",
+    "options": [
+      "a) Principio activo.",
+      "b) Fórmula magistral.",
+      "c) Forma galénica.",
+      "d) Forma farmacéutica."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "49. Según el Decreto 109/2015, de 19 de mayo, por el que se regula la producción y gestión de los\nresiduos sanitarios en Extremadura, ¿qué grupo de residuos sanitarios se generan en el área de\ncitostáticos del servicio de farmacia?\na) Grupo II.\nb) Grupo III.\nc) Grupo IV.\nd) Grupo V.",
+    "options": [
+      "a) Grupo II.",
+      "b) Grupo III.",
+      "c) Grupo IV.",
+      "d) Grupo V."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "50. No es una dirección de correo electrónico o email válido:\na) javier.pepe.1234@gmail.com\nb) matias1212@hotmail.es\nc) javier12>34@gmail.com\nd) m12at12+ias@educarex.es",
+    "options": [
+      "a) javier.pepe.1234@gmail.com",
+      "b) matias1212@hotmail.es",
+      "c) javier12>34@gmail.com",
+      "d) m12at12+ias@educarex.es"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "51. En el paquete office (Word), ¿cuál es el nombre de la opción que permite incluir contenido en la parte superior de cada página impresa?\na) Título.\nb) Encabezado.\nc) Pie de Página.\nd) Párrafo.",
+    "options": [
+      "a) Título.",
+      "b) Encabezado.",
+      "c) Pie de Página.",
+      "d) Párrafo."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "52. En el paquete office ¿cómo se identifican las filas y columnas en una hoja de cálculo Excel?\na) Alfabética y verticalmente las filas y numeradas las columnas.\nb) Numeradas horizontalmente las filas y alfabéticamente las columnas.\nc) Numeradas verticalmente las filas y alfabética y horizontalmente las columnas.\nd) Horizontal para las filas y para las columnas.",
+    "options": [
+      "a) Alfabética y verticalmente las filas y numeradas las columnas.",
+      "b) Numeradas horizontalmente las filas y alfabéticamente las columnas.",
+      "c) Numeradas verticalmente las filas y alfabética y horizontalmente las columnas.",
+      "d) Horizontal para las filas y para las columnas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "53. En un documento Word, ¿qué teclas hay que presionar para dar formato en cursiva a un texto?\na) Control + N.\nb) Control + K.\nc) Control + S.\nd) Control + C.",
+    "options": [
+      "a) Control + N.",
+      "b) Control + K.",
+      "c) Control + S.",
+      "d) Control + C."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "54. Según la Ley 31/1995, de 8 de noviembre, de Prevención de Riesgos Laborales, las disposiciones de carácter laboral contenidas en esta Ley y en sus normas reglamentarias tendrán en todo caso el carácter de:\na) Derecho necesario máximo disponible.\nb) Derecho necesario mínimo indisponible.\nc) Derecho necesario máximo indisponible.\nd) Derecho necesario mínimo disponible.",
+    "options": [
+      "a) Derecho necesario máximo disponible.",
+      "b) Derecho necesario mínimo indisponible.",
+      "c) Derecho necesario máximo indisponible.",
+      "d) Derecho necesario mínimo disponible."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "55. Según la Ley de Prevención de Riesgos Laborales, ¿qué se entiende por “prevención”?\na) Aquel factor de riesgo que resulte probable racionalmente que se materialice en un futuro inmediato y pueda suponer un daño grave para la salud de los trabajadores.\nb) El conjunto de actividades o medidas adoptadas o previstas en todas las fases de la actividad de la empresa con el fin de evitar o disminuir los riesgos derivados del trabajo.\nc) Cualquier máquina, aparato, instrumento o instalación utilizada en el trabajo.\nd) La posibilidad de que un trabajador sufra un determinado daño derivado del trabajo.",
+    "options": [
+      "a) Aquel factor de riesgo que resulte probable racionalmente que se materialice en un futuro inmediato y pueda suponer un daño grave para la salud de los trabajadores.",
+      "b) El conjunto de actividades o medidas adoptadas o previstas en todas las fases de la actividad de la empresa con el fin de evitar o disminuir los riesgos derivados del trabajo.",
+      "c) Cualquier máquina, aparato, instrumento o instalación utilizada en el trabajo.",
+      "d) La posibilidad de que un trabajador sufra un determinado daño derivado del trabajo."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "56. Según la Ley de Prevención de Riesgos Laborales, el empresario deberá elaborar y conservar a disposición de la autoridad laboral la siguiente documentación relativa a las obligaciones establecidas en dicha ley; señale la opción incorrecta:\na) Evaluación de los riesgos para la seguridad y la salud en el trabajo, incluido el resultado de los controles periódicos de las condiciones de trabajo.\nb) Plan de prevención de riesgos laborales.\nc) Relación de accidentes de trabajo y enfermedades profesionales que hayan causado al trabajador una incapacidad laboral superior a tres días de trabajo.\nd) Planificación de la actividad preventiva, incluidas las medidas de protección y de prevención a adoptar.",
+    "options": [
+      "a) Evaluación de los riesgos para la seguridad y la salud en el trabajo, incluido el resultado de los controles periódicos de las condiciones de trabajo.",
+      "b) Plan de prevención de riesgos laborales.",
+      "c) Relación de accidentes de trabajo y enfermedades profesionales que hayan causado al trabajador una incapacidad laboral superior a tres días de trabajo.",
+      "d) Planificación de la actividad preventiva, incluidas las medidas de protección y de prevención a adoptar."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "57. Según la Ley de Prevención de Riesgos Laborales, los trabajadores tendrán derecho a efectuar propuestas dirigidas a la mejora de los niveles de protección de la seguridad y la salud en la empresa a:\na) El Comité de Seguridad y Salud.\nb) El empresario y los órganos de participación y representación.\nc) Los Delegados de Prevención.\nd) Las organizaciones sindicales.",
+    "options": [
+      "a) El Comité de Seguridad y Salud.",
+      "b) El empresario y los órganos de participación y representación.",
+      "c) Los Delegados de Prevención.",
+      "d) Las organizaciones sindicales."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "58. Según la Ley 40/2015, de 1 de octubre, de Régimen Jurídico del Sector Público, “el punto de acceso electrónico cuya titularidad corresponda a una Administración Pública, organismo público o entidad de Derecho Público que permite el acceso a través de internet a la información publicada y, en su caso, a la sede electrónica correspondiente”, se entiende como:\na) Actuación administrativa electrónica.\nb) Carpeta ciudadana.\nc) Portal de Internet.\nd) Firma electrónica del personal al servicio de las Administraciones Publicas.",
+    "options": [
+      "a) Actuación administrativa electrónica.",
+      "b) Carpeta ciudadana.",
+      "c) Portal de Internet.",
+      "d) Firma electrónica del personal al servicio de las Administraciones Publicas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "59. Según la Ley de Régimen Jurídico del Sector Público, ¿qué se entiende por “actuación administrativa automatizada”?\na) Cualquier acto o actuación realizada íntegramente a través de medios electrónicos por una Administración Pública en el marco de un procedimiento administrativo y en la que haya intervenido de forma directa un empleado público.\nb) Cualquier acto o actuación realizada íntegramente a través de medios electrónicos por una Administración Pública en el marco de un procedimiento administrativo y en la que no haya intervenido de forma directa un empleado público.\nc) Cualquier acto o actuación realizada íntegramente a través de medios electrónicos por un empleado público.\nd) Es aquel acto o actuación realizada por la Administración Pública por el cual da autorización a un empleado público para que actúe sobre un procedimiento administrativo en representación de esta.",
+    "options": [
+      "a) Cualquier acto o actuación realizada íntegramente a través de medios electrónicos por una Administración Pública en el marco de un procedimiento administrativo y en la que haya intervenido de forma directa un empleado público.",
+      "b) Cualquier acto o actuación realizada íntegramente a través de medios electrónicos por una Administración Pública en el marco de un procedimiento administrativo y en la que no haya intervenido de forma directa un empleado público.",
+      "c) Cualquier acto o actuación realizada íntegramente a través de medios electrónicos por un empleado público.",
+      "d) Es aquel acto o actuación realizada por la Administración Pública por el cual da autorización a un empleado público para que actúe sobre un procedimiento administrativo en representación de esta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "60. Según se establece en el artículo 4 de la Ley de Igualdad entre Mujeres y Hombres y contra la Violencia de Género en Extremadura, la situación en que se encuentra una persona que en atención a su sexo sea, haya sido o pudiera ser tratada de manera menos favorable que otra en situación homóloga, se denomina:\na) Discriminación directa.\nb) Acoso sexual.\nc) Discriminación indirecta.\nd) Discriminación positiva.",
+    "options": [
+      "a) Discriminación directa.",
+      "b) Acoso sexual.",
+      "c) Discriminación indirecta.",
+      "d) Discriminación positiva."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "61. ¿Qué consejería es la competente del control del cumplimiento de la obligación que tiene la Administración de la Comunidad Autónoma de Extremadura de hacer un uso no sexista de todo tipo de lenguaje en el ámbito administrativo, según el artículo 27 de la Ley de Igualdad entre mujeres y hombres y contra la violencia de género de Extremadura?\na) La consejería competente en asuntos de Salud y Políticas Sociales.\nb) La consejería competente en asuntos de Educación.\nc) La consejería competente en materia de Igualdad y Cultura.\nd) La consejería competente en asuntos de Presidencia.",
+    "options": [
+      "a) La consejería competente en asuntos de Salud y Políticas Sociales.",
+      "b) La consejería competente en asuntos de Educación.",
+      "c) La consejería competente en materia de Igualdad y Cultura.",
+      "d) La consejería competente en asuntos de Presidencia."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "62. Según el artículo 26 de la Ley de Igualdad entre Mujeres y Hombres y contra la Violencia de Género en Extremadura, ¿qué órgano emitirá el informe de evaluación de impacto de Género sobre el Anteproyecto de ley del Presupuesto?\na) La Comisión de Impacto de Género de los Presupuestos.\nb) El Consejo de Gobierno.\nc) El Consejo Extremeño de Participación de las Mujeres.\nd) El Instituto de la Mujer de Extremadura.",
+    "options": [
+      "a) La Comisión de Impacto de Género de los Presupuestos.",
+      "b) El Consejo de Gobierno.",
+      "c) El Consejo Extremeño de Participación de las Mujeres.",
+      "d) El Instituto de la Mujer de Extremadura."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "63. ¿Cuál de los siguientes es un derecho fundamental previsto en la Constitución para todas las personas?\na) Derecho a la protección de la salud.\nb) Derecho a elegir libremente su residencia y a circular por el territorio nacional.\nc) Derecho a la propiedad privada y a la herencia.\nd) Derecho a obtener la tutela efectiva de los jueces y tribunales en el ejercicio de sus derechos e intereses legítimos, sin que, en ningún caso, pueda producirse indefensión.",
+    "options": [
+      "a) Derecho a la protección de la salud.",
+      "b) Derecho a elegir libremente su residencia y a circular por el territorio nacional.",
+      "c) Derecho a la propiedad privada y a la herencia.",
+      "d) Derecho a obtener la tutela efectiva de los jueces y tribunales en el ejercicio de sus derechos e intereses legítimos, sin que, en ningún caso, pueda producirse indefensión."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "64. Señale el enunciado correcto sobre el derecho a la educación que se regula en el artículo 27 de la Constitución:\na) La enseñanza infantil, primaria y secundaria es obligatoria y gratuita.\nb) Todos los centros docentes recibirán ayudas de los poderes públicos.\nc) Los profesores, los padres y, en su caso, los alumnos intervendrán en el control y gestión de todos los centros, tanto públicos como privados.\nd) Se reconoce la autonomía de las Universidades, en los términos que la ley establezca.",
+    "options": [
+      "a) La enseñanza infantil, primaria y secundaria es obligatoria y gratuita.",
+      "b) Todos los centros docentes recibirán ayudas de los poderes públicos.",
+      "c) Los profesores, los padres y, en su caso, los alumnos intervendrán en el control y gestión de todos los centros, tanto públicos como privados.",
+      "d) Se reconoce la autonomía de las Universidades, en los términos que la ley establezca."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "65. De acuerdo con su Estatuto de Autonomía, la Comunidad Autónoma de Extremadura, en materia de “productos farmacéuticos”, tiene competencias:\na) Exclusivas.\nb) De desarrollo normativo y ejecución.\nc) De ejecución.\nd) De organización sanitaria.",
+    "options": [
+      "a) Exclusivas.",
+      "b) De desarrollo normativo y ejecución.",
+      "c) De ejecución.",
+      "d) De organización sanitaria."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "66. “Asegurar en el ámbito de la Comunidad Autónoma el respeto al orden constitucional y al resto del ordenamiento jurídico, adoptando las medidas que fuesen necesarias en el marco de las competencias que le son propias” es una atribución del Presidente de la Junta de Extremadura como:\na) Supremo representante de la Comunidad Autónoma.\nb) Presidente de la Junta de Extremadura.\nc) Representante ordinario del Estado.\nd) Diputado electo a la Asamblea de Extremadura.",
+    "options": [
+      "a) Supremo representante de la Comunidad Autónoma.",
+      "b) Presidente de la Junta de Extremadura.",
+      "c) Representante ordinario del Estado.",
+      "d) Diputado electo a la Asamblea de Extremadura."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "67. Produce la pérdida de la condición de personal estatutario de los servicios de salud:\na) La pena de inhabilitación absoluta, cuando hubiera adquirido firmeza.\nb) La sanción disciplinaria de suspensión de funciones superior a seis meses.\nc) La falta de incorporación al servicio, institución o centro dentro del plazo.\nd) La incapacidad especial.",
+    "options": [
+      "a) La pena de inhabilitación absoluta, cuando hubiera adquirido firmeza.",
+      "b) La sanción disciplinaria de suspensión de funciones superior a seis meses.",
+      "c) La falta de incorporación al servicio, institución o centro dentro del plazo.",
+      "d) La incapacidad especial."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "68. La clasificación del personal estatutario de gestión y servicios se efectúa, en función del título exigido para el ingreso, de la siguiente forma:\na) Personal de formación universitaria y Personal de formación profesional.\nb) Personal de formación universitaria, Personal de formación profesional y Otro personal.\nc) Licenciados con título de especialista en Ciencias de la Salud, Licenciados sanitarios, Diplomados con título de Especialista en Ciencias de la Salud, Diplomados sanitarios, y Técnicos.\nd) Técnicos superiores y Técnicos.",
+    "options": [
+      "a) Personal de formación universitaria y Personal de formación profesional.",
+      "b) Personal de formación universitaria, Personal de formación profesional y Otro personal.",
+      "c) Licenciados con título de especialista en Ciencias de la Salud, Licenciados sanitarios, Diplomados con título de Especialista en Ciencias de la Salud, Diplomados sanitarios, y Técnicos.",
+      "d) Técnicos superiores y Técnicos."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "69. Según la Ley de Salud de Extremadura, ¿a quién corresponde “Establecer los principios generales que han de informar la política de salud en la Comunidad Autónoma de Extremadura, con relación al Sistema Sanitario Público?\na) A la Asamblea de Extremadura.\nb) A la Junta de Extremadura.\nc) A la Consejería responsable en materia de sanidad.\nd) A las Corporaciones Locales.",
+    "options": [
+      "a) A la Asamblea de Extremadura.",
+      "b) A la Junta de Extremadura.",
+      "c) A la Consejería responsable en materia de sanidad.",
+      "d) A las Corporaciones Locales."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "70. Es un órgano de Dirección y Gestión del Servicio Extremeño de Salud:\na) El Consejo General.\nb) El Consejo de Dirección.\nc) La Dirección General de Salud Pública.\nd) El Consejero de Sanidad y Políticas Sociales.",
+    "options": [
+      "a) El Consejo General.",
+      "b) El Consejo de Dirección.",
+      "c) La Dirección General de Salud Pública.",
+      "d) El Consejero de Sanidad y Políticas Sociales."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Reserva 1. ¿Qué es el armazón de Bolkman?\na) Es un accesorio que facilita la incorporación del paciente mediante un trapecio que le sirve de apoyo.\nb) Es un arco de protección para evitar el roce del paciente con las sábanas.\nc) Es un recubrimiento o dosel que preserva la intimidad.\nd) Es un tablero que se ajusta para evitar la aparición de edemas.",
+    "options": [
+      "a) Es un accesorio que facilita la incorporación del paciente mediante un trapecio que le sirve de apoyo.",
+      "b) Es un arco de protección para evitar el roce del paciente con las sábanas.",
+      "c) Es un recubrimiento o dosel que preserva la intimidad.",
+      "d) Es un tablero que se ajusta para evitar la aparición de edemas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "Reserva 2. Según lo previsto en la Ley 55/2003, de 16 de diciembre, del Estatuto Marco del personal estatutario de los servicios de salud, no es una causa de extinción de la condición de personal estatutario fijo:\na) La excedencia voluntaria.\nb) La renuncia.\nc) La sanción disciplinaria firme de separación del servicio.\nd) La jubilación.",
+    "options": [
+      "a) La excedencia voluntaria.",
+      "b) La renuncia.",
+      "c) La sanción disciplinaria firme de separación del servicio.",
+      "d) La jubilación."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "Reserva 3. ¿Cómo debe colocarse el celador para cambiar de posición a un paciente encamado con hemiplejia?\na) Del lado que no conserva su movilidad.\nb) Frente al paciente sujetando las axilas.\nc) Del lado que conserva su movilidad.\nd) Del lado con hemiplejia proporcionando un apoyo seguro.",
+    "options": [
+      "a) Del lado que no conserva su movilidad.",
+      "b) Frente al paciente sujetando las axilas.",
+      "c) Del lado que conserva su movilidad.",
+      "d) Del lado con hemiplejia proporcionando un apoyo seguro."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Reserva 4. ¿Cuál no es un servicio de correo webmail?\na) Email.\nb) Gmail.\nc) Outlook.\nd) Yahoo.",
+    "options": [
+      "a) Email.",
+      "b) Gmail.",
+      "c) Outlook.",
+      "d) Yahoo."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "Reserva 5. Se considera que la manipulación manual de toda carga puede entrañar un potencial riesgo dorsolumbar no tolerable, ya que, a pesar de ser una carga bastante ligera, si se manipula en unas condiciones ergonómicas desfavorables (alejada del cuerpo, con posturas inadecuadas, muy frecuentemente, en condiciones ambientales desfavorables, con suelos inestables, etc.), podría generar un riesgo, si pesa más de:\na) 3 kg.\nb) 5 kg.\nc) 10 kg.\nd) 15 kg.",
+    "options": [
+      "a) 3 kg.",
+      "b) 5 kg.",
+      "c) 10 kg.",
+      "d) 15 kg."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "Reserva 6. Según se establece en el artículo 4 de la Ley de Igualdad entre Mujeres y Hombres y contra la Violencia de Género en Extremadura, se entiende por acoso sexual:\na) La situación en que se produce cualquier comportamiento verbal, no verbal o físico de índole sexual, con el propósito o el efecto de atentar contra la dignidad de una persona en particular cuando se crea un entorno intimidatorio, hostil, degradante, humillante u ofensivo.\nb) La situación en que se produce cualquier comportamiento verbal o físico de índole sexual, con el propósito o el efecto de atentar contra la dignidad de una persona.\nc) La situación en que se produce cualquier comportamiento solamente físico de índole sexual con el fin de atentar contra la dignidad de la persona.\nd) La situación en que se produce un comportamiento relacionado con el sexo de una persona con el propósito o el efecto de atentar contra la dignidad de una persona y crear un entorno intimidatorio, hostil, degradante, humillante y ofensivo.",
+    "options": [
+      "a) La situación en que se produce cualquier comportamiento verbal, no verbal o físico de índole sexual, con el propósito o el efecto de atentar contra la dignidad de una persona en particular cuando se crea un entorno intimidatorio, hostil, degradante, humillante u ofensivo.",
+      "b) La situación en que se produce cualquier comportamiento verbal o físico de índole sexual, con el propósito o el efecto de atentar contra la dignidad de una persona.",
+      "c) La situación en que se produce cualquier comportamiento solamente físico de índole sexual con el fin de atentar contra la dignidad de la persona.",
+      "d) La situación en que se produce un comportamiento relacionado con el sexo de una persona con el propósito o el efecto de atentar contra la dignidad de una persona y crear un entorno intimidatorio, hostil, degradante, humillante y ofensivo."
+    ],
+    "correct": 0
+  }
+
+        ];
+
+finishButton.addEventListener('click', () => {
+    const totalQuestions = questions.length;
+    const gradeLimit = Math.min(70, totalQuestions); // primeras 70 (o menos si no las hay)
+
+    // Contadores para marcar/mostrar de todas las preguntas (corrección completa)
+    let overallCorrect = 0, overallIncorrect = 0, overallUnanswered = 0;
+
+    // Contadores que se usarán sólo para calcular la nota (primeras gradeLimit preguntas)
+    let correctForGrade = 0, incorrectForGrade = 0, unansweredForGrade = 0;
+
+    for (let index = 0; index < totalQuestions; index++) {
+        const q = questions[index];
+        const options = document.getElementsByName(`question${index}`); // NodeList de radios
+        const selectedOption = [...options].find(opt => opt.checked) || null;
+
+        // Marca visual en la UI (se hace para todas las preguntas)
+        if (!selectedOption) {
+            overallUnanswered++;
+        } else if (parseInt(selectedOption.value, 10) === q.correct) {
+            overallCorrect++;
+            if (selectedOption.parentElement) selectedOption.parentElement.classList.add('correct-answer');
+        } else {
+            overallIncorrect++;
+            if (selectedOption.parentElement) selectedOption.parentElement.classList.add('incorrect-answer');
+        }
+
+        // Siempre marcar la respuesta correcta visualmente (si existe)
+        const correctAnswerInput = document.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+        if (correctAnswerInput && correctAnswerInput.parentElement) {
+            correctAnswerInput.parentElement.classList.add('correct-answer');
+        }
+
+        // Si esta pregunta está dentro de las primeras gradeLimit, contabilizar para la nota
+        if (index < gradeLimit) {
+            if (!selectedOption) {
+                unansweredForGrade++;
+            } else if (parseInt(selectedOption.value, 10) === q.correct) {
+                correctForGrade++;
+            } else {
+                incorrectForGrade++;
+            }
+        }
+    }
+
+    // Cálculo de la nota: aplicar penalización (1/3) y escalar a 10
+    let finalCorrect = correctForGrade - Math.floor(incorrectForGrade / 3);
+    if (finalCorrect < 0) finalCorrect = 0;
+
+    // Denominador para escalar: si hay al menos 70 preguntas se escala sobre 70, si hay menos, sobre las que haya
+    const denom = (gradeLimit === 70) ? 70 : gradeLimit;
+    const finalScore = ((finalCorrect / denom) * 10).toFixed(2);
+
+    summaryDiv.textContent =
+      `Preguntas corregidas (total): ${totalQuestions} — Correctas: ${overallCorrect}, Incorrectas: ${overallIncorrect}, En blanco: ${overallUnanswered}.\n` +
+      `Para la nota se han considerado las primeras ${gradeLimit}: Correctas: ${correctForGrade}, Incorrectas: ${incorrectForGrade}, En blanco: ${unansweredForGrade}. Nota final: ${finalScore}`;
+});
+
+    </script>
+</body>
+</html>
