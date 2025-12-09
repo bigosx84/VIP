@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">ABEL SIMULACRO EX. 14</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+   {
+    "question": "1. Señale la respuesta incorrecta. El personal al servicio del Sistema Sanitario Público de Extremadura estará formado por:\na) El personal de la Administración de la Comunidad Autónoma de Extremadura que preste sus servicios en el Sistema Sanitario Público de Extremadura.\nb) El personal de otras Administraciones Públicas que se adscriba para prestar servicios en el Sistema Sanitario Público de Extremadura.\nc) El personal que se incorpore al mismo de acuerdo con la normativa vigente.\nd) El personal de la Administración de la Comunidad Autónoma de Extremadura que preste sus servicios en otro Sistema Sanitario.",
+    "options": [
+      "a) El personal de la Administración de la Comunidad Autónoma de Extremadura que preste sus servicios en el Sistema Sanitario Público de Extremadura.",
+      "b) El personal de otras Administraciones Públicas que se adscriba para prestar servicios en el Sistema Sanitario Público de Extremadura.",
+      "c) El personal que se incorpore al mismo de acuerdo con la normativa vigente.",
+      "d) El personal de la Administración de la Comunidad Autónoma de Extremadura que preste sus servicios en otro Sistema Sanitario."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "2. El médico forense solicita al celador ayuda durante una autopsia; le encarga asear el cadáver, serrar el cráneo y posteriormente limpiar la sala de autopsias. ¿Qué debe hacer el celador?\na) Todo menos serrar el cráneo.\nb) Todo, incluido serrar el cráneo ya que la sierra no se considera instrumental.\nc) Todo menos limpiar la sala, que es misión del personal de limpieza.\nd) Ninguna de las respuestas anteriores es correcta.",
+    "options": [
+      "a) Todo menos serrar el cráneo.",
+      "b) Todo, incluido serrar el cráneo ya que la sierra no se considera instrumental.",
+      "c) Todo menos limpiar la sala, que es misión del personal de limpieza.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "3. Otras finalidades que se persiguen con la higiene personal de los pacientes son:\na) Disminuir la temperatura corporal, cuando así esté indicado.\nb) Eliminar los malos olores corporales.\nc) Evitar el acúmulo de secreciones.\nd) Todas las respuestas anteriores son correctas.",
+    "options": [
+      "a) Disminuir la temperatura corporal, cuando así esté indicado.",
+      "b) Eliminar los malos olores corporales.",
+      "c) Evitar el acúmulo de secreciones.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "4. Cuando un trabajador detecte un incendio en el hospital debe comunicarlo de inmediato, llamando a:\na) La Central telefónica del Hospital.\nb) El Puesto de Control de Seguridad del Hospital.\nc) La Central de Coordinación de Emergencias de Protección Civil 1.1.2.\nd) Todas las respuestas anteriores son correctas.",
+    "options": [
+      "a) La Central telefónica del Hospital.",
+      "b) El Puesto de Control de Seguridad del Hospital.",
+      "c) La Central de Coordinación de Emergencias de Protección Civil 1.1.2.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "5. ¿Cuál de estas posiciones consideras no quirúrgicas?\na) Trendelenburg.\nb) Genupectoral.\nc) Roser.\nd) Ginecológica.",
+    "options": [
+      "a) Trendelenburg.",
+      "b) Genupectoral.",
+      "c) Roser.",
+      "d) Ginecológica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "6. ¿Cuántas cialíticas hay normalmente, en un quirófano?\na) Ninguna.\nb) Dos.\nc) Cuatro.\nd) Seis.",
+    "options": [
+      "a) Ninguna.",
+      "b) Dos.",
+      "c) Cuatro.",
+      "d) Seis."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "7. ¿Qué tipo de autopsia clínica, según su procedencia, se le realizaría a un paciente que fallece en el servicio de Urgencias?\na) Autopsia clínica hospitalaria.\nb) Autopsia clínica privada.\nc) Autopsia clínica extrahospitalaria.\nd) Autopsia clínica jurídica.",
+    "options": [
+      "a) Autopsia clínica hospitalaria.",
+      "b) Autopsia clínica privada.",
+      "c) Autopsia clínica extrahospitalaria.",
+      "d) Autopsia clínica jurídica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "8. Las demás lenguas españolas:\na) Serán oficiales en las Comunidades Autónomas de acuerdo con la Constitución.\nb) Serán oficiales en las respectivas Comunidades Autónomas de acuerdo con sus Estatutos.\nc) Serán oficiales en las respectivas Comunidades Autónomas de acuerdo con la Constitución.\nd) Ninguna de las respuestas anteriores es correcta.",
+    "options": [
+      "a) Serán oficiales en las Comunidades Autónomas de acuerdo con la Constitución.",
+      "b) Serán oficiales en las respectivas Comunidades Autónomas de acuerdo con sus Estatutos.",
+      "c) Serán oficiales en las respectivas Comunidades Autónomas de acuerdo con la Constitución.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "9. Son percepciones reales alteradas:\na) Las alucinaciones.\nb) Los sueños y pesadillas.\nc) Las ilusiones.\nd) La fuga de ideas.",
+    "options": [
+      "a) Las alucinaciones.",
+      "b) Los sueños y pesadillas.",
+      "c) Las ilusiones.",
+      "d) La fuga de ideas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "10. ¿Cuál es el objetivo en una emergencia?\na) Salvar siempre la vida del paciente y calmar a los familiares nerviosos.\nb) Evitar la muerte y disminuir las posibles secuelas.\nc) Llegar al lugar donde se encuentra el siniestro en un máximo de tiempo que favorezca la pronta reanimación del accidentado.\nd) Todas las respuestas anteriores son correctas.",
+    "options": [
+      "a) Salvar siempre la vida del paciente y calmar a los familiares nerviosos.",
+      "b) Evitar la muerte y disminuir las posibles secuelas.",
+      "c) Llegar al lugar donde se encuentra el siniestro en un máximo de tiempo que favorezca la pronta reanimación del accidentado.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "11. La capacidad de levantamiento mientras se está sentado es:\na) Superior a cuando se actúa de pie.\nb) Igual a cuando se actúa de pie.\nc) No incide en la capacidad de levantamiento de la carga.\nd) Inferior a cuando se actúa de pie.",
+    "options": [
+      "a) Superior a cuando se actúa de pie.",
+      "b) Igual a cuando se actúa de pie.",
+      "c) No incide en la capacidad de levantamiento de la carga.",
+      "d) Inferior a cuando se actúa de pie."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "12. Las solicitudes de información a la base de datos se denominan:\na) Formularios\nb) Tablas.\nc) Informes.\nd) Consultas.",
+    "options": [
+      "a) Formularios",
+      "b) Tablas.",
+      "c) Informes.",
+      "d) Consultas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "13. La petición del material al almacén debe hacerse:\na) En una hoja de albarán.\nb) En una hoja de dictamen.\nc) En un impreso normalizado.\nd) Todas las respuestas anteriores son correctas.",
+    "options": [
+      "a) En una hoja de albarán.",
+      "b) En una hoja de dictamen.",
+      "c) En un impreso normalizado.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "14. Los Delegados de Prevención son:\na) Representantes de los trabajadores.\nb) Representantes de los empresarios.\nc) Representantes de la Administración Estatal.\nd) Representantes de la Administración Local.",
+    "options": [
+      "a) Representantes de los trabajadores.",
+      "b) Representantes de los empresarios.",
+      "c) Representantes de la Administración Estatal.",
+      "d) Representantes de la Administración Local."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "15. La elaboración de un informe en el que se evalúe el impacto de género en el anteproyecto de Ley de Presupuestos de la Comunidad Autónoma de Extremadura se realizará por:\na) El Consejero competente en materia de igualdad.\nb) El Instituto de la Mujer de Extremadura.\nc) El Centro de Estudios de Género.\nd) La Comisión de Impacto de Género en los Presupuestos.",
+    "options": [
+      "a) El Consejero competente en materia de igualdad.",
+      "b) El Instituto de la Mujer de Extremadura.",
+      "c) El Centro de Estudios de Género.",
+      "d) La Comisión de Impacto de Género en los Presupuestos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "16. Señale la respuesta incorrecta. La Asamblea de Extremadura:\na) Representa al pueblo extremeño.\nb) Es elegida por cuatro años.\nc) No puede ser disuelta.\nd) Es inviolable.",
+    "options": [
+      "a) Representa al pueblo extremeño.",
+      "b) Es elegida por cuatro años.",
+      "c) No puede ser disuelta.",
+      "d) Es inviolable."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "17. Cuando un paciente fallece, el celador según sus funciones debe:\na) Amortajarlo y trasladarlo al mortuorio.\nb) Amortajarlo y avisar para que lo trasladen al mortuorio.\nc) Ayudar a amortajarlo y avisar para que lo trasladen al mortuorio\n d) Ayudar a amortajarlo y trasladarlo al mortuorio.",
+    "options": [
+      "a) Amortajarlo y trasladarlo al mortuorio.",
+      "b) Amortajarlo y avisar para que lo trasladen al mortuorio.",
+      "c) Ayudar a amortajarlo y avisar para que lo trasladen al mortuorio",
+      "d) Ayudar a amortajarlo y trasladarlo al mortuorio."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "18. La temperatura del agua para la higiene del paciente, salvo indicación contraría, estará entre:\na) 37 y 40 ºC.\nb) 47 y 50 ºC.\nc) 30 y 40 ºC.\nd) 35 y 45 ºC.",
+    "options": [
+      "a) 37 y 40 ºC.",
+      "b) 47 y 50 ºC.",
+      "c) 30 y 40 ºC.",
+      "d) 35 y 45 ºC."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "19. La vigencia del plan de autoprotección será:\na) De 3 años.\nb) De 4 años.\nc) De 5 años.\nd) Indeterminada.",
+    "options": [
+      "a) De 3 años.",
+      "b) De 4 años.",
+      "c) De 5 años.",
+      "d) Indeterminada."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "20. El desarrollo de un programa de ejercicios encaminados a conseguir el restablecimiento de las funciones disminuidas por la enfermedad se denomina:\na) Movilización.\nb) Fisioterapia.\nc) Masoterapia.\nd) Todas las respuestas anteriores son incorrectas.",
+    "options": [
+      "a) Movilización.",
+      "b) Fisioterapia.",
+      "c) Masoterapia.",
+      "d) Todas las respuestas anteriores son incorrectas."
+    ],
+    "correct": 0
+  },
+    {
+    "question": "21. Atendiendo a las normas de asepsia y antisepsia, el pasillo de limpio pertenece a:",
+    "options": [
+      "a) El área limpia.",
+      "b) El área estéril.",
+      "c) El área aséptica",
+      "d) La zona séptica."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "22. ¿Qué tipo de autopsia clínica, según su procedencia, se le realizaría a un paciente que fallece en su domicilio?",
+    "options": [
+      "a) Autopsia clínica hospitalaria.",
+      "b) Autopsia clínica privada.",
+      "c) Autopsia clínica extrahospitalaria.",
+      "d) Autopsia clínica jurídica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "23. El no poder realizar actividades motoras es definido como:",
+    "options": [
+      "a) Agnosia.",
+      "b) Afasia.",
+      "c) Apraxia.",
+      "d) Amnesia."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "24. Se podrá nombrar personal estatutario sustituto para el desempeño de funciones propias de personal estatutario en los siguientes supuestos y condiciones:",
+    "options": [
+      "a) Sustitución, que se expedirá, cuando resulte necesario para atender las funciones de personal fijo o temporal, durante los periodos de vacaciones, permisos, dispensas y demás ausencias de carácter temporal que comporten la reserva de plaza.",
+      "b) Existencia de plaza vacante, cuando no sea posible su cobertura por personal estatutario fijo, durante un plazo máximo de tres años.",
+      "c) Ejecución de programas de carácter temporal, que deberán especificar sus fechas de inicio y finalización y no podrán tener una duración superior a tres años.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "25. Un paciente que acude a urgencias hospitalarias recibirá, en su caso, asistencia médica especializada, ¿esto qué quiere decir?",
+    "options": [
+      "a) Que será tratado de forma especial.",
+      "b) Que todo el personal de este servicio es personal especializado en urgencias.",
+      "c) Que si lo necesitara será atendido por el médico especialista en su patología.",
+      "d) Las respuestas b) y c) son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "26. Los documentos tipográficos incluyen:",
+    "options": [
+      "a) Manuscritos.",
+      "b) Películas.",
+      "c) Fotocopias.",
+      "d) Microfichas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "27. Los interfaces que facilitan al usuario la introducción y visualización de datos en la base de datos se denominan:",
+    "options": [
+      "a) Formularios.",
+      "b) Tablas.",
+      "c) Informes.",
+      "d) Consultas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "28. ¿Por quién estará firmada la petición del material al almacén?",
+    "options": [
+      "a) Por el Celador.",
+      "b) Por el responsable del servicio.",
+      "c) Por el Médico.",
+      "d) Por el Auxiliar de Enfermería."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "29. La Ley de prevención de riesgos laborales consta de:",
+    "options": [
+      "a) 51 artículos.",
+      "b) 30 artículos.",
+      "c) 54 artículos.",
+      "d) 55 artículos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "30. La Junta de Extremadura elaborará normas o directrices en las que se indiquen las pautas a seguir para la realización de la evaluación previa del impacto en función del género, a propuesta:",
+    "options": [
+      "a) De la Consejería competente en materia de igualdad.",
+      "b) Del Instituto de la Mujer de Extremadura.",
+      "c) De la Comisión de Impacto de Género en los Presupuestos.",
+      "d) Del Consejo Extremeño de Participación de las Mujeres."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "31. La gestión y administración de los recursos y ejecución de los programas del área de salud se realizará de forma:",
+    "options": [
+      "a) Descentralizada.",
+      "b) Centralizada.",
+      "c) Coordinada.",
+      "d) Deslocalizada."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "32. Establece el artículo 2 de la Ley de Salud de Extremadura que el ámbito de aplicación de la misma, dentro del territorio de la Comunidad Autónoma de Extremadura es:",
+    "options": [
+      "a) Todos los extremeños y residentes en cualquiera de los municipios de Extremadura, siempre que se encuentren en situación legal.",
+      "b) Las Administraciones Públicas de la Comunidad Autónoma de Extremadura.",
+      "c) Los no residentes gozarán de los mismos derechos en la forma y condiciones previstas en la legislación autonómica.",
+      "d) Las instituciones públicas solamente, cuando así se establezca en la presente norma."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "33. Para evitar irritaciones en la piel durante el aseo del paciente, utilizaremos:",
+    "options": [
+      "a) Jabones básicos.",
+      "b) Jabones neutros.",
+      "c) Colonias o soluciones con contenido alcohólico.",
+      "d) Geles ácidos."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "34. Los fuegos según la forma de propagarse pueden ser:",
+    "options": [
+      "a) Alimentados.",
+      "b) Verticales.",
+      "c) Interiores.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "35. Las movilizaciones realizadas por el fisioterapeuta sobre los distintos segmentos corporales del paciente que no puede moverse, se denominan:",
+    "options": [
+      "a) Inmovilizadas.",
+      "b) Activas con asistencia.",
+      "c) Pasivas.",
+      "d) Activas con resistencia."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "36. En la zona a la que pertenece el pasillo de limpio, es necesario el uso de:",
+    "options": [
+      "a) Uniforme aséptico de dos piezas, gorro y calzas o zuecos quirúrgicos.",
+      "b) Gorro, calzas y mascarilla.",
+      "c) El gorro no es necesario.",
+      "d) Gorro y zuecos quirúrgicos."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "37. Las autopsias fetales son aquellas realizadas:",
+    "options": [
+      "a) A los fetos fallecidos al nacer.",
+      "b) A los fetos fallecidos antes de nacer.",
+      "c) A los fetos fallecidos antes de las 24 horas del nacimiento.",
+      "d) A los fetos fallecidos antes de las 48 horas del nacimiento."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "38. La fuga de ideas se observa en estados:",
+    "options": [
+      "a) Depresivos.",
+      "b) Psicóticos.",
+      "c) Neuróticos.",
+      "d) Maníacos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "39. Las urgencias sanitarias especializadas serán prestadas:",
+    "options": [
+      "a) En los hospitales.",
+      "b) En los consultorios.",
+      "c) En los centros de salud.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "40. En Extremadura, el ejercicio de la potestad legislativa corresponde a:",
+    "options": [
+      "a) La Asamblea de Extremadura.",
+      "b) La Junta de Extremadura.",
+      "c) El Presidente de la Junta.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+    {
+    "question": "41. Un factor fundamental en la aparición de riesgos por manipulación manual de cargas es:",
+    "options": [
+      "a) No tener máquinas elevadoras que hagan el trabajo.",
+      "b) El uso de calzado de seguridad.",
+      "c) El alejamiento de las mismas respecto al centro de gravedad del cuerpo.",
+      "d) El acercamiento de las mismas respecto al centro de gravedad del cuerpo."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "42. ¿Qué nombre recibe la representación de cómo se imprimirían los datos de una base de datos?",
+    "options": [
+      "a) Formularios.",
+      "b) Tablas.",
+      "c) Informes.",
+      "d) Consultas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "43. La petición del material debe indicar:",
+    "options": [
+      "a) Denominación del material.",
+      "b) Código y cantidad solicitada.",
+      "c) Identificación del Servicio, fecha y firma.",
+      "d) Todo lo anterior en un impreso normalizado."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "44. Los equipos de protección individual deben proteger:",
+    "options": [
+      "a) De un riesgo.",
+      "b) De una enfermedad.",
+      "c) De uno o varios riesgos.",
+      "d) De enfermedades y riesgos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "45. Conforme al artículo 2 de la Ley 8/2011, se incluyen en el ámbito de aplicación:",
+    "options": [
+      "a) A la Universidad de Extremadura.",
+      "b) A consorcios y entidades con personalidad jurídica propia con representación mayoritaria de la Junta.",
+      "c) A las entidades que realicen actividades educativas y de formación.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "46. El órgano de gestión y coordinación de los recursos del área de salud es:",
+    "options": [
+      "a) El Consejo de Dirección de Área.",
+      "b) La Gerencia de Área.",
+      "c) El Consejo de Salud de Área.",
+      "d) El Director de Salud de Área."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "47. Cuando un paciente fallece, ¿quién informa a los familiares de los trámites precisos para el enterramiento?",
+    "options": [
+      "a) El celador.",
+      "b) El jefe de personal subalterno.",
+      "c) El médico o la Supervisora de planta.",
+      "d) El médico responsable de la asistencia del paciente."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "48. El nombramiento de personal estatutario interino por exceso o acumulación de tareas se hará por un plazo máximo de:",
+    "options": [
+      "a) Doce meses, dentro de un período de veinticuatro meses.",
+      "b) Doce meses, dentro de un período de dieciocho meses.",
+      "c) Nueve meses, dentro de un período de dieciocho meses.",
+      "d) Nueve meses, dentro de un período de veinticuatro meses."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "49. Entre los factores de riesgo que justifican la implantación de los planes de emergencia, cabría destacar:",
+    "options": [
+      "a) La densidad de ocupación.",
+      "b) La existencia de personal foráneo.",
+      "c) Las limitaciones lumínicas.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "50. ¿Qué causa física del inmovilismo es fisiológica?",
+    "options": [
+      "a) La artrosis.",
+      "b) La osteoporosis.",
+      "c) La enfermedad de Parkinson.",
+      "d) La producida por el envejecimiento."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "51. No pertenece al área estéril del bloque quirúrgico:",
+    "options": [
+      "a) Quirófanos.",
+      "b) Zona de lavado quirúrgico.",
+      "c) Áreas de preparación de material estéril.",
+      "d) Almacén de material estéril."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "52. Según la OMS, las muertes fetales son consideradas abortos y no se autopsian cuando:",
+    "options": [
+      "a) Ocurren antes de las 22 semanas.",
+      "b) Ocurren en fetos menores de 500 gramos.",
+      "c) Ocurren en fetos no viables.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "53. La hiperestesia es:",
+    "options": [
+      "a) El aumento del dolor.",
+      "b) Hablar de forma acelerada.",
+      "c) Un aumento de la percepción o sensibilidad.",
+      "d) Una sensación subjetiva de la realidad."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "54. Los hospitales de referencia son hospitales considerados de nivel:",
+    "options": [
+      "a) Uno.",
+      "b) Dos.",
+      "c) Tres.",
+      "d) Cuatro."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "55. El Real Decreto 487/1997 de 14 de abril se refiere a:",
+    "options": [
+      "a) Disposiciones mínimas de seguridad y salud relativas a la manipulación general de cargas.",
+      "b) Disposiciones mínimas de salud e higiene relativas a la manipulación manual de cargas.",
+      "c) Disposiciones mínimas de seguridad y salud relativas a la manipulación manual de cargas.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "56. El Plan de Salud de Extremadura será aprobado por:",
+    "options": [
+      "a) El Consejo de Gobierno, a propuesta de la Consejería competente, oído el Consejo Extremeño de Salud.",
+      "b) El Consejo de Gobierno, a propuesta del SES, oído el Consejo Extremeño de Salud.",
+      "c) El SES, a propuesta de la Consejería competente, oído el Consejo Extremeño de Salud.",
+      "d) El SES, a propuesta de la Consejería competente, oído al Consejo de Gobierno."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "57. ¿Cómo se indica la parte decimal de un número en Excel?",
+    "options": [
+      "a) Con un punto (.).",
+      "b) Con un asterisco (*).",
+      "c) Con un guión (-).",
+      "d) Con una coma (,)."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "58. Señala la respuesta incorrecta sobre el código de barras:",
+    "options": [
+      "a) El código EAN consta de 15 dígitos.",
+      "b) Es una etiqueta con barras negras.",
+      "c) Cada barra representa un dígito.",
+      "d) Representa datos legibles por máquinas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "59. Los accidentes de trabajo y enfermedades tienen su causa en:",
+    "options": [
+      "a) El descuido del trabajador.",
+      "b) La casualidad.",
+      "c) Las conductas temerarias.",
+      "d) Las condiciones peligrosas o actos inseguros en el puesto de trabajo."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "60. Se garantizará la representación equilibrada de hombres y mujeres en el nombramiento de titulares de órganos directivos cuya designación corresponda:",
+    "options": [
+      "a) A la Comisión de Impacto de Género en los Presupuestos.",
+      "b) A la Consejería competente en igualdad.",
+      "c) Al Presidente de la Comunidad Autónoma.",
+      "d) Al Consejo de Gobierno."
+    ],
+    "correct": 3
+  },
+    {
+    "question": "61. El órgano colegiado de participación y coordinación entre las corporaciones locales y el equipo de atención primaria es:",
+    "options": [
+      "a) El Consejo de Salud de Zona.",
+      "b) El Consejo de Salud de Área.",
+      "c) La Dirección de Salud de Área.",
+      "d) El hospital."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "62. ¿Cuál de las siguientes funciones no corresponde al celador?",
+    "options": [
+      "a) Vigilancia exterior e interior del edificio.",
+      "b) Cargar y descargar las muestras y documentos en los vehículos de transporte entre centros.",
+      "c) Traslado de pacientes en el área de consultas.",
+      "d) Descargar los suministros de los vehículos que llegan a la Institución."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "63. El aseo del paciente se realizará tantas veces como sea necesario y como mínimo:",
+    "options": [
+      "a) Dos veces al día una por la mañana y otra por la noche.",
+      "b) Una vez al día por la mañana junto con el cambio de ropa de cama.",
+      "c) Tres veces al día antes de las comidas.",
+      "d) Una vez al día por la noche."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "64. ¿Qué se considera patrimonio cultural objeto de especial respeto y protección?",
+    "options": [
+      "a) Las regiones.",
+      "b) Las nacionalidades.",
+      "c) La riqueza de las distintas modalidades lingüísticas de España.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "65. ¿Qué causa física del inmovilismo es de origen neurológico?",
+    "options": [
+      "a) La artrosis.",
+      "b) La osteoporosis.",
+      "c) La enfermedad de Parkinson.",
+      "d) La insuficiencia cardiaca."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "66. La sala de lavado quirúrgico es, respecto al quirófano:",
+    "options": [
+      "a) Una zona cercana.",
+      "b) Una sala anexa.",
+      "c) Una sala incomunicada.",
+      "d) Una sala semilimitada."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "67. ¿En cuál de las siguientes situaciones está indicada la práctica de una autopsia clínica?",
+    "options": [
+      "a) En muertes donde la autopsia pueda explicar complicaciones médicas.",
+      "b) Cuando la causa de la muerte no es conocida con seguridad.",
+      "c) Cuando la autopsia puede aportar datos importantes a la familia o la sociedad.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "68. La persona que sufre una alteración del lenguaje conocida como coprolalia:",
+    "options": [
+      "a) Habla muy rápido y sin sentido.",
+      "b) Utiliza gran cantidad de palabras malsonantes.",
+      "c) Tiene dificultad para articular palabras.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "69. La asistencia sanitaria prestada por el servicio de urgencias del hospital no comprende:",
+    "options": [
+      "a) La asistencia en régimen ambulatorio.",
+      "b) La asistencia urgente domiciliaria.",
+      "c) La asistencia en régimen de observación.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "70. En general, en un equipo de dos personas la capacidad de levantamiento es “x” de la suma de capacidades individuales. Para tres personas, la capacidad se reduce a “y”:",
+    "options": [
+      "a) X = 50%, y = 60%.",
+      "b) X = dos tercios, y = un tercio.",
+      "c) X = 80 %, y = 35%.",
+      "d) X = dos tercios, y = la mitad."
+    ],
+    "correct": 3
+  },
+
+  /* RESERVAS */
+
+  {
+    "question": "RESERVA 1. El Sistema Sanitario Público de Extremadura desarrolla las siguientes actividades de salud pública:",
+    "options": [
+      "a) Asistencia psiquiátrica.",
+      "b) Control y mejora de la calidad de la asistencia sanitaria.",
+      "c) Promoción y protección de la salud alimentaria.",
+      "d) Ejecución de programas específicos de protección frente a factores de riesgo y prevención de deficiencias."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "RESERVA 2. Si un celador es requerido para ayudar en el traslado del mobiliario de una consulta, ¿cuál será su actuación?",
+    "options": [
+      "a) No lo hará porque es labor del personal de mudanzas.",
+      "b) Lo hará porque es una función más del celador.",
+      "c) Requerirá la presencia del encargado de turno.",
+      "d) Avisará al servicio de mantenimiento."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "RESERVA 3. La secuencia correcta en el lavado del paciente será:",
+    "options": [
+      "a) Enjabonar, enjuagar, aclarar y secar.",
+      "b) Aclarar, enjabonar y secar.",
+      "c) Enjuagar, aclarar y secar.",
+      "d) Enjabonar, aclarar, enjuagar y secar."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "RESERVA 4. Para que exista un incendio es necesaria la presencia de:",
+    "options": [
+      "a) Calor, comburente y oxígeno.",
+      "b) Fuente de ignición, combustible y oxígeno.",
+      "c) Fuente de calor, nitrógeno y combustible.",
+      "d) Hidrógeno, combustible y comburente."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "RESERVA 5. ¿Cuál de estas no es una causa física del inmovilismo?",
+    "options": [
+      "a) Envejecimiento fisiológico.",
+      "b) La osteoporosis.",
+      "c) La enfermedad de Parkinson.",
+      "d) La depresión."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "RESERVA 6. La bandera de España está formada por:",
+    "options": [
+      "a) Tres franjas verticales roja-amarilla-roja con la amarilla doble anchura.",
+      "b) Tres franjas horizontales roja-amarilla-roja con la amarilla doble altura.",
+      "c) Tres franjas horizontales roja-amarilla-roja con la amarilla doble anchura.",
+      "d) Tres franjas horizontales amarilla-roja-amarilla con la roja doble anchura."
+    ],
+    "correct": 2
+  }
+
+        ];
+
+finishButton.addEventListener('click', () => {
+    const totalQuestions = questions.length;
+    const gradeLimit = Math.min(70, totalQuestions); // primeras 70 (o menos si no las hay)
+
+    // Contadores para marcar/mostrar de todas las preguntas (corrección completa)
+    let overallCorrect = 0, overallIncorrect = 0, overallUnanswered = 0;
+
+    // Contadores que se usarán sólo para calcular la nota (primeras gradeLimit preguntas)
+    let correctForGrade = 0, incorrectForGrade = 0, unansweredForGrade = 0;
+
+    for (let index = 0; index < totalQuestions; index++) {
+        const q = questions[index];
+        const options = document.getElementsByName(`question${index}`); // NodeList de radios
+        const selectedOption = [...options].find(opt => opt.checked) || null;
+
+        // Marca visual en la UI (se hace para todas las preguntas)
+        if (!selectedOption) {
+            overallUnanswered++;
+        } else if (parseInt(selectedOption.value, 10) === q.correct) {
+            overallCorrect++;
+            if (selectedOption.parentElement) selectedOption.parentElement.classList.add('correct-answer');
+        } else {
+            overallIncorrect++;
+            if (selectedOption.parentElement) selectedOption.parentElement.classList.add('incorrect-answer');
+        }
+
+        // Siempre marcar la respuesta correcta visualmente (si existe)
+        const correctAnswerInput = document.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+        if (correctAnswerInput && correctAnswerInput.parentElement) {
+            correctAnswerInput.parentElement.classList.add('correct-answer');
+        }
+
+        // Si esta pregunta está dentro de las primeras gradeLimit, contabilizar para la nota
+        if (index < gradeLimit) {
+            if (!selectedOption) {
+                unansweredForGrade++;
+            } else if (parseInt(selectedOption.value, 10) === q.correct) {
+                correctForGrade++;
+            } else {
+                incorrectForGrade++;
+            }
+        }
+    }
+
+    // Cálculo de la nota: aplicar penalización (1/3) y escalar a 10
+    let finalCorrect = correctForGrade - Math.floor(incorrectForGrade / 3);
+    if (finalCorrect < 0) finalCorrect = 0;
+
+    // Denominador para escalar: si hay al menos 70 preguntas se escala sobre 70, si hay menos, sobre las que haya
+    const denom = (gradeLimit === 70) ? 70 : gradeLimit;
+    const finalScore = ((finalCorrect / denom) * 10).toFixed(2);
+
+    summaryDiv.textContent =
+      `Preguntas corregidas (total): ${totalQuestions} — Correctas: ${overallCorrect}, Incorrectas: ${overallIncorrect}, En blanco: ${overallUnanswered}.\n` +
+      `Para la nota se han considerado las primeras ${gradeLimit}: Correctas: ${correctForGrade}, Incorrectas: ${incorrectForGrade}, En blanco: ${unansweredForGrade}. Nota final: ${finalScore}`;
+});
+
+    </script>
+</body>
+</html>
