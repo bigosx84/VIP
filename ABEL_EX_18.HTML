@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">ABEL EXAMEN 18</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+  {
+    "question": "1. El marco territorial de la Atención Primaria, donde desarrollan las actividades sanitarias los Equipos de Atención Primaria, se denominan:",
+    "options": [
+      "a) Hospitales.",
+      "b) Áreas sociosanitarias.",
+      "c) Zonas de salud.",
+      "d) Ambulatorios."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "2. ¿Quién vigilarán personalmente la limpieza de la Institución?",
+    "options": [
+      "a) Los celadores.",
+      "b) El jefe de personal subalterno.",
+      "c) Todo el personal.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "3. Para el lavado del cabello en el paciente encamado, se colocará al paciente en la posición:",
+    "options": [
+      "a) De Sims.",
+      "b) De Fowler.",
+      "c) De Roser.",
+      "d) Ortopneica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "4. Se define la temperatura de ignición como:",
+    "options": [
+      "a) Temperatura a la cual una sustancia comienza a desprender vapores en cantidad suficiente para mantener la combustión.",
+      "b) Temperatura a la cual una sustancia puede llegar a arder en determinadas condiciones ambientales.",
+      "c) Temperatura a la cual una sustancia empieza a arder espontáneamente.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "5. ¿Qué profesional recoge el Estatuto de personal no sanitario que tendrá a su cargo el traslado de los enfermos tanto dentro de la institución como en el servicio de ambulancias?",
+    "options": [
+      "a) El Celador.",
+      "b) El TCAE.",
+      "c) La Enfermera.",
+      "d) El Médico."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "6. ¿Qué tipo de mesa que se encuentra en un quirófano suele ser de forma semicircular?",
+    "options": [
+      "a) La mesa auxiliar.",
+      "b) La mesa de instrumentación.",
+      "c) La mesa de Mayo.",
+      "d) La mesa de Cigüeña."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "7. La mesa de autopsia deberá estar diseñada con unas medidas mínimas determinadas, que son:",
+    "options": [
+      "a) 2 metros de longitud por 0,5 metros de anchura.",
+      "b) 2 metros de longitud por 0,75 metros de anchura.",
+      "c) 2,30 metros de longitud por 0,5 metros de anchura.",
+      "d) 1,80 metros de longitud por 1 metro de anchura."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "8. No es un fundamento del orden político y de la paz social:",
+    "options": [
+      "a) La dignidad de la persona.",
+      "b) La libertad económica.",
+      "c) El libre desarrollo de la personalidad.",
+      "d) El respeto a la ley y a los derechos de los demás."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "9. La red psiquiátrica de nuestro país está formada por varios dispositivos entre los que encontramos:",
+    "options": [
+      "a) Centros de salud mental.",
+      "b) Unidades de hospitalización psiquiátricas.",
+      "c) Dispositivos intermedios.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "10. ¿Cuál es la norma básica que se debe seguir en los primeros auxilios?",
+    "options": [
+      "a) Alertar y socorrer.",
+      "b) Proteger, avisar y socorrer.",
+      "c) Alertar, proteger y socorrer.",
+      "d) Solamente socorrer."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "11. En cuanto al método para el levantamiento manual y traslado de las cargas, señale la respuesta incorrecta:",
+    "options": [
+      "a) Como regla general es preferible manipular las cargas cerca del cuerpo.",
+      "b) La manipulación debe realizarse a una altura comprendida entre la altura de los codos y los nudillos, ya que de este modo se disminuye la tensión en la zona lumbar.",
+      "c) Si las cargas que deben ser manipuladas están situadas en el suelo o cerca del mismo, se utilizarán las técnicas de manejo de cargas que permitan utilizar los músculos de la espalda más que los de las piernas.",
+      "d) Deben separarse los pies para adquirir una postura estable y equilibrada para el levantamiento, colocando un pie más adelantado que el otro en la dirección del movimiento."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "12. ¿Con qué siglas se conoce a la red de área local?",
+    "options": [
+      "a) LAN.",
+      "b) GAN.",
+      "c) MAN.",
+      "d) WAN."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "13. El área o departamento de distribución de suministros en un hospital está adscrita a:",
+    "options": [
+      "a) La Gerencia.",
+      "b) La División Médica.",
+      "c) La División de Enfermería.",
+      "d) La División de Gestión y Servicios Generales."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "14. Cuando en la Ley de Prevención de Riesgos Laborales se haga referencia a trabajadores y empresarios, se entenderán también comprendidos en estos términos a:",
+    "options": [
+      "a) El personal con relación de carácter administrativo o estatutario.",
+      "b) Los socios de las cooperativas cuya actividad consista en la prestación de un trabajo personal.",
+      "c) Las personas que estén sindicadas y la patronal.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "15. Según la Ley 40/2015, de 1 de octubre, de Régimen Jurídico del Sector Público, en relación con las redes electrónicas y los portales de internet, señala la respuesta correcta:",
+    "options": [
+      "a) Los portales dispondrán de sistemas que permitan el establecimiento de comunicaciones seguras siempre que sean necesarias.",
+      "b) El establecimiento de un portal conlleva la responsabilidad del titular respecto de la integridad, veracidad y actualización de la información y los servicios a los que pueda accederse a través de la misma.",
+      "c) Se entiende por portal de internet el punto de acceso electrónico cuya titularidad corresponda a una Administración Pública, organismo público o entidad de Derecho Público que permite el acceso a través de internet a la información publicada y, en su caso, a la sede electrónica correspondiente.",
+      "d) Los portales de internet utilizarán, para identificarse y garantizar una comunicación segura con los mismos, certificados reconocidos o cualificados de autenticación de sitio web o medio equivalente."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "16. Cuál es el órgano de gobierno interior de la Asamblea de Extremadura:",
+    "options": [
+      "a) La Diputación Permanente.",
+      "b) El Presidente de la Asamblea.",
+      "c) La Mesa de la Asamblea.",
+      "d) La Consejería de Presidencia."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "17. ¿El control que ejercerá el jefe de personal subalterno de los paquetes y bultos de que sean portadoras las personas ajenas a la Institución que tengan acceso a la misma, será?",
+    "options": [
+      "a) Obligatorio.",
+      "b) Discreto y ordenado.",
+      "c) Rutinario.",
+      "d) Debido y discreto."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "18. En la higiene de los oídos del paciente no deberá:",
+    "options": [
+      "a) Limpiar con bastoncillos las partes más externas del oído del paciente.",
+      "b) Introducir los bastoncillos en el conducto auditivo para sacar la cera.",
+      "c) Evitar los objetos afilados.",
+      "d) Usar tapones en caso de duda de la calidad del agua."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "19. Cuando nos referimos a un BIE, hablamos de:",
+    "options": [
+      "a) Sistemas de bombeo interno de extracción de humos.",
+      "b) Un tipo de extintor portátil de incendio para materiales sólidos licuables.",
+      "c) Sistemas de bocas de incendio equipadas.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "20. ¿Quién es el responsable de un traslado una vez iniciado?",
+    "options": [
+      "a) El Celador.",
+      "b) El TCAE.",
+      "c) La Enfermera.",
+      "d) El Supervisor de área."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "21. El carro de parada también es conocido como:",
+    "options": [
+      "a) Carro de soporte vital.",
+      "b) Carro de emergencia.",
+      "c) Carro de urgencia.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "22. ¿Debe un celador de autopsias trasladar la documentación que le encomiende el patólogo?",
+    "options": [
+      "a) Sí.",
+      "b) No.",
+      "c) No, es función del técnico de anatomía patológica.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "23. La mayor parte de las unidades de hospitalización psiquiátricas se encuentran en:",
+    "options": [
+      "a) Los hospitales generales.",
+      "b) Las unidades vigiladas.",
+      "c) Los centros de día.",
+      "d) Los hospitales de día."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "24. El personal estatutario de los servicios de salud ostenta los siguientes derechos (señala la respuesta incorrecta):",
+    "options": [
+      "a) A recibir asistencia y protección de las Administraciones públicas y servicios de salud en el ejercicio de su profesión o en el desempeño de sus funciones.",
+      "b) A ser informado de las funciones, tareas, cometidos, programación funcional y objetivos asignados a cualquier unidad, centro o institución, y de los sistemas establecidos para la evaluación del cumplimiento de los mismos.",
+      "c) A la jubilación en los términos y condiciones establecidas en las normas en cada caso aplicables.",
+      "d) A recibir asistencia y protección de las Administraciones públicas y servicios de salud en el ejercicio de su profesión o en el desempeño de sus funciones."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "25. La atención de urgencias se presta al paciente que lo necesite en:",
+    "options": [
+      "a) Atención Primaria.",
+      "b) Atención Especializada.",
+      "c) Servicios de Emergencia Extrahospitalaria.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "26. En la manipulación manual de cargas, y respecto de los movimientos realizados, los giros del tronco:",
+    "options": [
+      "a) Vienen determinados por el ángulo que forman las líneas que unen los talones con la línea de los hombros.",
+      "b) Forman un ángulo que, cuanto más grande sea, menor riesgo de lesiones existe.",
+      "c) Están recomendados para disminuir el riesgo.",
+      "d) Provocan una disminución de las fuerzas compresivas en la zona lumbar."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "27. ¿Por qué se dice que una red es local?",
+    "options": [
+      "a) Porque su ámbito es provincial.",
+      "b) Porque es intermitente.",
+      "c) Porque es de limitadas dimensiones, se usa en empresas, oficinas, o edificios.",
+      "d) Porque no necesita cables."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "28. El departamento de distribución de suministros en un hospital sirve material:",
+    "options": [
+      "a) A los servicios de enfermería del hospital.",
+      "b) A los servicios quirúrgicos del hospital.",
+      "c) A los servicios de consultas externas del hospital.",
+      "d) A todos los servicios del hospital."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "29. Según lo establecido en la Ley de Prevención de Riesgos Laborales, ¿qué se entiende por riesgo laboral?",
+    "options": [
+      "a) Cualquiera de las definiciones contenidas en la Ley.",
+      "b) La cantidad de peligro que está dispuesto a asumir un empresario en materia de prevención.",
+      "c) La posibilidad de que un trabajador sufra un determinado daño derivado del trabajo.",
+      "d) Los procesos, actividades, operaciones, equipos o productos potencialmente peligrosos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "30. ¿Cuál es la Ley de Régimen Jurídico del Sector Público?",
+    "options": [
+      "a) La Ley 39/2015, de 1 de octubre.",
+      "b) La Ley 39/2014, de 1 de octubre.",
+      "c) La Ley 40/2015, de 1 de octubre.",
+      "d) La Ley 40/2014, de 1 de octubre."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "31. Se puede definir como “el conjunto de medios materiales y humanos de un Sistema de Salud, puestos a disposición de la población para atender al individuo y a la comunidad en sus problemas de salud”:",
+    "options": [
+      "a) La Atención Primaria.",
+      "b) La Atención Sociosanitaria.",
+      "c) La Atención Hospitalaria.",
+      "d) La Atención Ambulatoria."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "32. ¿A quién corresponderá la resolución de las reclamaciones previas a la vía jurisdiccional civil y laboral?",
+    "options": [
+      "a) A la Dirección General de Recursos Humanos.",
+      "b) Al Consejero competente en materia de sanidad.",
+      "c) A la Dirección Gerencia del Servicio Extremeño de Salud.",
+      "d) A la Dirección General de los Servicios Jurídicos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "33. En la higiene de los pacientes masculinos encamados, el primer paso a realizar será:",
+    "options": [
+      "a) El afeitado, si lo precisa.",
+      "b) La limpieza de manos y axilas.",
+      "c) La limpieza de los pies.",
+      "d) La limpieza de la región genital."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "34. ¿Cuál es la altura máxima a la que debe estar colocado un extintor, desde el suelo hasta la parte superior del mismo?",
+    "options": [
+      "a) 1,70 metros.",
+      "b) 1,40 metros.",
+      "c) 1,20 metros.",
+      "d) 1,10 metros."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "35. El abdomen se divide clásicamente en 9 cuadrantes. ¿Dónde se localiza el epigastrio?",
+    "options": [
+      "a) En el cuadrante medio superior.",
+      "b) En el cuadrante medio.",
+      "c) En el cuadrante inferior.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "36. Respecto al aparato de RX portátil que se puede encontrar en un quirófano, el celador:",
+    "options": [
+      "a) Es el encargado de su traslado dentro del área quirúrgica.",
+      "b) Es el encargado de su manejo.",
+      "c) Es el encargado de aplicar las técnicas radiológicas.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "37. La mesa de autopsias debe presentar unas características, señala la respuesta incorrecta:",
+    "options": [
+      "a) Debe ser de diseño sencillo.",
+      "b) Nunca podrá ser de piedra.",
+      "c) Uno de sus lados puede estar graduado en centímetros para facilitar la lectura de la talla.",
+      "d) Debe contar con un sistema de drenaje."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "38. Podemos definir el hospital de día como:",
+    "options": [
+      "a) El ingreso involuntario del paciente psiquiátrico.",
+      "b) Una hospitalización parcial del paciente psiquiátrico.",
+      "c) Un descanso para la familia.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "39. Si nos disponemos a medir la frecuencia respiratoria a un paciente que respira de forma irregular debemos medirla durante:",
+    "options": [
+      "a) 1 minuto.",
+      "b) 3 minutos.",
+      "c) 1 minuto y multiplicar el resultado por dos.",
+      "d) 30 segundos y multiplicar el resultado por dos."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "40. ¿Qué órgano de la Asamblea asume las funciones de esta cuando hubiera sido disuelta anticipadamente o se hubiera agotado la legislatura y hasta la constitución de la nueva Cámara?",
+    "options": [
+      "a) El Pleno de la Asamblea.",
+      "b) La Mesa de la Asamblea.",
+      "c) La Diputación Permanente.",
+      "d) El Presidente de la Asamblea."
+    ],
+    "correct": 2
+  },
+    {
+    "question": "41. En la manipulación manual de cargas, en lo que se refiere a la inclinación del tronco, es correcto afirmar que:",
+    "options": [
+      "a) La manipulación de una carga con el tronco inclinado disminuye el riesgo de lesión en la zona.",
+      "b) La postura correcta al manejar una carga es con la espalda recta.",
+      "c) La postura correcta al manejar una carga es con el tronco inclinado.",
+      "d) La técnica de levantamiento de la carga no afecta para una correcta manipulación."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "42. ¿Cuál es la topología de red en la que los nodos están unidos unos con otros formando un círculo?",
+    "options": [
+      "a) Bus.",
+      "b) Anillo.",
+      "c) Estrella.",
+      "d) Nodo."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "43. Son suministros internos:",
+    "options": [
+      "a) Los que facilita el almacén del hospital a su departamento de farmacia.",
+      "b) Los que suministran los distintos proveedores al almacén central del hospital.",
+      "c) Todas las respuestas anteriores son correctas.",
+      "d) Todas las respuestas anteriores son incorrectas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "44. Es obligación de los trabajadores en materia de prevención de riesgos:",
+    "options": [
+      "a) Usar adecuadamente, de acuerdo con su naturaleza y los riesgos previsibles, las máquinas, aparatos y herramientas.",
+      "b) Utilizar correctamente los medios y equipos de protección facilitados por el empresario.",
+      "c) Contribuir al cumplimiento de las obligaciones establecidas por la autoridad competente.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "45. ¿Qué artículos de la Ley 40/2015, de Régimen Jurídico del Sector Publico regulan el funcionamiento electrónico del Sector Público?",
+    "options": [
+      "a) Los artículos del 1 a 27.",
+      "b) Los artículos del 38 a 46.",
+      "c) Los artículos del 133 a 138.",
+      "d) Los artículos del 145 a 148."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "46. La Atención Especializada (AE) incluye asistencia en:",
+    "options": [
+      "a) Régimen domiciliario.",
+      "b) Hospitalización.",
+      "c) Rehabilitación.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "47. ¿Cuántas funciones específicamente reseñadas del jefe de personal subalterno, recoge el Estatuto de Personal no Sanitario?",
+    "options": [
+      "a) Ocho.",
+      "b) Nueve.",
+      "c) Diez.",
+      "d) Doce."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "48. El personal estatutario ostenta, en los términos establecidos en la Constitución y en la legislación específicamente aplicable, los siguientes derechos colectivos (señala la respuesta incorrecta):",
+    "options": [
+      "a) A la libre sindicación.",
+      "b) A la actividad sindical.",
+      "c) A la acción social en los términos y ámbitos subjetivos que se determinen en las normas, acuerdos o convenios aplicables.",
+      "d) A la huelga, garantizándose en todo caso el mantenimiento de los servicios que resulten esenciales para la atención sanitaria a la población."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "49. Ante una situación de incendio en una institución sanitaria como norma general:",
+    "options": [
+      "a) Primero intervenir y luego alertar.",
+      "b) No hacer nada hasta que llegue el equipo de primera intervención.",
+      "c) Primero alertar y luego intervenir.",
+      "d) Procurar coger los documentos y los objetos que sean más valiosos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "50. ¿Cuántos profesionales se requieren, al menos, para una transferencia de la cama a la silla de ruedas cuando el paciente es no colaborador?",
+    "options": [
+      "a) 1.",
+      "b) 2.",
+      "c) 3.",
+      "d) 4."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "51. Es un método de esterilización químico:",
+    "options": [
+      "a) El calor seco.",
+      "b) El plasma de peróxido de hidrógeno.",
+      "c) Las radiaciones.",
+      "d) El vapor."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "52. No forma parte de los equipos que se encuentran en la sala de autopsias:",
+    "options": [
+      "a) Equipo de Rayos X.",
+      "b) Equipo de Emergencia Vital (RCP).",
+      "c) Equipo fotográfico.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "53. La finalidad del centro de día es:",
+    "options": [
+      "a) Recuperar habilidades o destrezas.",
+      "b) Dar un oficio para el futuro.",
+      "c) Estabilizar a los pacientes agudos.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "54. Según la regla de Wallace, cuando se valora la extensión de una quemadura, el porcentaje que se aplica a los miembros superiores, tórax, abdomen y los genitales será:",
+    "options": [
+      "a) 36 %.",
+      "b) 37 %.",
+      "c) 19 %.",
+      "d) 39 %."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "55. Según su origen, los documentos se clasifican en:",
+    "options": [
+      "a) Gráficos, tipográficos e iconográficos.",
+      "b) Plásticos, fónicos y audiovisuales.",
+      "c) Gráficos, secundarios y audiovisuales.",
+      "d) Primarios, secundarios y terciarios."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "56. En caso de vacante, ausencia o enfermedad de su titular, corresponderá asumir la presidencia del Consejo General:",
+    "options": [
+      "a) Al responsable del órgano competente en materia de planificación sanitaria de la Comunidad Autónoma.",
+      "b) Al Director Gerente del SES.",
+      "c) Al Director de Planificación Económica.",
+      "d) Al Presidente del Consejo de Dirección."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "57. ¿En qué topología de red los mensajes están conectados a un ordenador central?",
+    "options": [
+      "a) Bus.",
+      "b) Anillo.",
+      "c) Estrella.",
+      "d) Lógica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "58. La responsabilidad del proveedor se descarga:",
+    "options": [
+      "a) Al facturar la mercancía.",
+      "b) Al firmar el almacenista el albarán de entrega.",
+      "c) Al recibir el pedido del hospital.",
+      "d) Al hacerse efectivo el cobro de la mercancía."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "59. ¿Cómo se denomina a cualquier equipo destinado a ser llevado o sujetado por el trabajador para que le proteja de uno o varios riesgos que puedan amenazar su seguridad o salud en el trabajo, así como cualquier complemento o accesorio destinado a tal fin?",
+    "options": [
+      "a) Equipo de trabajo.",
+      "b) Equipo de protección individual.",
+      "c) Equipo de prevención del riesgo.",
+      "d) Equipo de prevención de accidentes de trabajo."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "60. Las Administraciones Públicas se relacionarán entre sí y con sus órganos, organismos públicos y entidades vinculados o dependientes a través de medios:",
+    "options": [
+      "a) Telefónicos.",
+      "b) Documentales.",
+      "c) Electrónicos.",
+      "d) Telemáticos."
+    ],
+    "correct": 2
+  },
+   {
+    "question": "61. Son elementos necesarios para que exista coordinación asistencial:",
+    "options": [
+      "a) Conexión de los servicios sanitarios, mediante la transferencia de información y el manejo de los pacientes.",
+      "b) Existencia de un objetivo común, en el que se debe tener en cuenta las perspectivas de todos los implicados, para que no existan objetivos contrapuestos.",
+      "c) Sincronización entre las partes implicadas para que la atención sanitaria se lleve a cabo en el momento y en el lugar adecuado.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "62. Según se recoge en el Estatuto de Personal no Sanitario, para el acceso de enfermos, visitantes y personal a las distintas dependencias de la Institución, el jefe de personal subalterno:",
+    "options": [
+      "a) Mantendrá el régimen establecido por su inmediato superior.",
+      "b) Mantendrá el régimen establecido por el administrador.",
+      "c) Mantendrá el régimen establecido por la dirección.",
+      "d) Mantendrá el régimen establecido mediante ley."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "63. La aparición de dermatitis es frecuente, ¿en qué tipo de pacientes?",
+    "options": [
+      "a) En pacientes con úlceras por presión.",
+      "b) En recién nacidos.",
+      "c) En pacientes masculinos encamados.",
+      "d) En pacientes politraumatizados."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "64. Las normas relativas a los derechos fundamentales y a las libertades que la Constitución reconoce se interpretarán de conformidad con:",
+    "options": [
+      "a) Con la Declaración Universal de Derechos Humanos.",
+      "b) Con la Declaración Universal de Derechos Humanos y los tratados y acuerdos internacionales sobre las mismas materias.",
+      "c) Con la Declaración Universal de Derechos Humanos y los tratados y acuerdos internacionales sobre las mismas materias ratificados por España.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "65. La posición de mantenerse de pie se denomina:",
+    "options": [
+      "a) Fowler.",
+      "b) Bipedestación.",
+      "c) Anatómica.",
+      "d) Sedestación."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "66. Los extremos de un contenedor estéril se consideran:",
+    "options": [
+      "a) También estériles.",
+      "b) Desinfectados.",
+      "c) No estériles.",
+      "d) Desinfectados en alto nivel."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "67. ¿Qué instrumento se usa en una autopsia para no dañar las paredes de los órganos a la hora de cortarlos?",
+    "options": [
+      "a) Costótomo.",
+      "b) Enterótomo.",
+      "c) Tijeras y cuchillos.",
+      "d) Sonda metálica."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "68. Los centros de media estancia pertenecen al nivel:",
+    "options": [
+      "a) Primario.",
+      "b) Secundario.",
+      "c) Terciario.",
+      "d) Cuaternario."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "69. Una ambulancia del 1.1.2. traslada a un paciente muy grave desde su domicilio, ¿a dónde?",
+    "options": [
+      "a) Al servicio de urgencias hospitalario.",
+      "b) Al servicio de urgencias más cercano.",
+      "c) Al servicio de urgencias de atención continuada.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "70. Cuando se procede a movilizar a pacientes, éstos pueden realizar movimientos impredecibles cambiando, de este modo, su centro de gravedad. En estos casos se debe actuar:",
+    "options": [
+      "a) Haciéndolo lo más rápidamente posible.",
+      "b) Haciéndolo siempre manualmente, sin el uso de grúas mecánicas u otras ayudas.",
+      "c) Manipulando al paciente en equipo.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "RESERVA 1. El área de salud extenderá su acción a una población comprendida entre:",
+    "options": [
+      "a) 150.000 y 200.000 habitantes.",
+      "b) 200.000 y 250.000 habitantes.",
+      "c) 250.000 y 300.000 habitantes.",
+      "d) 100.000 y 150.000 habitantes."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "RESERVA 2. Según el Estatuto de Personal no Sanitario, no es una función del Jefe de Personal Subalterno:",
+    "options": [
+      "a) Informar a los familiares de los fallecidos en la Institución sobre los trámites precisos para llevar a cabo los enterramientos.",
+      "b) En todo caso, pondrá a los familiares de los fallecidos en contacto con la oficina administrativa correspondiente para completar la información sobre los enterramientos.",
+      "c) Vigilar personalmente la limpieza de la Institución.",
+      "d) Todas son funciones del Jefe de Personal Subalterno."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "RESERVA 3. ¿Qué es la unidad del paciente?",
+    "options": [
+      "a) La característica de que cada usuario es diferente a los demás.",
+      "b) El paciente en sí mismo.",
+      "c) Es el conjunto formado por el espacio de la habitación, el mobiliario y el material que utiliza el paciente durante su estancia en el centro hospitalario.",
+      "d) Todas las respuestas anteriores son incorrectas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "RESERVA 4. Para que una combustión sea posible es necesaria la presencia de:",
+    "options": [
+      "a) Humedad relativa baja.",
+      "b) Ozono.",
+      "c) Comburente.",
+      "d) Humedad relativa alta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "RESERVA 5. ¿En qué casos está indicado el uso de bastones?",
+    "options": [
+      "a) En los casos de hemiplejía derecha que permite la marcha.",
+      "b) En los casos de tetraplejía.",
+      "c) En los casos de fractura bilateral de cadera.",
+      "d) En los casos de luxaciones de ambas rótulas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "RESERVA 6. La mayoría de edad:",
+    "options": [
+      "a) Se alcanza a los 18 años para los españoles.",
+      "b) Se alcanza a los 16 años para los españoles.",
+      "c) Varía en función de la Comunidad Autónoma en la que se resida.",
+      "d) Se alcanza a los 14 años en toda España."
+    ],
+    "correct": 0
+  }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
