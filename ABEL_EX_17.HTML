@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">ABEL SIMULACRO EX. 17</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+     {
+    "question": "1. El Sistema Sanitario Público de Extremadura desarrolla las siguientes actividades de asistencia sanitaria:",
+    "options": [
+      "a) Ejecución de los programas específicos de protección frente a factores de riesgo, así como los programas de prevención de las deficiencias, tanto congénitas como adquiridas.",
+      "b) Prevención y protección de la salud frente a cualquier otro factor de riesgo, en especial la prevención de deficiencias.",
+      "c) Policía sanitaria mortuoria.",
+      "d) Control de la publicidad sanitaria."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "2. Según el Estatuto de Personal no Sanitario, quien ejerza la jefatura del personal de celadores lo hará por delegación de:",
+    "options": [
+      "a) El jefe de personal subalterno.",
+      "b) El administrador.",
+      "c) El director médico.",
+      "d) El director gerente."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "3. En la higiene de los pies del paciente, para suavizar las callosidades a fin de limarlas, se sumergirán los pies:",
+    "options": [
+      "a) En agua templada con sal.",
+      "b) En agua fría con jabón.",
+      "c) En agua caliente con alcohol.",
+      "d) En una solución de glicerina."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "4. Los sistemas de extinción por espuma física, estarán compuestos por los siguientes componentes principales:",
+    "options": [
+      "a) Red de tuberías, dosificador y boquillas de descarga.",
+      "b) Red de tuberías, tanque de almacenamiento de espumógeno y dosificador o proporcionador.",
+      "c) Red de tuberías, tanque de almacenamiento de espumógeno, dosificador o proporcionador y boquillas de descarga.",
+      "d) Boquillas de descarga, tanque de almacenamiento de espumógeno y dosificador o proporcionador."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "5. ¿En qué pacientes habrá que adoptar las máximas precauciones a la hora de movilizarlos?",
+    "options": [
+      "a) Pacientes no colaboradores.",
+      "b) Pacientes inconscientes.",
+      "c) Pacientes con traumatismo craneoencefálico.",
+      "d) Pacientes con depresión."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "6. Son funciones propias del celador del quirófano:",
+    "options": [
+      "a) Al final de la operación ayudará al personal de enfermería a recoger el quirófano.",
+      "b) Colocarán al paciente siempre en la posición de decúbito prono.",
+      "c) Trasladar a los pacientes desde sus habitaciones a la zona de quirófano.",
+      "d) Trasladar, al final de cada turno, las biopsias intraoperatorias al Servicio de Anatomía Patológica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "7. No es una “muerte miscelánea”:",
+    "options": [
+      "a) Muertes sospechosas de personas que mantienen litigios.",
+      "b) Cadáveres no identificados.",
+      "c) Muerte de pacientes por procedimientos clínicos-quirúrgicos.",
+      "d) Muerte por suicidio."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "8. Las bases de la organización militar se regularán:",
+    "options": [
+      "a) Por ley ordinaria.",
+      "b) Por ley orgánica.",
+      "c) Por reglamento.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "9. Un paciente oye voces que le incitan al suicidio, ¿qué alteración presenta?",
+    "options": [
+      "a) Trastorno conductual.",
+      "b) Alucinaciones.",
+      "c) Déficit cognitivo.",
+      "d) Desviación psicosexual."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "10. A un paciente inconsciente con obstrucción completa de la vía aérea por cuerpo extraño, usted deberá colocarle con cuidado sobre una superficie dura y:",
+    "options": [
+      "a) Comenzar la reanimación cardiopulmonar (RCP), 30 compresiones torácicas e intentar 2 insuflaciones, y continuar hasta que el paciente se recupere y comience a respirar con normalidad.",
+      "b) Animar a que tosa y dar 5 golpes secos entre las escápulas con el talón de la mano.",
+      "c) Dar 5 compresiones abdominales por encima del ombligo (maniobra de Heimlich), manteniéndolo de pie y ligeramente inclinado hacia adelante, situándose por detrás del mismo y rodeándole con los brazos.",
+      "d) Dar 5 golpes secos entre las escápulas con el talón de la mano, manteniéndolo de pie ligeramente inclinado hacia adelante, situándose por detrás del mismo y rodeándole con los brazos y alternarlos con 5 compresiones abdominales por encima del ombligo."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "11. En el método para el levantamiento manual y traslado de cargas, el procedimiento general en situaciones normales aconseja que lo correcto es:",
+    "options": [
+      "a) Mantener los pies juntos para adquirir una postura estable y equilibrada para el levantamiento.",
+      "b) Mantener las piernas rectas sin flexionar las rodillas, doblando la espalda hasta el agarre de la carga.",
+      "c) Alzarse con la mayor rapidez posible para que la espalda esté recta lo antes posible dando un fuerte tirón.",
+      "d) Mantener la carga pegada al cuerpo durante todo el proceso de levantamiento."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "12. ¿Cómo se conoce el lenguaje de internet?",
+    "options": [
+      "a) HTTP.",
+      "b) HTML.",
+      "c) Hipertexto.",
+      "d) SSL."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "13. No es función del Celador de la farmacia hospitalaria:",
+    "options": [
+      "a) Farmacovigilancia.",
+      "b) Dispensación de determinado material como sueros o alcohol.",
+      "c) Recepción de material.",
+      "d) Acondicionamiento de material."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "14. ¿Será de aplicación la Ley de Prevención de Riesgos Laborales en los centros y establecimientos militares?",
+    "options": [
+      "a) No, en ningún caso.",
+      "b) Sí, en todos los casos.",
+      "c) Depende de lo que decidan los órganos administrativos que los dirijan.",
+      "d) Sí, con las particularidades previstas en su normativa específica."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "15. Constituye uno de los principios generales de la Ley 8/2011, de 23 de marzo:",
+    "options": [
+      "a) La igualdad de trato entre mujeres y hombres.",
+      "b) La igualdad de oportunidades.",
+      "c) La ruptura de la brecha de género en la Sociedad de la Información, el Conocimiento y la Imaginación.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "16. Señale la respuesta incorrecta. Los diputados:",
+    "options": [
+      "a) No estarán sujetos a mandato imperativo.",
+      "b) Deberán tener identidad extremeña.",
+      "c) Disponen de inviolabilidad por los votos y opiniones que emitan en el ejercicio de su cargo, aun después de haber cesado su mandato.",
+      "d) Durante su mandato, no podrán ser detenidos ni retenidos en el territorio de la Comunidad sino en caso de flagrante delito."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "17. ¿A qué artículo pertenece la siguiente función del jefe de personal subalterno, según el Estatuto de Personal no Sanitario? “Instruirá convenientemente al personal a sus órdenes para que la realización de su trabajo sea eficaz y de calidad” .",
+    "options": [
+      "a) 14.1.1.",
+      "b) 14.1.2.",
+      "c) 14.1.5.",
+      "d) 14.1.6."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "18. ¿Qué zona del cuerpo del paciente se lavará y aclarará en último lugar?",
+    "options": [
+      "a) La región dorsolumbar.",
+      "b) La región perianal.",
+      "c) Las extremidades inferiores.",
+      "d) La cabeza."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "19. Señale cuál de los siguientes no forma parte del contenido mínimo que ha de comprender el plan de autoprotección:",
+    "options": [
+      "a) Inventario, análisis y evaluación de riesgos.",
+      "b) Registro de indicadores de actividades críticas.",
+      "c) Mantenimiento de la eficacia y actualización del Plan de Autoprotección.",
+      "d) Plan de actuación ante emergencias."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "20. ¿Dónde localizarías el hueso esfenoides?",
+    "options": [
+      "a) Mano.",
+      "b) Cara.",
+      "c) Cráneo.",
+      "d) Cuello."
+    ],
+    "correct": 2
+  },
+   {
+    "question": "21. Es una cualidad de un buen desinfectante o antiséptico:",
+    "options": [
+      "a) La incompatibilidad.",
+      "b) El elevado coste.",
+      "c) La estabilidad.",
+      "d) La opacidad."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "22. No se considera una muerte no violenta:",
+    "options": [
+      "a) Suicidio.",
+      "b) Muerte súbita.",
+      "c) Muerte natural sin tratamiento médico reciente.",
+      "d) Todas las anteriores se consideran muertes no violentas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "23. De las siguientes funciones, ¿cuál no corresponde al Celador destinado en las unidades de psiquiatría?",
+    "options": [
+      "a) Registrar en la hoja de incidencias los signos premonitorios de violencia o agresividad del enfermo.",
+      "b) Trasladar los carros de unidosis.",
+      "c) Vigilar el orden y armonía de los pacientes ingresados.",
+      "d) Trasladar a los enfermos en el servicio de ambulancias."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "24. El personal estatutario de los servicios de salud ostenta los siguientes derechos (señala la respuesta incorrecta):",
+    "options": [
+      "a) A la estabilidad en el empleo y al ejercicio o desempeño efectivo de la profesión o funciones que no correspondan a su nombramiento.",
+      "b) A la percepción puntual de las retribuciones e indemnizaciones por razón del servicio en cada caso establecidas.",
+      "c) A la formación continuada adecuada a la función desempeñada y al reconocimiento de su cualificación profesional en relación con dichas funciones.",
+      "d) A recibir protección eficaz en materia de seguridad y salud en el trabajo."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "25. Ante una sospecha de atragantamiento, la secuencia de acciones a realizar es:",
+    "options": [
+      "a) Primero anime a toser a la víctima.",
+      "b) Si la tos se vuelve inefectiva dé hasta 5 golpes en la espalda.",
+      "c) Si los golpes en la espalda no son efectivos dé hasta 5 compresiones abdominales.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "26. En el método adecuado para el levantamiento manual y traslado de las cargas:",
+    "options": [
+      "a) Como regla general, es preferible manipular las cargas cerca del cuerpo.",
+      "b) Disminuye el riesgo de lesiones, manipular las cargas a una altura superior a la de los hombros, ya que de este modo disminuye la tensión en la zona lumbar.",
+      "c) Si las cargas que deben ser manipuladas están situadas en el suelo o cerca del mismo, se deben utilizar las técnicas de manejo que permitan utilizar los músculos de la espalda más que los de las piernas.",
+      "d) Si el peso fuera excesivo, es mejor siempre realizar el levantamiento manual y traslado de la carga por una persona sola."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "27. ¿Cómo se denomina la dirección única de un documento web?",
+    "options": [
+      "a) Dirección IP.",
+      "b) HTML.",
+      "c) URL.",
+      "d) ICP."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "28. Un Celador destinado en el servicio de farmacia de un hospital deberá:",
+    "options": [
+      "a) Trasladar los pedidos a los servicios que lo soliciten.",
+      "b) Atender con carácter de urgencia la expedición de medicamentos por orden del farmacéutico, ante la ausencia del personal autorizado.",
+      "c) Velar por la seguridad en el servicio.",
+      "d) Las respuestas a) y c) son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "29. ¿Qué carácter tienen las disposiciones de carácter laboral contenidas en la Ley de Prevención de Riesgos Laborales?",
+    "options": [
+      "a) Derecho dispositivo supletorio.",
+      "b) Derecho necesario mínimo indisponible.",
+      "c) Derecho mínimo superior básico.",
+      "d) Derecho disponible de bases."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "30. ¿Cómo se denomina el principio que comprende las técnicas de análisis y planificación que tienen en cuenta la interacción que se produce entre el género y otros factores de discriminación?",
+    "options": [
+      "a) Interseccionalidad.",
+      "b) Interaccionalidad.",
+      "c) Seccionalidad.",
+      "d) Accionalidad."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "31. De conformidad con lo dispuesto en la normativa básica estatal, corresponderá a la Administración Sanitaria Pública de Extremadura:",
+    "options": [
+      "a) La supervisión de la formación que, en materia de prevención y promoción de la salud laboral, deba recibir el personal sanitario actuante en los servicios de prevención autorizados.",
+      "b) La elaboración y divulgación de estudios, investigaciones y estadísticas relacionadas con la salud de los trabajadores.",
+      "c) Las funciones encomendadas por la legislación vigente respecto a las incapacidades laborales, en coordinación con otras entidades competentes en dicha materia.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "32. ¿En qué color han de ir las siglas del SES en el logotipo del Organismo Autónomo, Servicio Extremeño de Salud?",
+    "options": [
+      "a) Verde.",
+      "b) Blanco.",
+      "c) Negro.",
+      "d) Gris."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "33. Respecto al lavado genital del paciente deberemos tener en cuenta que:",
+    "options": [
+      "a) Siempre que sea factible, se ofrecerá al paciente la posibilidad de realizarlo él mismo, ofreciéndole el material necesario.",
+      "b) Se limpiará de lo más limpio a lo más sucio debiendo resbalar el agua al aclarar en dirección al ano.",
+      "c) Se insistirá en el secado de los pliegues cutáneos para evitar infecciones y maceraciones.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "34. El extintor apropiado para la extinción de fuegos de sólidos licuables será el de clase:",
+    "options": [
+      "a) A.",
+      "b) B.",
+      "c) C.",
+      "d) D."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "35. ¿Cómo se denominan los pacientes que presentan parálisis de las extremidades inferiores y superiores?",
+    "options": [
+      "a) Hemipléjicos.",
+      "b) Hemiparéticos.",
+      "c) Tetrapléjicos.",
+      "d) Paraparésicos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "36. ¿Quién dará el permiso para colocar al paciente para la cirugía, después de que se encuentre anestesiado?",
+    "options": [
+      "a) La enfermera circulante.",
+      "b) El cirujano.",
+      "c) El anestesista.",
+      "d) El celador."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "37. Es una función del celador de autopsias:",
+    "options": [
+      "a) Traslado de cadáveres desde el depósito hasta la mesa de autopsias.",
+      "b) Limpiar la mesa y la sala, después de la autopsia.",
+      "c) Recomponer y asear al cadáver una vez efectuada la autopsia.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "38. El síntoma más precoz en la enfermedad de Alzheimer es:",
+    "options": [
+      "a) Temblor.",
+      "b) Desorientación.",
+      "c) Pérdida de memoria.",
+      "d) Alteración del equilibrio."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "39. Según el decálogo prehospitalario, una de las fases es la de aproximación, de las siguientes respuestas, ¿cuál es la correcta?",
+    "options": [
+      "a) Acceso al lugar del siniestro por el camino más rápido, más seguro y más corto.",
+      "b) Acceso al lugar del siniestro por el camino más seguro, más rápido y más corto.",
+      "c) Acceso al lugar del siniestro por el camino más corto, más seguro y más rápido.",
+      "d) Acceso al lugar del siniestro por el camino más seguro, más corto y más rápido."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "40. Representa a la Asamblea de Extremadura:",
+    "options": [
+      "a) El Presidente de la Junta de Extremadura.",
+      "b) La Mesa de la Asamblea.",
+      "c) La Diputación Permanente.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 3
+  },
+   {
+    "question": "41. En relación con el acceso del Celador a los datos que obran en la historia clínica del paciente:",
+    "options": [
+      "a) Tendrá libre acceso a los datos que figuran en la historia clínica del paciente.",
+      "b) Tendrá acceso a los datos excepto a las anotaciones subjetivas de otros profesionales.",
+      "c) No podrá tener acceso a ningún dato que figure en la historia clínica.",
+      "d) Sólo deberá acceder a los datos de la Historia Clínica que le sean imprescindibles para realizar sus funciones."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "42. ¿Qué organismos suelen usar el protocolo Telnet?",
+    "options": [
+      "a) Ayuntamientos.",
+      "b) Ministerios.",
+      "c) Medios de comunicación.",
+      "d) Bibliotecas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "43. Un Celador destinado en el almacén de farmacia es requerido por un médico para que le suministre una determinada medicación, ¿cuál debe ser su actuación?",
+    "options": [
+      "a) Se lo dará, notificándolo posteriormente.",
+      "b) Se lo negará y avisará al jefe de personal subalterno.",
+      "c) Se lo dará, pero se lo comunicará al supervisor de guardia.",
+      "d) Pasará la notificación al farmacéutico responsable."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "44. La Ley de Prevención de Riesgos Laborales establece:",
+    "options": [
+      "a) Los principios generales relativos a la prevención de riesgos profesionales.",
+      "b) La eliminación o disminución de los riesgos derivados del trabajo.",
+      "c) La formación de los trabajadores en materia preventiva.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "45. La Junta de Extremadura aprobará cada cuatro años el Plan Estratégico para la Igualdad entre Mujeres y Hombres a propuesta de:",
+    "options": [
+      "a) La Consejería competente en materia de igualdad.",
+      "b) El Consejo Extremeño de Participación de las Mujeres.",
+      "c) Las respuestas a) y b) son correctas.",
+      "d) Las respuestas a) y b) son incorrectas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "46. Los servicios sanitarios en Extremadura se ordenarán en los siguientes niveles, que actuarán bajo criterios de coordinación y cooperación:",
+    "options": [
+      "a) Atención primaria y Atención especializada, tanto en el ámbito hospitalario como extrahospitalario.",
+      "b) Atención sanitaria y Atención social, tanto en el ámbito hospitalario como extrahospitalario.",
+      "c) Atención personal y Atención sanitaria.",
+      "d) Las respuestas a) y c) con correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "47. Según el artículo 14.1.3 del Estatuto de Personal no Sanitario, el jefe de personal subalterno tiene a cargo al siguiente personal:",
+    "options": [
+      "a) Preferentemente a los celadores.",
+      "b) Al personal de oficio.",
+      "c) Al personal de oficio y subalterno.",
+      "d) Al personal de subalterno."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "48. El personal estatutario de los servicios de salud ostenta los siguientes derechos (señala la respuesta incorrecta):",
+    "options": [
+      "a) A la movilidad voluntaria, promoción interna y desarrollo profesional, en la forma en que prevean las disposiciones en cada caso aplicables.",
+      "b) A que sea respetada su dignidad e intimidad personal en el trabajo y a ser tratado con corrección, consideración y respeto por sus jefes y superiores, sus compañeros y sus subordinados.",
+      "c) Al descanso necesario, mediante la limitación de la jornada, las vacaciones periódicas retribuidas y permisos en los términos que se establezcan.",
+      "d) Al encuadramiento en el Régimen Especial de la Seguridad Social, con los derechos y obligaciones que de ello se derivan."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "49. Determine cuál de las siguientes no se considera una norma de utilización adecuada en un extintor portátil:",
+    "options": [
+      "a) Dirigir el chorro a la base de las llamas.",
+      "b) Apretar la maneta y, en caso de que exista, apretar la palanca de accionamiento de la boquilla.",
+      "c) Acercarse al fuego dejando como máximo un metro de distancia hasta él.",
+      "d) En el caso de que el extintor posea manguera cogerla por la boquilla para evitar la salida incontrolada del agente extintor."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "50. ¿Cuántos Kg se aplican en la tracción esquelética en el adulto para obtener el efecto terapéutico?",
+    "options": [
+      "a) De 3 a 6.",
+      "b) De 4,5 a 8.",
+      "c) De 7 a 12.",
+      "d) De 10 a 20."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "51. Según la clasificación del grado de contaminación de los tejidos en la cirugía, señale, cuál de los siguientes grados no es correcto:",
+    "options": [
+      "a) Limpia.",
+      "b) Contaminada.",
+      "c) Infectada.",
+      "d) Esterilizada."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "52. No es una función del celador de autopsias:",
+    "options": [
+      "a) Limpieza interna y externa del cadáver, rellenando los huecos viscerales.",
+      "b) Volver a amortajar y colocar el cadáver, cuidando el aspecto externo del difunto.",
+      "c) El traslado de los pacientes fallecidos desde el servicio de urgencias hasta la mesa de autopsias.",
+      "d) Realizar los movimientos del cadáver durante la realización de la autopsia."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "53. Entendemos por Psiquiatría:",
+    "options": [
+      "a) La rama de la psicología que se ocupa de los trastornos cuyo tratamiento es farmacológico.",
+      "b) La rama de la medicina que tiene por objeto el estudio, diagnóstico, tratamiento y prevención de las enfermedades mentales.",
+      "c) La rama de la medicina que se ocupa de las alteraciones anormales del pensamiento.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "54. ¿Qué es la maniobra de Heimlich?",
+    "options": [
+      "a) Una maniobra de resucitación.",
+      "b) Una maniobra de obstrucción de las vías aéreas.",
+      "c) Una maniobra de desobstrucción de las vías aéreas.",
+      "d) Una maniobra de apertura de vía aérea."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "55. Si hablamos de la manipulación manual de cargas, el calzado debe ser:",
+    "options": [
+      "a) Antideslizante.",
+      "b) Con protección adecuada del pie contra patologías fúngicas.",
+      "c) Con protección adecuada del pie contra la sudoración.",
+      "d) Con alzas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "56. Dentro de la composición del Consejo General del SES, ¿cuántos representantes serán designados por las organizaciones de consumidores y usuarios?",
+    "options": [
+      "a) Cuatro.",
+      "b) Tres.",
+      "c) Dos.",
+      "d) Uno."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "57. ¿Con qué siglas se conoce también un Chat?",
+    "options": [
+      "a) FTP.",
+      "b) IRC.",
+      "c) Re.",
+      "d) CCR."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "58. El Celador de farmacia normalmente se ocupa de acondicionar determinado material recepcionado por él, como:",
+    "options": [
+      "a) Alcohol.",
+      "b) Suero fisiológico.",
+      "c) El Celador no tiene que acondicionar ningún material.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "59. La Ley de Prevención de Riesgos Laborales está estructurada en:",
+    "options": [
+      "a) Siete Títulos.",
+      "b) Seis Títulos.",
+      "c) Siete Capítulos.",
+      "d) Seis Capítulos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "60. Se define como “dirección electrónica disponible para los ciudadanos a través de redes de telecomunicaciones cuya titularidad, gestión y administración corresponde a una Administración Pública, órgano o entidad administrativa en el ejercicio de sus competencias”:",
+    "options": [
+      "a) Sede electrónica.",
+      "b) Administración electrónica.",
+      "c) Página web de una Administración Pública.",
+      "d) Estándar abierto."
+    ],
+    "correct": 0
+  },
+   {
+    "question": "61. El personal sanitario del equipo de atención primaria, ostentará las funciones inspectoras y de control del cumplimiento de la normativa vigente en materia sanitaria que reglamentariamente se determinen. Cuando actúe en el ejercicio de dichas funciones tendrá la consideración de:",
+    "options": [
+      "a) Inspectores.",
+      "b) Personal sanitario superior.",
+      "c) Autoridad sanitaria.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "62. No es una función del jefe de personal subalterno, según el Estatuto de Personal no Sanitario:",
+    "options": [
+      "a) Constatar que el personal a su cargo cumpla el horario establecido en la Institución.",
+      "b) Constatar que el personal sanitario permanezca constantemente en su puesto de trabajo.",
+      "c) Cuidará que los celadores vistan el uniforme reglamentario.",
+      "d) Cuidará de la compostura del personal a sus órdenes."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "63. Una de las siguientes respuestas respecto de la higiene de los pies del paciente es incorrecta, ¿cuál es?",
+    "options": [
+      "a) El lavado de los pies puede favorecer la circulación sanguínea ayudando a prevenir las úlceras por presión.",
+      "b) Para proteger los pies del peso de la ropa de la cama se podrán utilizar arcos de cama.",
+      "c) Las uñas se cortarán en línea curva y con los bordes rugosos.",
+      "d) Se podrá utilizar una palangana para facilitar la higiene mediante inmersión."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "64. A quién corresponde facilitar la participación de todos los ciudadanos en la vida política, económica, cultural y social:",
+    "options": [
+      "a) A los partidos políticos.",
+      "b) A los sindicatos de trabajadores.",
+      "c) A los poderes públicos.",
+      "d) A las Cortes Generales."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "65. ¿Cuántos Kg se aplican en una extremidad en la tracción cutánea para obtener el efecto terapéutico?",
+    "options": [
+      "a) De 2 a 3.",
+      "b) De 3 a 6.",
+      "c) De 4,5 a 8.",
+      "d) De 7 a 12."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "66. El sistema de aspiración se conecta:",
+    "options": [
+      "a) A la toma de oxígeno.",
+      "b) A la toma de vacío.",
+      "c) Para ayudar a respirar al paciente que va a ser sometido a una intervención.",
+      "d) Al carro de paradas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "67. En las autopsias, los huecos viscerales se rellenan, generalmente:",
+    "options": [
+      "a) Con torundas desechables.",
+      "b) Con algodones.",
+      "c) Con papel de celulosa.",
+      "d) Con torundas estériles."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "68. Según la OMS se define la salud como:",
+    "options": [
+      "a) Ausencia de enfermedad.",
+      "b) Estado de equilibrio entre el estado mental y físico del paciente.",
+      "c) Estado de completo bienestar físico, mental y social y no sólo la ausencia de enfermedad.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "69. ¿Cuáles son las primeras señales objetivas que se deben valorar cuando nos encontremos ante un herido?",
+    "options": [
+      "a) Consciencia, respiración y fracturas.",
+      "b) Hemorragias, fracturas y quemaduras.",
+      "c) Consciencia, respiración y pulso.",
+      "d) Consciencia, fracturas y hemorragias."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "70. La humedad relativa también desempeña un papel importante en el ámbito de la manipulación manual de cargas y, para conseguir un óptimo desarrollo del trabajo, la humedad debe estar, de forma general, entre:",
+    "options": [
+      "a) El 30 y el 70 %. ",
+      "b) El 50 y el 70 %.",
+      "c) El 30 y el 90 %.",
+      "d) El 20 y el 40 %."
+    ],
+    "correct": 0
+  },
+
+  /* RESERVAS */
+
+  {
+    "question": "R1. La Ley 10/2001, de 28 de junio, de Salud de Extremadura, establece la organización pública de los servicios sanitarios bajo la denominación de:",
+    "options": [
+      "a) Atención sociosanitaria.",
+      "b) Sistema Sanitario Público de Extremadura (SSPE).",
+      "c) Atención especializada.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "R2. Si el jefe de personal subalterno encontrara alteraciones en el cuidado del orden del edificio, ¿a quién daría cuenta de dichas alteraciones?",
+    "options": [
+      "a) A los celadores.",
+      "b) Al administrador.",
+      "c) Al encargado de limpieza.",
+      "d) Al personal a sus órdenes."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "R3. Sobre las recomendaciones para el traslado intrahospitalario del paciente aislado, señale la respuesta correcta:",
+    "options": [
+      "a) El traslado de los pacientes con indicación de aislamiento por gérmenes de transmisión aérea, por gotitas y por contacto deberá limitarse o evitarse.",
+      "b) Los pacientes en sus desplazamientos intrahospitalarios llevarán mascarilla quirúrgica en los casos de infecciones con riesgo de transmisión por gotas y aéreo.",
+      "c) Los pacientes en sus desplazamientos en el caso de presentar lesiones cutáneas, heridas o drenajes, deberán ser tapadas adecuadamente.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "R4. Dentro de la gravedad de la emergencia se consideran posibles variables:",
+    "options": [
+      "a) Falsa alarma, conato de incendio, lugar de difícil acceso, y gran emergencia.",
+      "b) Falsa alarma, conato de incendio, incendio grave, y lugar de difícil acceso.",
+      "c) Falsa alarma, conato de incendio, incendio grave, y gran emergencia.",
+      "d) Conato de incendio, incendio grave, gran emergencia, e instalaciones peligrosas alrededor."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R5. ¿Quién debe supervisar los sistemas y conexiones del respirador, así como los tubos y cánulas, para proceder de forma adecuada a la movilización de un paciente asistido por ventilación artificial?",
+    "options": [
+      "a) El Celador.",
+      "b) El Técnico en Cuidados Auxiliares en Enfermería.",
+      "c) La Enfermera.",
+      "d) El Médico."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "R6. La Constitución no garantiza:",
+    "options": [
+      "a) El principio de legalidad.",
+      "b) La jerarquía normativa y la publicidad de las normas.",
+      "c) La retroactividad de las disposiciones sancionadoras no favorables o restrictivas de derechos individuales.",
+      "d) La seguridad jurídica, la responsabilidad y la interdicción de la arbitrariedad de los poderes públicos."
+    ],
+    "correct": 2
+  }
+
+        ];
+
+finishButton.addEventListener('click', () => {
+    const totalQuestions = questions.length;
+    const gradeLimit = Math.min(70, totalQuestions); // primeras 70 (o menos si no las hay)
+
+    // Contadores para marcar/mostrar de todas las preguntas (corrección completa)
+    let overallCorrect = 0, overallIncorrect = 0, overallUnanswered = 0;
+
+    // Contadores que se usarán sólo para calcular la nota (primeras gradeLimit preguntas)
+    let correctForGrade = 0, incorrectForGrade = 0, unansweredForGrade = 0;
+
+    for (let index = 0; index < totalQuestions; index++) {
+        const q = questions[index];
+        const options = document.getElementsByName(`question${index}`); // NodeList de radios
+        const selectedOption = [...options].find(opt => opt.checked) || null;
+
+        // Marca visual en la UI (se hace para todas las preguntas)
+        if (!selectedOption) {
+            overallUnanswered++;
+        } else if (parseInt(selectedOption.value, 10) === q.correct) {
+            overallCorrect++;
+            if (selectedOption.parentElement) selectedOption.parentElement.classList.add('correct-answer');
+        } else {
+            overallIncorrect++;
+            if (selectedOption.parentElement) selectedOption.parentElement.classList.add('incorrect-answer');
+        }
+
+        // Siempre marcar la respuesta correcta visualmente (si existe)
+        const correctAnswerInput = document.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+        if (correctAnswerInput && correctAnswerInput.parentElement) {
+            correctAnswerInput.parentElement.classList.add('correct-answer');
+        }
+
+        // Si esta pregunta está dentro de las primeras gradeLimit, contabilizar para la nota
+        if (index < gradeLimit) {
+            if (!selectedOption) {
+                unansweredForGrade++;
+            } else if (parseInt(selectedOption.value, 10) === q.correct) {
+                correctForGrade++;
+            } else {
+                incorrectForGrade++;
+            }
+        }
+    }
+
+    // Cálculo de la nota: aplicar penalización (1/3) y escalar a 10
+    let finalCorrect = correctForGrade - Math.floor(incorrectForGrade / 3);
+    if (finalCorrect < 0) finalCorrect = 0;
+
+    // Denominador para escalar: si hay al menos 70 preguntas se escala sobre 70, si hay menos, sobre las que haya
+    const denom = (gradeLimit === 70) ? 70 : gradeLimit;
+    const finalScore = ((finalCorrect / denom) * 10).toFixed(2);
+
+    summaryDiv.textContent =
+      `Preguntas corregidas (total): ${totalQuestions} — Correctas: ${overallCorrect}, Incorrectas: ${overallIncorrect}, En blanco: ${overallUnanswered}.\n` +
+      `Para la nota se han considerado las primeras ${gradeLimit}: Correctas: ${correctForGrade}, Incorrectas: ${incorrectForGrade}, En blanco: ${unansweredForGrade}. Nota final: ${finalScore}`;
+});
+
+    </script>
+</body>
+</html>
