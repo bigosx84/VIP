@@ -76,7 +76,7 @@
 <body>
     <div class="container">
         <form id="quizForm" aria-labelledby="quizFormLabel">
-            <h1 id="quizFormLabel">ABEL SIMULACRO EX. 17</h1>
+            <h1 id="quizFormLabel">ABEL EXAMEN 11</h1>
             <button type="button" id="finishButton">Terminar Simulacro</button>
             <div id="summary" class="summary"></div>
         </form>
@@ -845,66 +845,69 @@
     "correct": 2
   }
 
-        ];
+  ];
 
-finishButton.addEventListener('click', () => {
-    const totalQuestions = questions.length;
-    const gradeLimit = Math.min(70, totalQuestions); // primeras 70 (o menos si no las hay)
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
 
-    // Contadores para marcar/mostrar de todas las preguntas (corrección completa)
-    let overallCorrect = 0, overallIncorrect = 0, overallUnanswered = 0;
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
 
-    // Contadores que se usarán sólo para calcular la nota (primeras gradeLimit preguntas)
-    let correctForGrade = 0, incorrectForGrade = 0, unansweredForGrade = 0;
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
 
-    for (let index = 0; index < totalQuestions; index++) {
-        const q = questions[index];
-        const options = document.getElementsByName(`question${index}`); // NodeList de radios
-        const selectedOption = [...options].find(opt => opt.checked) || null;
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
 
-        // Marca visual en la UI (se hace para todas las preguntas)
-        if (!selectedOption) {
-            overallUnanswered++;
-        } else if (parseInt(selectedOption.value, 10) === q.correct) {
-            overallCorrect++;
-            if (selectedOption.parentElement) selectedOption.parentElement.classList.add('correct-answer');
-        } else {
-            overallIncorrect++;
-            if (selectedOption.parentElement) selectedOption.parentElement.classList.add('incorrect-answer');
-        }
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
 
-        // Siempre marcar la respuesta correcta visualmente (si existe)
-        const correctAnswerInput = document.querySelector(`input[name='question${index}'][value='${q.correct}']`);
-        if (correctAnswerInput && correctAnswerInput.parentElement) {
-            correctAnswerInput.parentElement.classList.add('correct-answer');
-        }
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
 
-        // Si esta pregunta está dentro de las primeras gradeLimit, contabilizar para la nota
-        if (index < gradeLimit) {
-            if (!selectedOption) {
-                unansweredForGrade++;
-            } else if (parseInt(selectedOption.value, 10) === q.correct) {
-                correctForGrade++;
-            } else {
-                incorrectForGrade++;
-            }
-        }
-    }
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
 
-    // Cálculo de la nota: aplicar penalización (1/3) y escalar a 10
-    let finalCorrect = correctForGrade - Math.floor(incorrectForGrade / 3);
-    if (finalCorrect < 0) finalCorrect = 0;
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
 
-    // Denominador para escalar: si hay al menos 70 preguntas se escala sobre 70, si hay menos, sobre las que haya
-    const denom = (gradeLimit === 70) ? 70 : gradeLimit;
-    const finalScore = ((finalCorrect / denom) * 10).toFixed(2);
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
 
-    summaryDiv.textContent =
-      `Preguntas corregidas (total): ${totalQuestions} — Correctas: ${overallCorrect}, Incorrectas: ${overallIncorrect}, En blanco: ${overallUnanswered}.\n` +
-      `Para la nota se han considerado las primeras ${gradeLimit}: Correctas: ${correctForGrade}, Incorrectas: ${incorrectForGrade}, En blanco: ${unansweredForGrade}. Nota final: ${finalScore}`;
-});
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
 
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
     </script>
 </body>
-
 </html>
+
