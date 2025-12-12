@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">ABEL EXAMEN 20</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+ {
+    "question": "1. Según los Estatutos del Organismo Autónomo Servicio Extremeño de Salud, quién nombra al personal estatutario fijo:",
+    "options": [
+      "a) La Dirección General de Recursos Humanos.",
+      "b) La Secretaría General.",
+      "c) La Dirección Gerencia.",
+      "d) La Dirección General de Asistencia Sanitaria."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "2. En virtud de lo dispuesto en el Estatuto de Autonomía de la C.A. de Extremadura, la Junta de Extremadura, como órgano colegiado de gobierno, está compuesta por:",
+    "options": [
+      "a) El Presidente, los Vicepresidentes, los Consejeros, los Directores Generales y los Jefes de Servicio.",
+      "b) El Presidente de la Asamblea, y los Consejeros, de haberlos.",
+      "c) El Presidente, y los Vicepresidentes, de haberlos.",
+      "d) El Presidente, los Vicepresidentes, de haberlos, y los Consejeros."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "3. ¿Qué artículo de la Constitución Española proclama la igualdad como uno de los valores superiores de nuestro ordenamiento jurídico?",
+    "options": [
+      "a) El art. 1.1.",
+      "b) El art. 3.1.",
+      "c) El art. 9.1.",
+      "d) El art. 9.3."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "4. ¿Qué artículo de la Constitución Española de 1978 promulga el derecho a disfrutar de un medio ambiente adecuado para el desarrollo de la persona?",
+    "options": [
+      "a) El artículo 45.",
+      "b) El artículo 46.",
+      "c) El artículo 47.",
+      "d) El artículo 51."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "5. La Constitución Española de 1978 tiene las siguientes disposiciones:",
+    "options": [
+      "a) Nueve Disposiciones Adicionales, cuatro Disposiciones Transitorias, una Disposición Derogatoria y una Disposición Final.",
+      "b) Cuatro Disposiciones Adicionales, nueve Disposiciones Transitorias, una Disposición Derogatoria y una Disposición Final.",
+      "c) Tres Disposiciones Adicionales, ocho Disposiciones Transitorias, una Disposición Derogatoria y una Disposición Final.",
+      "d) Cuatro Disposiciones Adicionales, nueve Disposiciones Transitorias, dos Disposiciones Derogatorias y una Disposición Final."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "6. Son derechos fundamentales de los extremeños, reconocidos expresamente por el artículo 6 del Estatuto de Autonomía, posibilitándose su ejercicio frente a los poderes públicos regionales:",
+    "options": [
+      "a) Los de libertad y seguridad.",
+      "b) Los de libre circulación y a la vida.",
+      "c) Los de participación y petición.",
+      "d) Los de educación y libre sindicación."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "7. El Estatuto de Autonomía de Extremadura relaciona entre los principios rectores de los poderes públicos regionales:",
+    "options": [
+      "a) El impulso de todo tipo de relaciones con Portugal.",
+      "b) El fomento del empleo juvenil.",
+      "c) El acceso a la vivienda en condiciones ventajosas de la población inmigrante para favorecer su integración.",
+      "d) La asunción de competencias sobre las cuencas fluviales intercomunitarias."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "8. Los recursos asistenciales en Salud Mental están encaminados a:",
+    "options": [
+      "a) Asistencia.",
+      "b) Rehabilitación.",
+      "c) Prevención.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "9. Los dispositivos intermedios no incluyen:",
+    "options": [
+      "a) Centros de larga estancia.",
+      "b) Unidades de corta estancia.",
+      "c) Centro de día.",
+      "d) Pisos protegidos."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "10. Respecto a la unidad de hospitalización psiquiátrica, señala la opción incorrecta:",
+    "options": [
+      "a) Atiende casos de desintoxicación, así como de evaluación y proceso diagnóstico.",
+      "b) Está atendida por un equipo multidisciplinar.",
+      "c) Su horario es de mañana.",
+      "d) Está indicada para pacientes con enfermedad física que se agrava con patología psíquica."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "11. ¿En qué tipo de hospital, se atienden urgencias de todas las especialidades médicas?",
+    "options": [
+      "a) En los hospitales de Nivel 1.",
+      "b) En los hospitales de Nivel 2.",
+      "c) En los hospitales de Nivel 3.",
+      "d) En los hospitales de Nivel 4."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "12. ¿Cuál de los siguientes apartados, no es necesario que esté incluido en el Plan de Urgencias de un hospital?",
+    "options": [
+      "a) Protocolo de asistencia sanitaria de urgencias.",
+      "b) Esquema de situación, de salidas de emergencias y dispositivos de extinción de incendios.",
+      "c) Organigrama, personal de la unidad y recursos materiales.",
+      "d) Programa de formación continuada del personal."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "13. ¿En qué área de trabajo de la unidad de urgencias, se quedan los enfermos encamados para comprobar la evolución clínica de su proceso, antes de decidirse su ingreso en planta de hospitalización o su alta?",
+    "options": [
+      "a) Área de observación.",
+      "b) Área de emergencias.",
+      "c) Área de boxes.",
+      "d) Área de SVB (Soporte Vital Básico)."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "14. ¿Cómo se denomina al tipo de asistencia sanitaria prestada por la Unidad de Urgencias del hospital, que comprende, asistencia en urgencias y alta al domicilio?",
+    "options": [
+      "a) Asistencia en régimen de observación.",
+      "b) Asistencia en régimen domiciliario.",
+      "c) Asistencia en régimen ambulatorio.",
+      "d) Asistencia en régimen de inmediatez."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "15. ¿En qué consiste la tercera fase del decálogo prehospitalario?",
+    "options": [
+      "a) En permitir la participación positiva y adaptada ante un problema.",
+      "b) En el acceso al lugar del siniestro por el camino más seguro, rápido y más corto.",
+      "c) En prevenir nuevos accidentes sobreañadidos al siniestro, impedir el acceso de curiosos y espectadores y evitar la difusión, se acotará el lugar del evento, procediendo a balizar la zona.",
+      "d) En la clasificación de los pacientes en el lugar del siniestro."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "16. ¿Cuáles son las medidas pasivas en la protección de la tercera fase del decálogo prehospitalario?",
+    "options": [
+      "a) Alarmas acústicas y visuales, elementos reflectantes y prevención de incendios, explosiones o derrumbes.",
+      "b) Mantener la distancia de seguridad y desconexión de equipos electrónicos.",
+      "c) Cascos, elementos reflectantes y la desconexión de equipos electrónicos.",
+      "d) Alarmas acústicas y visuales, elementos reflectantes en la uniformidad y cascos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "17. ¿Qué debe contener la transferencia que queda registrada en una ficha básica de Emergencias, según la novena fase del decálogo prehospitalario?",
+    "options": [
+      "a) Filiación del paciente, historia y patología que presenta.",
+      "b) Filiación del paciente, historia y patología que presenta, asistencia realizada, controles, incidencias, centro y facultativo receptor, equipo asistencial, fecha y hora.",
+      "c) Asistencia realizada, controles, incidencias, centro y facultativo receptor.",
+      "d) Historia y patología que presenta el paciente, equipo asistencial, fecha y hora."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "18. ¿Cómo se denomina el síntoma que se describe como sensación de falta de aire, que se manifiesta a menudo con jadeo?",
+    "options": [
+      "a) Ansiedad.",
+      "b) Disnea.",
+      "c) Expectoración.",
+      "d) Sibilancia."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "19. Los mensajes de correo no deseados generalmente de tipo publicitario se denominan:",
+    "options": [
+      "a) SPAM.",
+      "b) Bulling.",
+      "c) Breakmails.",
+      "d) Storm."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "20. El producto destinado a una posterior transformación industrial por un fabricante autorizado, se corresponde con:",
+    "options": [
+      "a) Producto intermedio.",
+      "b) Materia prima.",
+      "c) Medicamento de investigación.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "21. Los medicamentos derivados de la sangre, del plasma y el resto de sustancias de origen humano, así como sus correspondientes derivados, cuando se utilicen con finalidad terapéutica, constituyen:",
+    "options": [
+      "a) Medicamentos de uso humano.",
+      "b) Medicamentos de terapia génica.",
+      "c) Medicamentos de uso veterinario.",
+      "d) Medicamentos de origen humano."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "22. Toda sustancia (activa o inactiva) empleada en la fabricación de un medicamento, ya permanezca inalterada, se modifique o desaparezca en el transcurso del proceso, se denomina:",
+    "options": [
+      "a) Forma galénica.",
+      "b) Materia prima.",
+      "c) Producto intermedio.",
+      "d) Excipiente."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "23. La Ley de Prevención de Riesgos laborales, tiene por objeto:",
+    "options": [
+      "a) Prevenir los accidentes en general.",
+      "b) Evitar riesgos en el recorrido al puesto de trabajo.",
+      "c) Promover la seguridad y la salud de los trabajadores.",
+      "d) Que cada vez haya menos accidentes de tráfico."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "24. ¿Qué norma constituye el marco de desarrollo del principio de igualdad de trato, incorpora sustanciales modificaciones legislativas para avanzar en la igualdad real de mujeres y hombres y en el ejercicio pleno de los derechos e implementa medidas transversales que inciden en todos los órdenes de la vida política, jurídica y social, a fin de erradicar las discriminaciones contra las mujeres?",
+    "options": [
+      "a) La Ley Orgánica 3/2007, de 22 de marzo.",
+      "b) La Ley 8/2011 , de 23 de marzo.",
+      "c) La Ley 40/2015, de 1 de octubre.",
+      "d) La Ley 9/2014, de 9 de mayo."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "25. Los elementos de lavado son:",
+    "options": [
+      "a) Toallas, guantes, esponjas, palangana, agua, jabón, crema hidratante, jarra, etc.",
+      "b) Toallas, guantes, esponjas, palangana, agua, jabón, sábana pequeña, jarra, etc.",
+      "c) Toallas, guantes, esponjas, palangana y jabón.",
+      "d) Toallas, guantes, manta de baño, palangana, agua, jabón, crema hidratante, jarra, etc."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "26. ¿A quién debe comunicar el Servicio de Medicina Interna el Alta de un paciente para que esta se produzca de manera formal?",
+    "options": [
+      "a) A la Gerencia del Hospital.",
+      "b) A la Unidad de Admisión.",
+      "c) A la Unidad de Altas.",
+      "d) A la Unidad de Mantenimientos y movimientos de Pacientes en el Hospital."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "27. ¿Cuándo está indicado el uso de bastones en los enfermos?",
+    "options": [
+      "a) Hemiplejia derecha que permite la marcha.",
+      "b) Tetraplejia.",
+      "c) Fractura bilateral de caderas.",
+      "d) Luxaciones de ambas rótulas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "28. Los criterios que deben tenerse en cuenta a la hora de elegir entre un procedimiento u otro, son los siguientes:",
+    "options": [
+      "a) Aquellos que causen menos dolor, angustia o lesión a los animales.",
+      "b) Los que utilicen un menor número de animales.",
+      "c) Aquellos que empleen animales pertenecientes a especies cuya elección haya sido cuidadosamente valorada.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "29. ¿Qué área del hospital es el mayor cliente del Servicio de esterilización?",
+    "options": [
+      "a) De celadores.",
+      "b) Quirúrgica.",
+      "c) Pediátrica.",
+      "d) De Medicina Interna."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "30. ¿Cómo se denomina la fase de la relación interpersonal del celador/usuarios en la que se presta la asistencia o ayuda necesaria?",
+    "options": [
+      "a) Fase de Ejecución.",
+      "b) Fase de Recepción.",
+      "c) Fase de Conclusión.",
+      "d) Fase Inicial."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "31. En referencia al baño en la cama completo, entre las normas generales de aseo se encuentran:",
+    "options": [
+      "a) Evitar que en la habitación haya corrientes de aire.",
+      "b) Que la temperatura del agua para el baño entre 37-40 ºC y la de la habitación 22-24 ºC aproximadamente.",
+      "c) Es importante incidir en el secado para evitar la aparición de alteraciones cutáneas.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "32. ¿Cómo se denomina la parte distal de bastones, muletas y andadores?",
+    "options": [
+      "a) Cinchas.",
+      "b) Poleas.",
+      "c) Estribos.",
+      "d) Conteras."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "33. ¿Cuál es el método de desinfección más utilizado en nuestro sistema hospitalario?",
+    "options": [
+      "a) Métodos químicos líquidos.",
+      "b) Radiación ultravioleta.",
+      "c) Hervido.",
+      "d) Pasteurización."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "34. Cuando se realiza una desinfección por agentes químicos que eliminan virus lipídicos de tamaño medio, bacterias en forma vegetativa y algunos hongos en un periodo de tiempo corto (menos de 10 minutos), estamos hablando de:",
+    "options": [
+      "a) Desinfección de bajo nivel.",
+      "b) Desinfección de moderado nivel.",
+      "c) Desinfección de nivel intermedio.",
+      "d) Desinfección de alto nivel."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "35. De acuerdo con la Ley 8/2011, de 23 de marzo, de Igualdad entre mujeres y hombres y contra la violencia de género en Extremadura, ¿qué se entiende por discriminación directa por razón de sexo?",
+    "options": [
+      "a) La situación en que se produce un comportamiento relacionado con el sexo de una persona, con el propósito o el efecto de atentar contra la dignidad de la persona y crear un entorno intimidatorio, hostil, degradante, humillante u ofensivo.",
+      "b) La situación en que se produce cualquier comportamiento verbal, no verbal o físico de índole sexual, con el propósito o el efecto de atentar contra la dignidad de una persona, en particular cuando se crea un entorno intimidatorio, hostil, degradante, humillante y ofensivo.",
+      "c) El condicionamiento de un derecho o de una expectativa de derecho a la aceptación de una situación constitutiva de acoso sexual o de acoso por razón de sexo.",
+      "d) Cualquier tipo de trato desfavorable relacionado con el embarazo, la maternidad o la paternidad."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "36. De acuerdo con la Ley de Régimen Jurídico del Sector Público, y con relación al funcionamiento electrónico del sector público, ¿qué se entiende por actuación administrativa automatizada?",
+    "options": [
+      "a) Cualquier acto o actuación realizada íntegramente a través de medios electrónicos por una Administración Pública en el marco de un procedimiento administrativo y en la que no haya intervenido de forma directa un empleado público.",
+      "b) Aquellos actos realizados en su integridad de manera electrónica y en los que haya intervenido de manera directa un empleado público.",
+      "c) Aquellos actos realizados total o parcialmente de manera electrónica y en los que haya intervenido de manera directa un empleado público.",
+      "d) La Ley de Régimen Jurídico del Sector Público no define qué deba entenderse por actuación administrativa automatizada."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "37. ¿Qué principio general impone a los poderes públicos de Extremadura la obligación de adoptar las medidas oportunas para garantizar el acceso y el ejercicio efectivo de los derechos políticos, civiles, económicos, sociales, laborales y culturales y para eliminar la discriminación?",
+    "options": [
+      "a) El principio de igualdad de oportunidades.",
+      "b) El principio de fomento de la corresponsabilidad.",
+      "c) El principio de igualdad de trato entre mujeres y hombres.",
+      "d) El principio de acción positiva."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "38. Respecto al archivo de los documentos electrónicos, señale la opción correcta:",
+    "options": [
+      "a) Todos los documentos utilizados en las actuaciones administrativas se almacenarán por medios electrónicos, salvo cuando no sea posible.",
+      "b) En todo caso, los documentos utilizados en las actuaciones administrativas se almacenarán por medios electrónicos.",
+      "c) Los documentos utilizados en las actuaciones administrativas se almacenarán por medios electrónicos sólo cuando así lo exija la ley.",
+      "d) Todos los documentos utilizados en las actuaciones administrativas se almacenarán por medios electrónicos, salvo que la ley disponga lo contrario."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "39. Pretendemos esterilizar vidrio por calor seco mediante estufa Poupinel programando un tiempo de 30 minutos, ¿qué temperatura debemos seleccionar?",
+    "options": [
+      "a) 180 ºC.",
+      "b) 170 ºC.",
+      "c) 160 ºC.",
+      "d) 150 ºC."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "40. La segregación de cuchillas utilizadas en el microtomo, se realiza en un contenedor de objetos punzantes y cortantes. ¿A qué tipo de residuos pertenecen?",
+    "options": [
+      "a) Residuos tipo I.",
+      "b) Residuos tipo II.",
+      "c) Residuos tipo III.",
+      "d) Residuos tipo IV."
+    ],
+    "correct": 2
+  },
+   {
+    "question": "41. ¿Qué test se realiza en el autoclave todos los días a la misma hora con el fin de comprobar el correcto desalojo del aire (vacío) y la adecuada penetración del vapor?",
+    "options": [
+      "a) Test de Allen.",
+      "b) Test de Romberg.",
+      "c) Test de Bowie-Dick.",
+      "d) Test del Shulman."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "42. Señale la respuesta correcta en relación con el derecho al acompañamiento, según la Ley 3/2005 de 8 de julio de información sanitaria y autonomía del paciente:",
+    "options": [
+      "a) Se deberá facilitar el acompañamiento de los pacientes de un familiar o persona de su confianza, en todos los casos.",
+      "b) Se vigilará especialmente que, durante el proceso de parto, sea efectivo el derecho de toda mujer a que se facilite el acceso al padre o de otra persona designada por ella, excepto si es desaconsejable.",
+      "c) Los menores siempre tendrán derecho a estar acompañados de sus padres, tutores o guardadores.",
+      "d) Los incapacitados no tendrán derecho a estar acompañados de los responsables de su guarda y protección, sólo de sus padres."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "43. Señale la respuesta correcta en relación con la eficacia del documento de expresión anticipada de voluntades:",
+    "options": [
+      "a) La voluntad del paciente, expresada por escrito o verbalmente, prevalecerá sobre las instrucciones contenidas en el documento de EAV.",
+      "b) Se podrán tener en cuenta las instrucciones contrarias al ordenamiento jurídico, si es en beneficio del paciente.",
+      "c) La emisión del paciente de un consentimiento informado prevalece sobre la EAV.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "44. La prestación del consentimiento informado será:",
+    "options": [
+      "a) De forma verbal como regla general.",
+      "b) De forma verbal en caso de intervención quirúrgica.",
+      "c) De forma escrita como regla general.",
+      "d) De forma verbal en la aplicación de procedimientos que suponen riesgos o inconvenientes de notoria y previsible repercusión negativa sobre la salud del paciente."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "45. El tipo de comunicación donde el mensaje del emisor finaliza con la ejecución de una tarea por parte del receptor se denomina:",
+    "options": [
+      "a) Participativa.",
+      "b) Directiva.",
+      "c) Unidireccional.",
+      "d) Externa."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "46. ¿Cómo se denomina la primera vértebra cervical?",
+    "options": [
+      "a) Axis.",
+      "b) Atlas.",
+      "c) Axon.",
+      "d) Magna."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "47. ¿Qué plano permite los movimientos de abducción y aducción?",
+    "options": [
+      "a) Plano sagital.",
+      "b) Plano transversal.",
+      "c) Plano coronal.",
+      "d) Plano parasagital."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "48. ¿Qué posición está indicada para un paciente que sufre hernia de hiato?",
+    "options": [
+      "a) Trendelenburg.",
+      "b) Morestin.",
+      "c) Sims.",
+      "d) Decúbito prono."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "49. Las pinzas de Crile se consideran un instrumental de:",
+    "options": [
+      "a) Diéresis.",
+      "b) Talla o campo.",
+      "c) Hemostasia.",
+      "d) Aprehensión."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "50. En los primeros auxilios hay que seguir la conducta:",
+    "options": [
+      "a) PES.",
+      "b) PAS.",
+      "c) AVA.",
+      "d) ALEC."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "51. ¿Qué método es el más exacto para el cálculo de la superficie corporal quemada en los niños?",
+    "options": [
+      "a) Esquema de Lund y Browder.",
+      "b) Regla de la palma de la mano.",
+      "c) Regla de Wallace.",
+      "d) Regla de Parkland."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "52. ¿Qué tipo de quemaduras no son dolorosas?",
+    "options": [
+      "a) Primer grado.",
+      "b) Segundo grado.",
+      "c) Tercer grado.",
+      "d) Sexto grado."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "53. En el aislamiento protector o inverso el sistema de ventilación en la habitación será:",
+    "options": [
+      "a) A presión negativa.",
+      "b) A presión positiva.",
+      "c) Este tipo de aislamiento no necesita un sistema de ventilación especial del aire.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "54. ¿Cuál será la primera medida de barrera que nos quitaremos en un aislamiento por contacto?",
+    "options": [
+      "a) Bata.",
+      "b) Gafas protectoras.",
+      "c) Guantes.",
+      "d) Mascarilla."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "55. Un Hospital privado vinculado al sistema público:",
+    "options": [
+      "a) No se someterá al mismo control económico que uno público.",
+      "b) Se someterá al mismo control administrativo que uno público.",
+      "c) Debe establecer una atención sanitaria distinta que uno público.",
+      "d) Puede establecer una atención sanitaria distinta que uno público."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "56. ¿Qué tipo de extintor es el más indicado en caso de fuego eléctrico?",
+    "options": [
+      "a) De nitrógeno líquido.",
+      "b) De polvo seco polivalente.",
+      "c) De agua tratada.",
+      "d) De CO2."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "57. En caso de pacientes psiquiátricos agitados el celador deberá:",
+    "options": [
+      "a) Colaborar en las maniobras de reducción a indicación del personal sanitario.",
+      "b) Llamar inmediatamente a las fuerzas de seguridad públicas.",
+      "c) Practicar sujeción mecánica antes de que pase a ser valorado por el personal sanitario.",
+      "d) Las respuestas a) y b) son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "58. Un usuario impulsivo es aquel que:",
+    "options": [
+      "a) Quiere respuestas rápidas.",
+      "b) Es influenciable y dependiente.",
+      "c) Nunca está seguro.",
+      "d) Cree saberlo todo y es dominante."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "59. Para poder ofrecer al usuario una atención que genere satisfacción, es preciso que el celador tenga en cuenta lo que este espera recibir cuando entra en una institución sanitaria, es decir sus:",
+    "options": [
+      "a) Motivaciones.",
+      "b) Expectativas.",
+      "c) Sentimientos.",
+      "d) Valores."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "60. Respecto a la ventilación de las habitaciones de los hospitales, es correcto que:",
+    "options": [
+      "a) Si el hospital no dispone de aire acondicionado que realice esta función, habrá que abrir la ventana de 10 a 15 minutos diarios.",
+      "b) Todos los días entre 8 y 8:15 de la mañana hay que abrir las ventanas ya que es la hora más adecuada para ello.",
+      "c) No es necesario hacerlo, de hecho sería peligroso para la población en general que los virus y bacterias que hay en todos los hospitales de una ciudad, salgan de ese espacio cerrado y controlado.",
+      "d) Es necesario realizarla al menos 3 veces al día."
+    ],
+    "correct": 0
+  },
+   {
+    "question": "61. La piel representa una superficie de:",
+    "options": [
+      "a) Aproximadamente dos metros cuadrados en el adulto.",
+      "b) Entre 4-5 Kg.",
+      "c) Entre 0,5-2 mm (aunque hay zonas donde el grosor puede ser de 4 mm o más).",
+      "d) Algo menos de un metro cuadrado."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "62. Si un paciente ingresado en el hospital, requiere ser trasladado del Servicio de Medicina Interna al Servicio de Radiología, para la realización de exámenes ¿quién autorizará de forma operativa dicho traslado?",
+    "options": [
+      "a) Medicina Interna.",
+      "b) Radiología.",
+      "c) Admisión.",
+      "d) No requiere de concesión o autorización alguna, el celador lo llevará donde lo requiera el facultativo."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "63. ¿Con qué fin, la unidad de admisión dispondrá de un dispositivo orgánico en la puerta de urgencias del hospital?",
+    "options": [
+      "a) Recibir a los usuarios/ pacientes.",
+      "b) Registrar las entradas y las salidas del hospital.",
+      "c) Distribuir a los usuarios/ pacientes a la consulta o servicio que corresponda.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "64. ¿Cómo puede actuar la Admisión de urgencias en un hospital?",
+    "options": [
+      "a) Como oficina delegada durante el día.",
+      "b) Como unidad central de Admisión en días o circunstancias especiales (festivos, noches).",
+      "c) Son correctas las respuestas a) y b).",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "65. Los cambios posturales del enfermo encamado para prevenir la aparición de úlceras se efectuarán cada:",
+    "options": [
+      "a) 2-3 horas.",
+      "b) 4-5 horas.",
+      "c) 6-8 horas.",
+      "d) 12 horas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "66. ¿Qué es incorrecto de la posición de decúbito supino?",
+    "options": [
+      "a) Es una posición utilizada para la exploración del tórax, abdomen, piernas y pies.",
+      "b) Se emplea para comenzar con la higiene del enfermo y como punto de partida para diferentes movilizaciones.",
+      "c) El plano del cuerpo es paralelo al plano del suelo y al plano horizontal de la cama o camilla.",
+      "d) Sus piernas están extendidas y sus brazos alineados a lo largo del cuerpo, estando el paciente acostado sobre su abdomen y pecho."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "67. ¿Qué posición es de mucha utilidad en las embarazadas para evitar el “síndrome de hipotensión en decúbito supino” que se produce como consecuencia de la compresión del útero sobre la vena cava inferior?",
+    "options": [
+      "a) Decúbito dorsal.",
+      "b) Decúbito lateral izquierdo.",
+      "c) Decúbito prono.",
+      "d) Decúbito lateral derecho."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "68. ¿Cuál de estas posiciones es fundamental para los enfermos encamados, como medio de utilidad en los cambios posturales evitando o previniendo la aparición de úlceras por presión?",
+    "options": [
+      "a) Decúbito prono.",
+      "b) Decúbito lateral izquierdo o derecho.",
+      "c) Decúbito supino.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "69. Un color de seguridad amarillo, o amarillo anaranjado para que contraste a efectos de mejorar la percepción deberá utilizarse con un color de fondo:",
+    "options": [
+      "a) Blanco.",
+      "b) Azul.",
+      "c) Negro.",
+      "d) Rojo."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "70. El receptáculo fijo o móvil cerrado por paredes sólidas y, al menos por un lado, con barrotes o tela metálica o, en su caso, redes, donde se alojan o transportan uno o más animales, se denomina:",
+    "options": [
+      "a) Criadero.",
+      "b) Jaula.",
+      "c) Establecimiento.",
+      "d) Centro."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "Reserva 1. Los animales usados más frecuentemente para experimentación a nivel hospitalario, incluyen:",
+    "options": [
+      "a) Roedores.",
+      "b) Palomas.",
+      "c) Gallinas.",
+      "d) Cabras."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "Reserva 2. ¿En qué fecha se ratificó la Constitución Española por el pueblo español en referéndum?",
+    "options": [
+      "a) 27 de diciembre de 1978.",
+      "b) 31 de octubre de 1978.",
+      "c) 6 de diciembre de 1978.",
+      "d) 8 de diciembre de 1979."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Reserva 3. ¿Cómo se denomina la zona del bloque quirúrgico donde se requiere de uniforme quirúrgico, calzas o zuecos quirúrgicos, gorro, y uso de mascarilla obligatorio?",
+    "options": [
+      "a) Sin limitación de acceso.",
+      "b) Semilimitada.",
+      "c) Limitada.",
+      "d) Prohibida."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Reserva 4. El antequirófano pertenece a la zona quirúrgica:",
+    "options": [
+      "a) Sin limitación de acceso.",
+      "b) Semilimitada.",
+      "c) Limitada.",
+      "d) Prohibida."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Reserva 5. ¿En qué grupo de cirugía incluirías aquella que pretende corregir deformidades, como por ejemplo una escoliosis verdadera?",
+    "options": [
+      "a) Diagnóstica.",
+      "b) Curativa.",
+      "c) Reparadora.",
+      "d) Estética."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Reserva 6. La zona gris en el bloque quirúrgico se corresponde con:",
+    "options": [
+      "a) La zona estéril.",
+      "b) La zona sucia.",
+      "c) La zona libre.",
+      "d) La zona limpia."
+    ],
+    "correct": 3
+  }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
