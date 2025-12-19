@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro ¡Al toro!</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eef3ff;
+            border-left: 5px solid #4a90e2;
+        }
+        .question label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            border: 1px solid #d1d8e0;
+            margin-bottom: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #d9e8ff;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct-answer {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50;
+            font-weight: bold;
+        }
+        .incorrect-answer {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="quizForm" aria-labelledby="quizFormLabel">
+            <h1 id="quizFormLabel">ABEL EXAMEN 21</h1>
+            <button type="button" id="finishButton">Terminar Simulacro</button>
+            <div id="summary" class="summary"></div>
+        </form>
+    </div>
+
+    <script>
+     const questions = [
+
+    "question": "1. Según el artículo 1 de la Constitución Española, España se constituye en un Estado:",
+    "options": [
+      "a) Democrático y plural.",
+      "b) Constitucional y democrático.",
+      "c) Social y democrático de Derecho.",
+      "d) Autonómico, aconfesional y monárquico."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "2. Sobre la materia de régimen y convocatoria de consultas populares no vinculantes diferentes al referéndum, ostenta la Comunidad Autónoma de Extremadura:",
+    "options": [
+      "a) Competencia exclusiva.",
+      "b) Competencia de desarrollo y ejecución.",
+      "c) Competencia de ejecución.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "3. ¿Cuál de las siguientes materias no le compete en exclusiva a la Comunidad Autónoma de Extremadura según su Estatuto de Autonomía?",
+    "options": [
+      "a) Prensa, radio y televisión y otros medios de comunicación.",
+      "b) La Administración de justicia.",
+      "c) Agricultura, ganadería y pastos.",
+      "d) Caza y explotaciones cinegéticas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "4. El personal estatutario de los servicios de salud tiene el deber de:",
+    "options": [
+      "a) Participar en la elaboración de los convenios colectivos.",
+      "b) Realizar sus funciones fuera del horario y jornada habitual.",
+      "c) Realizar actividades sindicales.",
+      "d) Respetar la Constitución, el Estatuto de Autonomía correspondiente y el resto del ordenamiento jurídico."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "5. No es un principio y criterio de ordenación del régimen estatutario:",
+    "options": [
+      "a) Igualdad, mérito, capacidad y publicidad en el acceso a la condición de personal estatutario.",
+      "b) Movilidad del personal en el conjunto de las Administraciones Públicas.",
+      "c) Coordinación, cooperación y mutua información entre las Administraciones sanitarias públicas.",
+      "d) Integración en el régimen organizativo y funcional del servicio de salud y de sus centros e instituciones."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "6. ¿A quién le corresponde realizar el nombramiento del personal estatutario fijo?",
+    "options": [
+      "a) Al Consejo de Gobierno de la Junta de Extremadura.",
+      "b) Al titular de la Consejería competente en materia sanitaria.",
+      "c) Al Director Gerente del Servicio Extremeño de Salud.",
+      "d) A la Dirección General de Recursos Humanos."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "7. A tenor del artículo 2 de la Ley de Salud de Extremadura, esta será de aplicación en el territorio de la Comunidad Autónoma de Extremadura a:",
+    "options": [
+      "a) Las Administraciones Públicas de la Comunidad Autónoma de Extremadura.",
+      "b) Todos los extremeños y residentes en cualquiera de los municipios de Extremadura, con independencia de su situación legal o administrativa.",
+      "c) Cualesquiera entidades o instituciones, tanto públicas como privadas, cuando así se establezca en la Ley 10/2001, de 28 de junio.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "8. El acondicionamiento térmico que permite mantener el cadáver durante las primeras 24 horas retardando los procesos de putrefacción, se denomina:",
+    "options": [
+      "a) Refrigeración.",
+      "b) Congelación.",
+      "c) Cremación.",
+      "d) Ninguna de las opciones anteriores es correcta."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "9. La tanatopraxia está prohibida cuando la muerte sea debida a:",
+    "options": [
+      "a) Enfermedad de Crohn.",
+      "b) Rabia.",
+      "c) Infarto.",
+      "d) Insuficiencia renal."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "10. La disección y examen del cuerpo de una persona fallecida para determinar la causa de la muerte o la existencia de un proceso patológico, se denomina:",
+    "options": [
+      "a) Tanatopraxia.",
+      "b) Tanatoplastia.",
+      "c) Tanatopsia.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "11. El método de conservación del cadáver por medio de la hipotermia, se conoce como:",
+    "options": [
+      "a) Congelación.",
+      "b) Climatización.",
+      "c) Embalsamamiento.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "12. La incineración es la reducción a cenizas de:",
+    "options": [
+      "a) Restos cadavéricos.",
+      "b) Cadáveres.",
+      "c) Restos humanos.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "13. Indica qué centro tiene como finalidad la rehabilitación del paciente después de haber pasado un ingreso de 6 a 12 meses:",
+    "options": [
+      "a) Centro de media estancia.",
+      "b) Piso protegido.",
+      "c) Centro de salud mental.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "14. Dispositivo sanitario que constituye una alternativa al ingreso total es:",
+    "options": [
+      "a) Centro de larga estancia.",
+      "b) Centro de día.",
+      "c) Piso protegido.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "15. El centro cuya finalidad es la recuperación de habilidades o destrezas para integrarse en la sociedad, se denomina:",
+    "options": [
+      "a) Centro de media estancia.",
+      "b) Centro de día.",
+      "c) Unidad de corta estancia.",
+      "d) Taller ocupacional."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "16. Señala cuál de los siguientes enunciados no corresponde con alguno de los responsables del servicio de urgencias hospitalario:",
+    "options": [
+      "a) Jefe de personal subalterno.",
+      "b) Supervisor/a de enfermería.",
+      "c) Coordinador médico de urgencias.",
+      "d) Responsable de hostelería y limpieza."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "17. ¿Cómo se denomina a los médicos que están recibiendo formación de especialistas en el hospital durante varios años?",
+    "options": [
+      "a) Facultativos especialistas.",
+      "b) MIR (médicos internos residentes).",
+      "c) Médicos generalistas.",
+      "d) Facultativos no especialistas."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "18. ¿Cuál de los siguientes tipos de asistencia no es propia de los Servicios Normales de Urgencias y Servicios Especiales de Urgencias?",
+    "options": [
+      "a) Asistencia en régimen ambulatorio.",
+      "b) Asistencia urgente.",
+      "c) Asistencia en régimen de internamiento.",
+      "d) Asistencia domiciliaria."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "19. ¿Qué es una herida?",
+    "options": [
+      "a) Una salida masiva de sangre de los vasos sanguíneos.",
+      "b) Lesión que puede producir rotura de la piel.",
+      "c) Interrupción de la continuidad de un tendón.",
+      "d) Destrucción de los tegumentos."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "20. ¿Cuál sería la actuación correcta en una otorragia?",
+    "options": [
+      "a) No colocar gasas ni cualquier otro apósito en el oído, para facilitar la salida de sangre.",
+      "b) Administrar un suero.",
+      "c) Colocar un tapón de gasa humedecido en agua oxigenada.",
+      "d) Controlar el nivel de consciencia cada 3 horas."
+    ],
+    "correct": 0
+  },
+    {
+    "question": "21. ¿Cuál sería la actuación correcta en una hemorragia interna?",
+    "options": [
+      "a) Colocar al paciente en la posición de antishock con la cabeza ladeada.",
+      "b) No tapar al paciente.",
+      "c) Informar al paciente de que no debe moverse ni realizar ningún esfuerzo.",
+      "d) Tumbar al paciente en posición de decúbito supino, con la cabeza hacia el frente y los pies por debajo de la altura de la cabeza."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "22. ¿De dónde procede la sangre en la hematemesis?",
+    "options": [
+      "a) Sangre procedente del aparato digestivo que es expulsada con las heces.",
+      "b) Hemorragia de las encías.",
+      "c) Sangre procedente del aparato digestivo que es expulsada con el vómito.",
+      "d) Hemorragia que se produce a través de la nariz."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "23. ¿Cuál de las siguientes pruebas se utiliza para diagnosticar directamente la insuficiencia respiratoria?",
+    "options": [
+      "a) Bioquímica.",
+      "b) Gasometría arterial.",
+      "c) Hematología.",
+      "d) Hemocultivo."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "24. ¿Cuál es el cuadro clínico característico de la insuficiencia respiratoria?",
+    "options": [
+      "a) Disnea, bradicardia, bradipnea e hipertensión.",
+      "b) Disartria, taquicardia, hipotensión y sudoración.",
+      "c) Disnea, taquicardia, taquipnea y sudoración.",
+      "d) Diplopía, taquicardia, bradipnea e hipotensión."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "25. ¿Qué elemento se considera obligatorio para enviar un email?",
+    "options": [
+      "a) Asunto.",
+      "b) Destinatario.",
+      "c) Elemento adjunto.",
+      "d) Copia oculta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "26. ¿Qué servicio se utiliza para conectar a equipos remotos mediante la Red emulando un terminal del equipo al que se realiza la conexión?",
+    "options": [
+      "a) FTP.",
+      "b) SMTP.",
+      "c) Telnet.",
+      "d) HTTP."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "27. El campo CCO de la cabecera de un mensaje de email, ¿qué significa?",
+    "options": [
+      "a) Archivo adjunto.",
+      "b) Que se envía una copia oculta del email a las direcciones que se indican en ese campo.",
+      "c) Que se envía una copia del email a las direcciones que se indican en ese campo.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "28. La forma farmacéutica de un principio activo o placebo, que se investiga o se utiliza como referencia en un ensayo clínico, se denomina:",
+    "options": [
+      "a) Medicamento biológico.",
+      "b) Medicamento de uso humano.",
+      "c) Medicamento de terapia génica.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "29. Aquel medicamento elaborado y garantizado por un farmacéutico o bajo su dirección, dispensado en una oficina de farmacia o servicio farmacéutico, enumerado y descrito por el Formulario, es:",
+    "options": [
+      "a) Fórmula magistral.",
+      "b) Medicamento genérico.",
+      "c) Producto de higiene personal.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "30. Las vacunas y los inmunosueros se encuadran en el apartado de:",
+    "options": [
+      "a) Medicamentos biológicos.",
+      "b) Medicamentos de terapia génica.",
+      "c) Medicamentos de uso veterinario.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "31. Las actividades o medidas que adoptan las empresas en todas sus fases de actividad, tendentes a disminuir o evitar los riesgos derivados del trabajo, se denominan por la Ley 31/1995:",
+    "options": [
+      "a) Cuidados.",
+      "b) Protección.",
+      "c) Previsión.",
+      "d) Prevención."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "32. La Junta de Extremadura, a propuesta de la Consejería competente en materia de igualdad y con el dictamen del Consejo Extremeño de Participación de las Mujeres, aprobará el Plan Estratégico para la Igualdad entre Mujeres y Hombres:",
+    "options": [
+      "a) Cada cinco años.",
+      "b) Cada cuatro años.",
+      "c) Cada dos años.",
+      "d) Cada año."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "33. Cuando sea necesario trasladar un paciente a la UCI, tras dar aviso a la citada unidad, se colocará en la camilla:",
+    "options": [
+      "a) Desfibrilador.",
+      "b) Bomba de nutrición enteral.",
+      "c) Medicación necesaria.",
+      "d) Las respuestas a) y c) son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "34. En relación con las batas utilizadas para realizar autopsias, señala la respuesta incorrecta:",
+    "options": [
+      "a) Impiden las salpicaduras de los fluidos corporales.",
+      "b) Al acabar la autopsia, se introducen en un baño desinfectante.",
+      "c) Son impermeables, y por lo tanto, muy seguras.",
+      "d) Son una medida de prevención."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "35. En relación con la técnica de sujeción terapéutica, indica cuál debe ser el número mínimo de personas necesarias para su instauración:",
+    "options": [
+      "a) Cinco.",
+      "b) Tres.",
+      "c) Cuatro.",
+      "d) Dos."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "36. ¿En qué posición se trasladaría a una paciente embarazada con un posible parto inminente en el período de dilatación?",
+    "options": [
+      "a) Decúbito prono.",
+      "b) Decúbito lateral izquierdo.",
+      "c) Posición antitrendelenburg.",
+      "d) Tronco semiincorporado."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "37. En la primera fase de la epilepsia, en la fase tónica, ¿qué ocurre?",
+    "options": [
+      "a) El paciente sufre contracciones musculares generalizadas.",
+      "b) El paciente se cae al suelo, por pérdida de consciencia y se pone rígido.",
+      "c) El paciente relaja los músculos.",
+      "d) El paciente se autolesiona."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "38. La extracción agrupada de pedidos se conoce en logística con el nombre de:",
+    "options": [
+      "a) Cooking.",
+      "b) Método ABC.",
+      "c) Drive out.",
+      "d) Picking."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "39. ¿Puede un celador abandonar su puesto de trabajo al finalizar su turno?",
+    "options": [
+      "a) Por supuesto, como cualquier otro trabajador.",
+      "b) Siempre que todas las funciones encomendadas estén realizadas.",
+      "c) Hay situaciones en las que no, por ejemplo, en la ausencia de un compañero, puede ser requerido por la supervisora.",
+      "d) No, todos los celadores deben quedarse 15 minutos más tras terminar su jornada como se recoge en el Estatuto Marco."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "40. ¿Cómo se denomina la actitud de franqueza en el trato del celador y que esta sea percibida por el paciente y sus familiares para que se produzca una relación de confianza?",
+    "options": [
+      "a) Respeto.",
+      "b) Empatía.",
+      "c) Sinceridad.",
+      "d) Asertividad."
+    ],
+    "correct": 2
+  },
+    {
+    "question": "41. La salida de una planta puede ser el arranque de una escalera que conduce a una planta de salida del edificio, siempre que esta no tenga un ojo o hueco central con un área en planta mayor de:",
+    "options": [
+      "a) 1 m2.",
+      "b) 1,3 m2.",
+      "c) 1,5 m2.",
+      "d) 2 m2."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "42. Los bastones simples son inestables, si sobre los mismos se ejerce como mínimo del peso corporal una fuerza superior al:",
+    "options": [
+      "a) 1-5 %.",
+      "b) 5-15 %.",
+      "c) 20-25 %.",
+      "d) 80-90 %."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "43. Los Hospitales que, tras el pertinente convenio con la Universidad, quedan acreditados para impartir enseñanza universitaria de pregrado en Medicina y otras Ciencias de la Salud se denominan:",
+    "options": [
+      "a) Hospitales Clínicos.",
+      "b) Hospitales Generales Clínicos.",
+      "c) Hospitales Universitarios.",
+      "d) Facultades de Medicina."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "44. La dinámica o funcionamiento de un grupo de trabajo desde un punto de vista subjetivo incluye factores tales como:",
+    "options": [
+      "a) Procurar la adecuación del carácter con los demás miembros.",
+      "b) Identificación total con el fin del grupo al que se pertenece.",
+      "c) Entusiasmo ante los obstáculos y resistencia ante la frustración.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "45. ¿Qué necesidad de estas considerarías fuera del grupo de las emocionales, respecto de la atención al público?",
+    "options": [
+      "a) Recibir un servicio de calidad y con instrucciones claras.",
+      "b) Trato respetuoso.",
+      "c) Relación de amabilidad.",
+      "d) Trato de cortesía."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "46. ¿Cómo se denomina el término que se describe como “trabajar rápido y bien” desde un punto de vista de cubrir las necesidades de atención a los ciudadanos?",
+    "options": [
+      "a) Seguridad.",
+      "b) Discreción.",
+      "c) Cortesía.",
+      "d) Eficacia."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "47. ¿Qué es lo que no se debe hacer para crear una imagen de profesionalidad frente al usuario?",
+    "options": [
+      "a) Actuar con naturalidad.",
+      "b) Mantener informado al usuario.",
+      "c) Sonreír y ser sincero.",
+      "d) Hacer promesas que no se puedan cumplir."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "48. La temperatura adecuada para una habitación en un hospital es:",
+    "options": [
+      "a) Entre los 20-22 °C aproximadamente.",
+      "b) Debe ser exactamente 25 °C todo el año.",
+      "c) Sobre los 25-30 °C.",
+      "d) Nunca por encima de la temperatura del cuerpo que es 36,5 °C, y nunca por debajo de 5 °C menos que la temperatura del cuerpo, es decir 31,5 °C."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "49. El grosor de la piel oscila entre:",
+    "options": [
+      "a) 4-5 Kg, aunque hay zonas donde puede ser mayor.",
+      "b) 2 metros cuadrados.",
+      "c) 0,5-2 mm aunque hay zonas donde puede ser de 4 mm o mayor.",
+      "d) Exactamente de 2 mm en todo el cuerpo."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "50. ¿Qué respuesta es incorrecta en relación a los traslados?",
+    "options": [
+      "a) El traslado de un paciente puede realizarse dentro del mismo centro asistencial.",
+      "b) Una de las causas de traslado puede ser un cambio en la evolución de la enfermedad que padece el paciente.",
+      "c) Cualquier traslado no implica seguir el protocolo marcado por el Servicio de Admisión, y solo se pone en marcha cuando los pacientes salen del hospital.",
+      "d) Solo en casos urgentes, de extrema gravedad, que no permiten espera de trámites administrativos, se puede realizar el traslado y hacer a posteriori la solicitud del cambio."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "51. Una de las siguientes clases de fuego no existe:",
+    "options": [
+      "a) A.",
+      "b) B.",
+      "c) E.",
+      "d) F."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "52. Para el traslado/transporte de un paciente, es necesario:",
+    "options": [
+      "a) Que se realice con comodidad para el paciente.",
+      "b) Llevarlo a cabo en el tiempo que sea necesario, impidiendo que se haga en la menor duración posible, ya que se podrían producir accidentes de tráfico.",
+      "c) El celador supervisará cómo los familiares ayudan a acomodarse al paciente dentro del vehículo.",
+      "d) Los traslados dentro del mismo hospital, de un servicio a otro, no exige que el servicio de Admisión lo autorice."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "53. La posición lateral de seguridad, en la que se coloca a los enfermos inconscientes que respiran con normalidad, para facilitarles la eliminación de las secreciones y evitarles la broncoaspiración es:",
+    "options": [
+      "a) La posición de recuperación.",
+      "b) La posición de decúbito supino.",
+      "c) La posición de Fowler.",
+      "d) La posición de Trendelenburg."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "54. ¿Cómo se llama la posición que se describe como aquella en la que la paciente se halla acostada boca arriba, con las piernas separadas y colocadas sobre los estribos, con las rodillas y cadera flexionadas 90° y los muslos en abducción?",
+    "options": [
+      "a) La posición de Fowler.",
+      "b) La posición de Trendelenburg.",
+      "c) La posición ginecológica.",
+      "d) La posición de Morestin."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "55. ¿Cómo se llama también la posición de antitrendelenburg?",
+    "options": [
+      "a) La posición de Litotomía.",
+      "b) La posición de Morestin.",
+      "c) La posición de Roser.",
+      "d) La posición de Sims."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "56. ¿Qué posición de estas es la más idónea para un examen rectal o extracción de un fecaloma?",
+    "options": [
+      "a) La posición de Fowler.",
+      "b) La posición de Trendelenburg.",
+      "c) La posición genupectoral.",
+      "d) La posición de litotomía."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "57. ¿A qué zona del bloque quirúrgico tienen acceso los celadores destinados en el mismo?",
+    "options": [
+      "a) La zona sucia.",
+      "b) La zona limpia.",
+      "c) La zona estéril.",
+      "d) A todas las anteriores."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "58. ¿A qué intervalo de temperatura en ºC se debe mantener el quirófano de adultos?",
+    "options": [
+      "a) 10 a 15.",
+      "b) 22 a 26.",
+      "c) 25 a 30.",
+      "d) 27 a 35."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "59. ¿Qué temperaturas en °C puede necesitar el quirófano de pediatría? Superiores a ...",
+    "options": [
+      "a) 10.",
+      "b) 15.",
+      "c) 26.",
+      "d) 35."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "60. ¿Qué características constructivas de los quirófanos es correcta?",
+    "options": [
+      "a) Las unidades de iluminación del techo se instalarán en un solo pivote y las puertas deben estar diseñadas para disminuir al máximo la turbulencia del aire, al abrirse y cerrarse.",
+      "b) Las paredes, techos y suelos deben estar construidos con un material no poroso de fácil limpieza y el habitáculo que se corresponde con el mismo debe estar insonorizado.",
+      "c) No debe haber ventanas y existirá una instalación de aire acondicionado independiente de la del resto del hospital y con capacidad para renovar el aire, con el sistema de filtros de partículas de alta seguridad.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+    {
+    "question": "61. La humedad del ambiente de un quirófano debe mantenerse entre:",
+    "options": [
+      "a) 10-20 %.",
+      "b) 30-40 %.",
+      "c) 45-55 %.",
+      "d) 80-90 %."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "62. La instalación de aire acondicionado con filtros de partículas de alta seguridad existentes en los quirófanos, debe renovar el aire de forma general (renovaciones/hora):",
+    "options": [
+      "a) 5 a 10 veces.",
+      "b) 10 a 15 veces.",
+      "c) 15 a 20 veces.",
+      "d) 25 a 30 veces."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "63. ¿A qué grupo dentro del equipo quirúrgico pertenece el cirujano que va a realizar la intervención quirúrgica?",
+    "options": [
+      "a) Miembros del equipo lavados limpios.",
+      "b) Miembros del equipo lavados estériles.",
+      "c) Miembros del equipo no estériles.",
+      "d) Miembros del equipo no limpios."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "64. La UCI dispone de las siguientes áreas; indica la respuesta incorrecta:",
+    "options": [
+      "a) Vestuario.",
+      "b) Despachos médicos.",
+      "c) Almacén de aparatos.",
+      "d) Oficina de farmacia."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "65. Algunas de las unidades de internamiento de la UCI son las siguientes:",
+    "options": [
+      "a) Neonatos.",
+      "b) Pacientes grandes quemados.",
+      "c) Pacientes sépticos.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "66. La valoración y certificación de la muerte en el ámbito sanitario es competencia del:",
+    "options": [
+      "a) Juez.",
+      "b) Médico.",
+      "c) Agente de la autoridad.",
+      "d) Enfermero."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "67. Los signos tardíos de muerte incluyen:",
+    "options": [
+      "a) Ausencia de tono muscular.",
+      "b) Auscultación nula del latido cardíaco.",
+      "c) Enfriamiento del cadáver.",
+      "d) Pérdida de sensibilidad cutánea."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "68. Considerando las fases de la muerte según Gisbert Calabuig, la extinción/desaparición progresiva e irreversible de la actividad biológica de los diferentes órganos y tejidos se corresponde con la fase:",
+    "options": [
+      "a) Muerte relativa.",
+      "b) Muerte absoluta.",
+      "c) Muerte aparente.",
+      "d) Muerte intermedia."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "69. En relación con los pacientes fallecidos, es función exclusiva del celador:",
+    "options": [
+      "a) Traslado del cadáver hasta el mortuorio.",
+      "b) Amortajar al enfermo fallecido.",
+      "c) Informar a la familia sobre las causas de la muerte.",
+      "d) Ninguna de las respuestas anteriores es correcta."
+    ],
+    "correct": 0
+  },
+  {
+    "question": "70. Respecto al amortajamiento, señala la respuesta incorrecta:",
+    "options": [
+      "a) Debe realizarse con la mayor intimidad posible y en el menor espacio de tiempo.",
+      "b) Incluye la desconexión y retirada de los dispositivos, sondas y catéteres que tuviese el cadáver.",
+      "c) Es conveniente taponar aquellos orificios naturales del cadáver por los que es posible que salgan fluidos.",
+      "d) El cadáver se coloca encima de una sábana grande en posición de decúbito prono."
+    ],
+    "correct": 3
+  },
+   {
+    "question": "Reserva 1. El término que se refiere al tono emocional de una persona y da color a su vida psíquica, se denomina:",
+    "options": [
+      "a) Emoción.",
+      "b) Estado de ánimo.",
+      "c) Afecto.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Reserva 2. Respecto a la neurosis, señala la respuesta incorrecta:",
+    "options": [
+      "a) Puede existir afectación de la conducta.",
+      "b) No tiene base orgánica.",
+      "c) La personalidad no está desorganizada.",
+      "d) Hay confusión entre las experiencias subjetivas y la realidad externa."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "Reserva 3. Los trastornos del estado de ánimo incluyen:",
+    "options": [
+      "a) Esquizofrenia.",
+      "b) Trastorno bipolar.",
+      "c) Ansiedad.",
+      "d) Demencia."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "Reserva 4. ¿Cuál de las siguientes funciones es propia de los celadores en las unidades de urgencias extrahospitalarias?",
+    "options": [
+      "a) Facilitará la hoja de reclamaciones a usuarios que no estén de acuerdo con la atención recibida.",
+      "b) Trasladar al enfermo en camilla/silla, así como el equipamiento sanitario que fuese necesario.",
+      "c) Tomar los datos del paciente, así como reflejar el motivo de la consulta.",
+      "d) Todas las respuestas anteriores son correctas."
+    ],
+    "correct": 3
+  },
+  {
+    "question": "Reserva 5. ¿De dónde parte la iniciativa de la creación del Servicio de Urgencias y Emergencias Sanitarias 061/112/SAMU?",
+    "options": [
+      "a) De la Constitución de 1978.",
+      "b) Del Plan Director de Urgencias Sanitarias de 1988.",
+      "c) De la Ley General de Sanidad de 1986.",
+      "d) De la Ley de Ordenación Sanitaria de 2001."
+    ],
+    "correct": 1
+  },
+  {
+    "question": "Reserva 6. ¿Cómo se denomina el órgano colegiado superior de carácter consultivo, de participación ciudadana y de formulación y control de la política sanitaria en la Comunidad Autónoma de Extremadura?",
+    "options": [
+      "a) Comité Regional de Sanidad de Extremadura.",
+      "b) Comisión Extremeña de Salud.",
+      "c) Consejo Extremeño de Salud.",
+      "d) Junta Extremeña de Sanidad."
+    ],
+    "correct": 2
+  }
+
+        ];
+
+        const form = document.getElementById('quizForm');
+        const finishButton = document.getElementById('finishButton');
+        const summaryDiv = document.getElementById('summary');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+
+            const label = document.createElement('label');
+            label.textContent = q.question;
+            questionDiv.appendChild(label);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('options');
+
+            q.options.forEach((option, i) => {
+                const optionItem = document.createElement('li');
+                optionItem.classList.add('option');
+                const radio = document.createElement('input');
+                optionItem.addEventListener('click', () => radio.click());
+                radio.type = 'radio';
+                radio.name = `question${index}`;
+                radio.value = i;
+                optionItem.appendChild(radio);
+                optionItem.appendChild(document.createTextNode(option));
+                optionsList.appendChild(optionItem);
+            });
+
+            questionDiv.appendChild(optionsList);
+            form.insertBefore(questionDiv, finishButton);
+        });
+
+        finishButton.addEventListener('click', () => {
+            let correctCount = 0, incorrectCount = 0, unansweredCount = 0;
+
+            questions.forEach((q, index) => {
+                const options = form[`question${index}`];
+                let selectedOption = [...options].find(option => option.checked);
+
+                if (!selectedOption) {
+                    unansweredCount++;
+                } else if (parseInt(selectedOption.value) === q.correct) {
+                    correctCount++;
+                    selectedOption.parentElement.classList.add('correct-answer');
+                } else {
+                    incorrectCount++;
+                    selectedOption.parentElement.classList.add('incorrect-answer');
+                }
+
+                const correctAnswer = form.querySelector(`input[name='question${index}'][value='${q.correct}']`);
+                if (correctAnswer) {
+                    correctAnswer.parentElement.classList.add('correct-answer');
+                }
+            });
+
+            let finalCorrect = correctCount - Math.floor(incorrectCount / 3);
+            let finalScore = (finalCorrect / 7).toFixed(2);
+
+            summaryDiv.textContent = `Preguntas totales: 70, Contestadas: ${70 - unansweredCount}, Correctas: ${correctCount}, Incorrectas: ${incorrectCount}, En blanco: ${unansweredCount}, Nota final: ${finalScore}`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
